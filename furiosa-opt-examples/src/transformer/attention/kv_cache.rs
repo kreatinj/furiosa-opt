@@ -76,7 +76,7 @@ pub(super) fn cache_kv(
         .commit_at(0x100);
 
     // Spill prepared V offsets back to HBM for dma_scatter.
-    let v_idx_hbm: HbmTensor<i32, Chip, m![T]> = v_idx_d0b.to_hbm(&mut ctx.tdma, 0x10e36000);
+    let v_idx_hbm: HbmTensor<i32, Chip, m![T]> = v_idx_d0b.to_hbm_at(&mut ctx.tdma, 0x10e36000);
 
     // Load V rows into SRAM, then reinterpret as [N, D] blocks for cache scatter.
     attn_v.to_dm_at::<Cluster, m![T / 16], m![T % 16, K]>(&mut ctx.tdma, 0x200);
@@ -143,7 +143,7 @@ pub(super) fn cache_kv(
         .commit_at(0x100);
 
     // Spill prepared K offsets back to HBM for dma_scatter.
-    let k_idx_hbm: HbmTensor<i32, Chip, m![T]> = k_idx_d0b.to_hbm(&mut ctx.tdma, 0x10e40000);
+    let k_idx_hbm: HbmTensor<i32, Chip, m![T]> = k_idx_d0b.to_hbm_at(&mut ctx.tdma, 0x10e40000);
 
     // Load K rows into SRAM, then reinterpret as [N, D] blocks for cache scatter.
     attn_k.to_dm_at::<Cluster, m![T / 4], m![T % 4, K]>(&mut ctx.tdma, 0x5e00);

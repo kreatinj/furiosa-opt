@@ -49,5 +49,5 @@ pub fn gather_minimal(
 ) -> HbmTensor<bf16, Chip, m![C, D]> {
     let values_dm: DmTensor<bf16, Chip, Cluster, m![C / 2], m![C % 2, D]> = table.dma_gather(index, 0x0, true);
 
-    values_dm.to_hbm(&mut ctx.tdma, 0x1000)
+    values_dm.to_hbm_at(&mut ctx.tdma, 0x1000)
 }

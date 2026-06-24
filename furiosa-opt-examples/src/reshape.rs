@@ -16,7 +16,7 @@ pub fn reshape(
 
     let reshaped: DmTensor<i32, m![C], m![D], m![E, F], m![G, H, I]> = unsafe { dm_tensor.reshape() };
 
-    reshaped.to_hbm(&mut ctx.tdma, 0x2000)
+    reshaped.to_hbm_at(&mut ctx.tdma, 0x2000)
 }
 
 // Note: This test uses different shape definitions, so it's in a separate module
@@ -43,6 +43,6 @@ pub mod different_axes {
 
         let reshaped: DmTensor<i32, m![C], m![D], m![E], m![F]> = unsafe { dm_tensor.reshape() };
 
-        reshaped.to_hbm(&mut ctx.tdma, 0x2000)
+        reshaped.to_hbm_at(&mut ctx.tdma, 0x2000)
     }
 }

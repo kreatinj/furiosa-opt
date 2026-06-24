@@ -12,5 +12,5 @@ type Cluster = m![1 # 2];
 pub fn invalid_hbm_to_dm(ctx: &mut Context, input: &HbmTensor<i8, Chip, m![A, B]>) -> HbmTensor<i8, Chip, m![B, A]> {
     let output_dm: DmTensor<i8, Chip, Cluster, m![B / 4], m![B % 4, A]> = input.to_dm_at(&mut ctx.tdma, 0x20000);
 
-    output_dm.to_hbm(&mut ctx.tdma, 0x1000_0000)
+    output_dm.to_hbm_at(&mut ctx.tdma, 0x1000_0000)
 }

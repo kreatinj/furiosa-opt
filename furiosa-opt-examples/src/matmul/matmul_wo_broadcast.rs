@@ -38,5 +38,5 @@ pub fn matmul_wo_broadcast(
         .commit_at(0);
 
     // write back to HBM.
-    matmul_result.to_hbm(&mut ctx.tdma, 0x3000)
+    matmul_result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }

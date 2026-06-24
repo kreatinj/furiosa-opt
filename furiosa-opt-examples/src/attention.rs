@@ -55,7 +55,7 @@ pub fn compile_llama3_1_mlperf_latest_8pe_4chip_w8a16kv16_prefill_first_block_b1
         .collect::<m![S / 16 % 4, S / 2 % 8], m![S % 2 = 8]>()
         .commit_trim::<m![S % 2]>()
         .commit_at::<m![S % 64]>(0x00010100)
-        .to_hbm(&mut ctx.tdma, 0x936ac000);
+        .to_hbm_at(&mut ctx.tdma, 0x936ac000);
 
     let embeddings_sram: DmTensor<bf16, Chip, m![S / 512], m![S / 128 % 4, E / 128], m![E % 128]> =
         embedding_table_hbm.dma_gather(&input_ids_scaled_dram, 0x00018000, true);
@@ -77,7 +77,7 @@ pub fn compile_llama3_1_mlperf_latest_8pe_4chip_w8a16kv16_prefill_first_block_b1
         .commit_trim::<m![E % 32]>()
         .commit_at(0x001200);
 
-    let embeddings_hbm: HbmTensor<bf16, m![1], m![S, E]> = embeddings_sram.to_hbm(&mut ctx.tdma, 0x936ad000);
+    let embeddings_hbm: HbmTensor<bf16, m![1], m![S, E]> = embeddings_sram.to_hbm_at(&mut ctx.tdma, 0x936ad000);
 
     for i in 0..2 {
         let embedding_view = embeddings_hbm.view().tile::<m![S / 512], 1, m![1 # 2, S % 512, E]>(i);

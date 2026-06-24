@@ -17,7 +17,7 @@ pub fn ve_elementwise_fxp_const(ctx: &mut Context, input: &HbmTensor<i32, Chip, 
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 /// **NOTE**: This example demonstrates an ALU conflict and should PANIC:
@@ -45,7 +45,7 @@ pub fn ve_elementwise_fxp_chain(ctx: &mut Context, input: &HbmTensor<i32, Chip, 
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 #[device(chip = 1)]
@@ -75,7 +75,7 @@ pub fn ve_elementwise_full_pipeline(
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 #[device(chip = 1)]
@@ -99,7 +99,7 @@ pub fn ve_elementwise_stash_f32(ctx: &mut Context, input: &HbmTensor<f32, Chip, 
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 /// i32 stash example: stash input, multiply by 2, then max with stashed value
@@ -122,7 +122,7 @@ pub fn ve_elementwise_stash_i32(ctx: &mut Context, input: &HbmTensor<i32, Chip, 
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 #[device(chip = 1)]
@@ -144,7 +144,7 @@ pub fn ve_elementwise_fp_unary(ctx: &mut Context, input: &HbmTensor<f32, Chip, m
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 #[device(chip = 1)]
@@ -169,7 +169,7 @@ pub fn ve_elementwise_fp_binary_with_mode(
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 #[device(chip = 1)]
@@ -194,7 +194,7 @@ pub fn ve_elementwise_fp_ternary_with_mode(
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 #[device(chip = 1)]
@@ -217,7 +217,7 @@ pub fn ve_elementwise_logic_with_mode(
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 #[device(chip = 1)]
@@ -240,7 +240,7 @@ pub fn ve_elementwise_fxp_with_mode(
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 #[device(chip = 1)]
@@ -265,7 +265,7 @@ pub fn ve_elementwise_fp_div_with_mode(
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 #[device(chip = 1)]
@@ -288,7 +288,7 @@ pub fn ve_elementwise_clip_with_mode(
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 #[device(chip = 1)]
@@ -315,7 +315,7 @@ pub fn ve_group_pair_fp_zip_with_mode(
         .commit_trim::<m![A % 2]>()
         .commit_at(0x3000);
 
-    result.to_hbm(&mut ctx.tdma, 0x4000)
+    result.to_hbm_at(&mut ctx.tdma, 0x4000)
 }
 
 // Stash at fxp stage, read at clip stage (i32 -> i32)
@@ -339,7 +339,7 @@ pub fn ve_stash_fxp_fxp(ctx: &mut Context, input: &HbmTensor<i32, Chip, m![A]>) 
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 // Stash at fxp stage, read at fp stage (i32 stash -> f32 read via fxp_to_fp)
@@ -364,7 +364,7 @@ pub fn ve_stash_fxp_fp(ctx: &mut Context, input: &HbmTensor<i32, Chip, m![A]>) -
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 // Stash at fp stage, read at clip stage (f32 -> f32)
@@ -391,7 +391,7 @@ pub fn ve_stash_fp_fp(ctx: &mut Context, input: &HbmTensor<f32, Chip, m![A]>) ->
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 // Stash at fp stage, read at clip stage after fp_to_fxp (f32 stash -> i32 read)
@@ -418,7 +418,7 @@ pub fn ve_stash_fp_fxp(ctx: &mut Context, input: &HbmTensor<f32, Chip, m![A]>) -
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 #[device(chip = 1)]
@@ -439,7 +439,7 @@ pub fn ve_elementwise_logic(ctx: &mut Context, input: &HbmTensor<i32, Chip, m![A
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 #[device(chip = 1)]
@@ -473,7 +473,7 @@ pub fn ve_elementwise_vrf(
         .commit_trim::<m![A % 2]>()
         .commit_at(0x3000);
 
-    result.to_hbm(&mut ctx.tdma, 0x5000)
+    result.to_hbm_at(&mut ctx.tdma, 0x5000)
 }
 
 #[device(chip = 1)]
@@ -519,7 +519,7 @@ pub fn ve_elementwise_multi_vrf(
         .commit_trim::<m![A % 2]>()
         .commit_at(0x4000);
 
-    result.to_hbm(&mut ctx.tdma, 0x5000)
+    result.to_hbm_at(&mut ctx.tdma, 0x5000)
 }
 
 // =============================================================================

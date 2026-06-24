@@ -175,7 +175,7 @@ fn fc2(
         .commit_trim::<m![1 # 16]>()
         .commit_at(0x60000);
 
-    logits.to_hbm(&mut ctx.tdma, 0x1100_0000)
+    logits.to_hbm_at(&mut ctx.tdma, 0x1100_0000)
 }
 
 #[device(chip = 1)]

@@ -28,7 +28,7 @@ pub mod simpl {
         input3.to_dm_view(&mut ctx.tdma, output0);
 
         // Transfer output tensor back to HBM.
-        output.to_hbm(&mut ctx.tdma, 0x4000)
+        output.to_hbm_at(&mut ctx.tdma, 0x4000)
     }
 }
 
@@ -77,6 +77,6 @@ pub mod padding {
         input3.to_dm_view(&mut ctx.tdma, output0);
 
         // Transfer output tensor back to HBM.
-        output.to_hbm(&mut ctx.tdma, 0x5000)
+        output.to_hbm_at(&mut ctx.tdma, 0x5000)
     }
 }

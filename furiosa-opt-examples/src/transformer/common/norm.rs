@@ -54,11 +54,11 @@ pub(crate) fn residual_norm(
         .commit_at(0x8000);
 
     // Keep the residual sum for the next residual connection.
-    let residual_hbm = residual_dm.to_hbm(&mut ctx.tdma, 0x10e00000);
+    let residual_hbm = residual_dm.to_hbm_at(&mut ctx.tdma, 0x10e00000);
 
     let normalized = rms_norm_pipeline(ctx, &residual_dm, norm_weight);
 
-    let norm_hbm: HbmTensor<bf16, Chip, m![S, H]> = normalized.to_hbm(&mut ctx.tdma, 0x10e10000);
+    let norm_hbm: HbmTensor<bf16, Chip, m![S, H]> = normalized.to_hbm_at(&mut ctx.tdma, 0x10e10000);
     let retiled: DmTensor<bf16, Chip, Cluster, m![Y, S / 32, H / 56], m![S % 32, H % 56]> =
         norm_hbm.to_dm_at(&mut ctx.tdma, 0x1300);
     (retiled, residual_hbm)
@@ -97,7 +97,7 @@ pub(crate) fn residual_norm_post(
 
     let rms_result = rms_norm_pipeline(ctx, &residual_sum, norm_weight);
     // Retile normalized output for the next block.
-    let norm_hbm: HbmTensor<bf16, Chip, m![S, H]> = rms_result.to_hbm(&mut ctx.tdma, 0x10e10000);
+    let norm_hbm: HbmTensor<bf16, Chip, m![S, H]> = rms_result.to_hbm_at(&mut ctx.tdma, 0x10e10000);
     norm_hbm.to_dm_at(&mut ctx.tdma, 0x1300)
 }
 
@@ -213,7 +213,7 @@ pub(crate) fn final_norm(
         .commit_trim::<m![H % 224]>()
         .commit_at(0x8000);
     // Use an HBM round-trip to retile from H-contiguous to S-contiguous layout.
-    let residual_hbm: HbmTensor<bf16, Chip, m![S, H]> = residual_sum.to_hbm(&mut ctx.tdma, 0x10e10000);
+    let residual_hbm: HbmTensor<bf16, Chip, m![S, H]> = residual_sum.to_hbm_at(&mut ctx.tdma, 0x10e10000);
     let retiled: DmTensor<bf16, Chip, Cluster, m![Y, H / 14], m![H % 14, S]> =
         residual_hbm.to_dm_at(&mut ctx.tdma, 0x1e000);
 

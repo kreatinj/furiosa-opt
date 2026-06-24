@@ -712,6 +712,15 @@ impl<D: Scalar, Chip: M, Cluster: M, Slice: M, Element: M, B: Backend> DmTensor<
     pub fn to_hbm<Element2: M>(
         &self,
         _dma: &mut DmaContext<{ Dma::Tensor }>,
+    ) -> HbmTensor<D, Chip, Element2, B> {
+        HbmTensor::new(self.inner.transpose(true), None)
+    }
+
+    /// Converts to HBM tensor at `address`.
+    #[primitive(DmTensor::to_hbm_at)]
+    pub fn to_hbm_at<Element2: M>(
+        &self,
+        _dma: &mut DmaContext<{ Dma::Tensor }>,
         address: Address,
     ) -> HbmTensor<D, Chip, Element2, B> {
         HbmTensor::new(self.inner.transpose(true), Some(address))

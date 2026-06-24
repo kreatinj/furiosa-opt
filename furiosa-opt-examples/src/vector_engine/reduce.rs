@@ -23,7 +23,7 @@ pub fn ve_intra_slice_reduce_add_fxp_sat(
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 /// Intra-slice reduce: max (i32)
@@ -50,7 +50,7 @@ pub fn ve_intra_slice_reduce_max_i32(
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 /// Intra-slice reduce: min (i32)
@@ -77,7 +77,7 @@ pub fn ve_intra_slice_reduce_min_i32(
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 /// Intra-slice reduce: add (f32)
@@ -104,7 +104,7 @@ pub fn ve_intra_slice_reduce_add_f32(
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 /// Intra-slice reduce: max (f32)
@@ -131,7 +131,7 @@ pub fn ve_intra_slice_reduce_max_f32(
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 /// Intra-slice reduce: min (f32)
@@ -158,7 +158,7 @@ pub fn ve_intra_slice_reduce_min_f32(
         .commit_trim::<m![A % 2]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 // =============================================================================
@@ -192,7 +192,7 @@ pub fn ve_intra_slice_reduce_split_slice_time(
         .commit_trim::<m![A % 8]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 /// Intra-slice reduce with R split across Time and Packet.
@@ -221,7 +221,7 @@ pub fn ve_intra_slice_reduce_split_time_packet(
         .commit_trim::<m![1 # 8]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 // =============================================================================
@@ -251,7 +251,7 @@ pub fn ve_inter_slice_reduce_add_sat_i32(
         .commit_trim::<m![A % 8]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 /// Inter-slice reduce: max (i32), inter-slice reducer-only path.
@@ -274,7 +274,7 @@ pub fn ve_inter_slice_reduce_max_i32(
         .commit_trim::<m![A % 8]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 /// Inter-slice reduce: add (f32), inter-slice reducer-only path.
@@ -297,7 +297,7 @@ pub fn ve_inter_slice_reduce_add_f32(
         .commit_trim::<m![A % 8]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 // =============================================================================
@@ -324,7 +324,7 @@ pub fn ve_vru_then_vau_i32(ctx: &mut Context, input: &HbmTensor<i32, Chip, m![R,
         .commit_trim::<m![A % 8]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }
 
 // =============================================================================
@@ -356,5 +356,5 @@ pub fn ve_inter_slice_reduce_promote_f32(
         .commit_trim::<m![P]>()
         .commit_at(0x2000);
 
-    result.to_hbm(&mut ctx.tdma, 0x3000)
+    result.to_hbm_at(&mut ctx.tdma, 0x3000)
 }

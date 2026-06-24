@@ -176,5 +176,5 @@ pub fn matmul_with_split_reduce2(
             .commit_at(0x0000_0000);
     }
 
-    acc.to_hbm(&mut ctx.tdma, 0x3000)
+    acc.to_hbm_at(&mut ctx.tdma, 0x3000)
 }

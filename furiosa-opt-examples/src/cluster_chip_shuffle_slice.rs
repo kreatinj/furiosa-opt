@@ -20,7 +20,7 @@ pub fn chip_slice(
             &[0, 1, 2, 3],
         );
 
-    sliced.to_hbm(&mut ctx.tdma, 0x2000)
+    sliced.to_hbm_at(&mut ctx.tdma, 0x2000)
 }
 
 #[device(chip = 4)]
@@ -39,7 +39,7 @@ pub fn cluster_slice(
             &[0, 1],
         );
 
-    sliced.to_hbm(&mut ctx.tdma, 0x2000)
+    sliced.to_hbm_at(&mut ctx.tdma, 0x2000)
 }
 
 #[device(chip = 4)]
@@ -53,7 +53,7 @@ pub fn chip_shuffle(
 
     let shuffled: DmTensor<i32, _, _, _, _> = dm_tensor.view().dm_chip_shuffle::<4>(&mut ctx.tdma, &[1, 2, 3, 0]);
 
-    shuffled.to_hbm(&mut ctx.tdma, 0x2000)
+    shuffled.to_hbm_at(&mut ctx.tdma, 0x2000)
 }
 
 #[device(chip = 4)]
@@ -68,5 +68,5 @@ pub fn cluster_shuffle(
     // Shuffle pattern [1, 0]: cluster 1->0, cluster 0->1
     let shuffled: DmTensor<i32, _, _, _, _> = dm_tensor.view().dm_cluster_shuffle::<2>(&mut ctx.tdma, &[1, 0]);
 
-    shuffled.to_hbm(&mut ctx.tdma, 0x2000)
+    shuffled.to_hbm_at(&mut ctx.tdma, 0x2000)
 }
