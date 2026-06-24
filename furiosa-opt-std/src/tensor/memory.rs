@@ -411,7 +411,7 @@ impl<D: Scalar, Chip: M, Element: M, B: Backend> HbmTensor<D, Chip, Element, B> 
         address: Address,
     ) -> DmTensor<D, Chip, Cluster, Slice, Element2, B> {
         assert_dma_layout::<D, m![{ Chip }, { Element }], Element2>(DMA_SRAM_WRITE_WIDTH);
-        DmTensor::new(self.inner.transpose(true), address)
+        DmTensor::new(self.inner.transpose(true), Some(address))
     }
 }
 // ANCHOR_END: dma_impl
@@ -546,7 +546,7 @@ impl<'l, D: Scalar, Chip: M, Element: M, B: Backend> HbmTensorView<'l, D, Chip, 
         address: Address,
     ) -> DmTensor<D, Chip, Cluster, Slice, Element2, B> {
         assert_dma_layout::<D, m![{ Chip }, { Element }], Element2>(DMA_SRAM_WRITE_WIDTH);
-        DmTensor::new(self.inner.read().transpose(true), address)
+        DmTensor::new(self.inner.read().transpose(true), Some(address))
     }
 
     /// Perform chip shuffle using DMA commands (HBM <-> HBM transfer across chips).
@@ -632,7 +632,7 @@ impl<'l, D: Scalar, Chip: M, Element: M, B: Backend> HbmTensorViewMut<'l, D, Chi
 #[derive(Debug)]
 pub struct DmTensor<D: Scalar, Chip: M, Cluster: M, Slice: M, Element: M, B: Backend = CurrentBackend> {
     inner: Tensor<D, Pair<Chip, Pair<Cluster, Pair<Slice, Element>>>, B>,
-    address: Address,
+    address: Option<Address>,
     _marker: PhantomData<(D, Chip, Cluster, Slice, Element)>,
 }
 
@@ -640,7 +640,7 @@ impl<D: Scalar, Chip: M, Cluster: M, Slice: M, Element: M, B: Backend> DmTensor<
     /// Mapping type alias.
     pub type Mapping = m![{ Chip }, { Cluster }, { Slice }, { Element }];
 
-    pub(crate) fn new(inner: Tensor<D, Self::Mapping, B>, address: Address) -> Self {
+    pub(crate) fn new(inner: Tensor<D, Self::Mapping, B>, address: Option<Address>) -> Self {
         Self {
             inner,
             address,
@@ -659,7 +659,7 @@ impl<D: Scalar, Chip: M, Cluster: M, Slice: M, Element: M, B: Backend> DmTensor<
     #[primitive(DmTensor::from_addr)]
     pub unsafe fn from_addr(address: Address) -> Self {
         let axes = gen_axes::<Pair<Chip, Pair<Cluster, Pair<Slice, Element>>>>();
-        Self::new(Tensor::from_inner(B::RawTensor::uninit_from_axes(axes)), address)
+        Self::new(Tensor::from_inner(B::RawTensor::uninit_from_axes(axes)), Some(address))
     }
 }
 
@@ -727,7 +727,7 @@ impl<D: Scalar, Chip: M, Cluster: M, Slice: M, Element: M, B: Backend> DmTensor<
         address: Address,
     ) -> DmTensor<D, Chip, Cluster, Slice2, Element2, B> {
         assert_dma_layout::<D, m![{ Cluster }, { Slice }, { Element }], Element2>(DMA_SRAM_WRITE_WIDTH);
-        DmTensor::new(self.inner.transpose(true), address)
+        DmTensor::new(self.inner.transpose(true), Some(address))
     }
 
     /// Copies data to another DM tensor via parallel copy.
