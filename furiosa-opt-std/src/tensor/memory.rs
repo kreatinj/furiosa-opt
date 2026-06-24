@@ -272,7 +272,7 @@ where
 #[derive(Debug)]
 pub struct HbmTensor<D: Scalar, Chip: M, Element: M, B: Backend = CurrentBackend> {
     inner: Tensor<D, Pair<Chip, Element>, B>,
-    address: Address,
+    address: Option<Address>,
 }
 
 // Manual impl: inner `Tensor` is not DeviceSend
@@ -289,7 +289,7 @@ impl<D: Scalar, Chip: M, Element: M, B: Backend> HbmTensor<D, Chip, Element, B> 
     /// Mapping type alias.
     pub type Mapping = m![{ Chip }, { Element }];
 
-    pub(crate) fn new(inner: Tensor<D, Self::Mapping, B>, address: Address) -> Self {
+    pub(crate) fn new(inner: Tensor<D, Self::Mapping, B>, address: Option<Address>) -> Self {
         Self { inner, address }
     }
 
@@ -298,7 +298,7 @@ impl<D: Scalar, Chip: M, Element: M, B: Backend> HbmTensor<D, Chip, Element, B> 
     }
 
     /// Returns the HBM address of this tensor.
-    pub fn address(&self) -> Address {
+    pub fn address(&self) -> Option<Address> {
         self.address
     }
 
@@ -342,7 +342,7 @@ impl<D: Scalar, Chip: M, Element: M, B: Backend> HbmTensor<D, Chip, Element, B> 
     #[primitive(HbmTensor::from_addr)]
     pub unsafe fn from_addr(address: Address) -> Self {
         let axes = gen_axes::<Pair<Chip, Element>>();
-        Self::new(Tensor::from_inner(B::RawTensor::uninit_from_axes(axes)), address)
+        Self::new(Tensor::from_inner(B::RawTensor::uninit_from_axes(axes)), Some(address))
     }
 }
 
@@ -372,7 +372,7 @@ impl<D: Scalar, Chip: M, Element: M, B: Backend> HbmTensor<D, Chip, Element, B> 
         _dma: &mut DmaContext<{ DMA }>,
         address: Address,
     ) -> HbmTensor<D, Chip, Element2, B> {
-        HbmTensor::new(self.inner.transpose(true), address)
+        HbmTensor::new(self.inner.transpose(true), Some(address))
     }
 
     /// Gather DRAM rows into SRAM at positions given by index tensor.
@@ -462,7 +462,7 @@ impl<D: Scalar, Chip: M, Element: M, B: Backend> HbmTensor<D, Chip, Element, B> 
 #[derive(Debug, Clone)]
 pub struct HbmTensorView<'l, D: Scalar, Chip: M, Element: M, B: Backend = CurrentBackend> {
     inner: TensorView<'l, D, Pair<Chip, Element>, B>,
-    address: Address,
+    address: Option<Address>,
 }
 
 impl<'l, D: Scalar, Chip: M, Element: M, B: Backend> HbmTensorView<'l, D, Chip, Element, B> {
@@ -470,7 +470,7 @@ impl<'l, D: Scalar, Chip: M, Element: M, B: Backend> HbmTensorView<'l, D, Chip, 
     pub type Mapping = m![{ Chip }, { Element }];
 
     /// Returns the base HBM address of this view.
-    pub fn address(&self) -> Address {
+    pub fn address(&self) -> Option<Address> {
         self.address
     }
 
@@ -590,12 +590,12 @@ impl<'l, D: Scalar, Chip: M, Element: M, B: Backend> HbmTensorView<'l, D, Chip, 
 #[derive(Debug)]
 pub struct HbmTensorViewMut<'l, D: Scalar, Chip: M, Element: M, B: Backend = CurrentBackend> {
     inner: TensorViewMut<'l, D, Pair<Chip, Element>, B>,
-    address: Address,
+    address: Option<Address>,
 }
 
 impl<'l, D: Scalar, Chip: M, Element: M, B: Backend> HbmTensorViewMut<'l, D, Chip, Element, B> {
     /// Returns the base HBM address of this view.
-    pub fn address(&self) -> Address {
+    pub fn address(&self) -> Option<Address> {
         self.address
     }
 
@@ -685,7 +685,7 @@ impl<D: Scalar, Chip: M, Cluster: M, Slice: M, Element: M, B: Backend> DmTensor<
         _dma: &mut DmaContext<{ Dma::Tensor }>,
         address: Address,
     ) -> HbmTensor<D, Chip, Element2, B> {
-        HbmTensor::new(self.inner.transpose(true), address)
+        HbmTensor::new(self.inner.transpose(true), Some(address))
     }
 
     /// Scatter SRAM values to DRAM at positions given by index tensor.

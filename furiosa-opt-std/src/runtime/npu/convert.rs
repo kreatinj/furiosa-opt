@@ -12,19 +12,19 @@ fn to_buffer<D: Scalar, Chip: M, Element: M>(addr: u64) -> Buffer {
 
 impl<D: Scalar, Chip: M, Element: M> From<&HbmTensor<D, Chip, Element>> for Buffer {
     fn from(tensor: &HbmTensor<D, Chip, Element>) -> Buffer {
-        to_buffer::<D, Chip, Element>(tensor.address())
+        to_buffer::<D, Chip, Element>(tensor.address().unwrap())
     }
 }
 
 impl<D: Scalar, Chip: M, Element: M> From<&HbmTensorView<'_, D, Chip, Element>> for Buffer {
     fn from(view: &HbmTensorView<'_, D, Chip, Element>) -> Buffer {
-        to_buffer::<D, Chip, Element>(view.address())
+        to_buffer::<D, Chip, Element>(view.address().unwrap())
     }
 }
 
 impl<D: Scalar, Chip: M, Element: M> From<&HbmTensorViewMut<'_, D, Chip, Element>> for Buffer {
     fn from(view: &HbmTensorViewMut<'_, D, Chip, Element>) -> Buffer {
-        to_buffer::<D, Chip, Element>(view.address())
+        to_buffer::<D, Chip, Element>(view.address().unwrap())
     }
 }
 

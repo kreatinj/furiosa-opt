@@ -177,9 +177,10 @@ impl Kernel {
         let stride = std::mem::size_of::<D>();
         let count = furiosa_mapping::Pair::<Chip, Element>::SIZE;
         let len = count * stride;
-        log::debug!("read: addr=0x{:x}, len={len}", hbm.address());
+        let hbm_addr = hbm.address().unwrap();
+        log::debug!("read: addr=0x{:x}, len={len}", hbm_addr);
 
-        let src = Buffer::npu(hbm.address(), len);
+        let src = Buffer::npu(hbm_addr, len);
         let dst = CpuBuffer::cpu(len);
         assert!(
             unsafe { ffi::lib().furiosa_read(ffi::rt(), src.as_ptr(), dst.as_ptr()) } == 0,

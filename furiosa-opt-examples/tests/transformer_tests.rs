@@ -72,10 +72,10 @@ async fn run_embedding(ctx: &mut Context) -> QkvAddrs {
     .await;
 
     QkvAddrs {
-        q: out_q.address(),
-        k: out_k.address(),
-        v: out_v.address(),
-        hidden: out_hidden.address(),
+        q: out_q.address().unwrap(),
+        k: out_k.address().unwrap(),
+        v: out_v.address().unwrap(),
+        hidden: out_hidden.address().unwrap(),
     }
 }
 
@@ -118,7 +118,7 @@ async fn run_attention(ctx: &mut Context, qkv: &QkvAddrs) -> AttentionAddrs {
     .await;
 
     AttentionAddrs {
-        score_v: out_attn.address(),
+        score_v: out_attn.address().unwrap(),
         hidden: qkv.hidden,
     }
 }
@@ -197,10 +197,10 @@ async fn run_decoder(ctx: &mut Context, attn: &AttentionAddrs) -> QkvAddrs {
     .await;
 
     QkvAddrs {
-        q: out_q.address(),
-        k: out_k.address(),
-        v: out_v.address(),
-        hidden: out_hidden.address(),
+        q: out_q.address().unwrap(),
+        k: out_k.address().unwrap(),
+        v: out_v.address().unwrap(),
+        hidden: out_hidden.address().unwrap(),
     }
 }
 
