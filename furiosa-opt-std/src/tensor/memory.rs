@@ -158,9 +158,7 @@ impl<D: Scalar, Element: M, B: Backend> HostTensor<D, Element, B> {
         Tensor::try_from_buf(data).map(Into::into)
     }
 
-    /// Converts to HBM tensor.
-    ///
-    /// TODO: `address` should be optional.
+    /// Converts to HBM tensor at `address`.
     pub async fn to_hbm<Chip: M, Element2: M>(
         &self,
         _dma: &mut DmaContext<{ Dma::Pcie }>,
