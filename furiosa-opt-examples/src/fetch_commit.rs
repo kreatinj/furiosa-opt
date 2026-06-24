@@ -25,5 +25,5 @@ pub fn fetch_commit_simple(
         .commit_trim::<m![B]>()
         .commit();
 
-    fetch_and_commit_tensor.to_hbm(&mut ctx.tdma, )
+    fetch_and_commit_tensor.to_hbm(&mut ctx.tdma)
 }

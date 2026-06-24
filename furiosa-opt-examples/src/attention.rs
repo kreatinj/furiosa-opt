@@ -15,8 +15,7 @@ pub fn compile_llama3_1_mlperf_latest_8pe_4chip_w8a16kv16_prefill_first_block_b1
     embedding_table_hbm: &HbmTensor<bf16, Chip, m![V, E]>,
     norm_weight_hbm: &HbmTensor<f32, Chip, m![E]>,
 ) {
-    let input_ids_sram_1 =
-        input_ids_hbm.to_dm::<m![S / 512], m![S / 16 % 32, 1 # 8], m![S % 16]>(&mut ctx.tdma);
+    let input_ids_sram_1 = input_ids_hbm.to_dm::<m![S / 512], m![S / 16 % 32, 1 # 8], m![S % 16]>(&mut ctx.tdma);
     let input_ids_sram_1 = ctx
         .main
         .begin(input_ids_sram_1.view())
