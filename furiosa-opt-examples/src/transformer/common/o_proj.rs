@@ -27,11 +27,11 @@ pub(crate) fn o_proj(
 ) -> HbmTensor<bf16, Chip, m![S, H]> {
     // Load input to SRAM with 112-wide hidden tiling.
     let input_dm: DmTensor<bf16, Chip, Cluster, m![Z, H / 112, S / 8], m![S % 8, H % 112]> =
-        input.to_dm(&mut ctx.tdma, 0xbb00);
+        input.to_dm_at(&mut ctx.tdma, 0xbb00);
 
     // Load projection weights to SRAM.
     let weight_dm: DmTensor<bf16, Chip, Cluster, m![H / 28, H / 448, H / 7 % 4], m![H % 7, H % 448]> =
-        weight.to_dm(&mut ctx.tdma, 0x8900);
+        weight.to_dm_at(&mut ctx.tdma, 0x8900);
 
     // Reorder weight tiles for contraction over 112 hidden channels.
     let weight_it: DmTensor<bf16, Chip, Cluster, m![H / 28, H / 448, H / 112 % 4], m![H / 7 % 4, H % 7, H % 112]> = ctx

@@ -43,7 +43,7 @@ pub(crate) fn rope(
 
     // Load position IDs into DM tiles used by the offset-scaling step.
     let pos_dm: DmTensor<i32, Chip, Cluster, m![1 # 128, S / 64], m![S % 64]> =
-        position_ids.to_dm(&mut ctx.tdma, 0x2300);
+        position_ids.to_dm_at(&mut ctx.tdma, 0x2300);
 
     // Convert each position ID into a byte offset for rope-table row access.
     let pos_scaled: DmTensor<i32, Chip, Cluster, m![1 # 128, S / 64], m![S % 64]> = ctx
@@ -94,7 +94,7 @@ pub(crate) fn rope(
         .to_trf_at(TrfAddress::FirstHalf);
 
     // K RoPE: load K in rotation-pair layout and place it in TRF SecondHalf.
-    let k_dm: DmTensor<bf16, Chip, Cluster, m![S, D / 16 % 2], m![R, R, D % 16]> = k.to_dm(&mut ctx.tdma, 0x0);
+    let k_dm: DmTensor<bf16, Chip, Cluster, m![S, D / 16 % 2], m![R, R, D % 16]> = k.to_dm_at(&mut ctx.tdma, 0x0);
     let k_trf: TrfTensor<bf16, Chip, Cluster, m![S, D / 16 % 2], m![R], m![R, D % 16]> = ctx
         .sub
         .begin(k_dm.view())
@@ -139,7 +139,7 @@ pub(crate) fn rope(
 
     // Reload Q into the layout used by the RoPE contraction path.
     let q_dm_reload: DmTensor<bf16, Chip, Cluster, m![S / 16, D % 16, D / 16 % 2], m![Q / 64, R, S % 16]> =
-        q.to_dm(&mut ctx.tdma, 0x200);
+        q.to_dm_at(&mut ctx.tdma, 0x200);
 
     // Reorder Q so the sequence sub-axis and head-group axis match downstream access.
     let q_te: DmTensor<bf16, Chip, Cluster, m![S / 16, D % 16, D / 16 % 2], m![R, S % 16, Q / 64 # 16]> = ctx

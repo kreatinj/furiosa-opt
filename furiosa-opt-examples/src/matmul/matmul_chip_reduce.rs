@@ -16,9 +16,9 @@ pub fn matmul_chip_reduce(
     lhs: &HbmTensor<i8, Chip, m![A]>,
     rhs: &HbmTensor<i8, Chip, m![C]>,
 ) -> HbmTensor<i8, m![C / 2 % 4], m![A, C / 8, C % 2]> {
-    let lhs = lhs.to_dm::<Cluster, m![A / 4], m![A % 4 # 8]>(&mut ctx.tdma, 0);
+    let lhs = lhs.to_dm_at::<Cluster, m![A / 4], m![A % 4 # 8]>(&mut ctx.tdma, 0);
 
-    let rhs = rhs.to_dm::<Cluster, m![C / 4], m![C % 4 # 8]>(&mut ctx.tdma, 128 * 1024);
+    let rhs = rhs.to_dm_at::<Cluster, m![C / 4], m![C % 4 # 8]>(&mut ctx.tdma, 128 * 1024);
 
     // Load rhs into VRF
     let rhs_broadcasted: DmTensor<i8, Chip, Cluster, m![A / 4], m![C / 4, C % 4 # 8]> = ctx

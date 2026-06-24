@@ -17,10 +17,10 @@ pub fn matmul_cluster_reduce(
     rhs: &HbmTensor<i8, Chip, m![B, C]>,
 ) -> HbmTensor<i8, Chip, m![A, C]> {
     // Load lhs: [A=1024, B=2] with B mapped to Cluster
-    let lhs = lhs.to_dm::<Cluster, m![A / 4], m![A % 4 # 8]>(&mut ctx.tdma, 0);
+    let lhs = lhs.to_dm_at::<Cluster, m![A / 4], m![A % 4 # 8]>(&mut ctx.tdma, 0);
 
     // Load rhs: [B=2, C=1024] with B mapped to Cluster
-    let rhs = rhs.to_dm::<Cluster, m![C / 4], m![C % 4 # 8]>(&mut ctx.tdma, 128 * 1024);
+    let rhs = rhs.to_dm_at::<Cluster, m![C / 4], m![C % 4 # 8]>(&mut ctx.tdma, 128 * 1024);
 
     // Load rhs into VRF
     let rhs_broadcasted: DmTensor<i8, Chip, Cluster, m![A / 4], m![C / 4, C % 4 # 8]> = ctx

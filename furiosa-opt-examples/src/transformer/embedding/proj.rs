@@ -29,7 +29,7 @@ pub(crate) fn v_proj(
     out: &mut HbmTensor<bf16, Chip, m![S, V]>,
 ) {
     let weight_dm: DmTensor<bf16, Chip, Cluster, m![V / 8, H / 224, V / 2 % 4], m![V % 2, H % 224]> =
-        weight.to_dm(&mut ctx.tdma, 0x400);
+        weight.to_dm_at(&mut ctx.tdma, 0x400);
 
     // Reorder the weight tile so H blocks align with DPE contraction.
     let weight_it: DmTensor<bf16, Chip, Cluster, m![V / 8, H / 224, H / 56 % 4], m![V % 8, H % 56 # 64]> = ctx
@@ -58,7 +58,7 @@ pub(crate) fn v_proj(
     let v_bias_hbm: HbmTensor<f32, Chip, m![1 # 2, 1 # 2, S / 32, S / 4 % 8, S / 2 % 2, V % 32]> =
         unsafe { HbmTensor::from_addr(0xc000) };
     let v_bias_dm: DmTensor<f32, Chip, Cluster, m![1 # 2, 1 # 2, S / 32, S / 4 % 8, S / 2 % 2], m![V % 32]> =
-        v_bias_hbm.to_dm(&mut ctx.tdma, 0x400);
+        v_bias_hbm.to_dm_at(&mut ctx.tdma, 0x400);
     let v_bias_vrf: VrfTensor<f32, Chip, Cluster, m![1 # 2, 1 # 2, S / 32, S / 4 % 8, S / 2 % 2], m![V % 32]> = ctx
         .sub
         .begin(v_bias_dm.view())
@@ -111,7 +111,7 @@ pub(crate) fn q_proj(
     // Reshape Q bias from HBM layout into a VRF layout for fused add.
 
     let q_bias_dm: DmTensor<bf16, Chip, Cluster, m![Q / 32 % 2, Q / 4 % 8, 1 # 16], m![Q / 64, Q % 4]> =
-        bias.to_dm(&mut ctx.tdma, 0x6600);
+        bias.to_dm_at(&mut ctx.tdma, 0x6600);
 
     let q_bias_te: DmTensor<bf16, Chip, Cluster, m![Q / 32 % 2, Q / 4 % 8, 1 # 16], m![Q % 4, Q / 64 # 16]> = ctx
         .main
@@ -186,7 +186,7 @@ pub(crate) fn q_proj(
         Cluster,
         m![Q / 4 % 16, H / 224, Q / 448, Q / 2 % 2],
         m![Q / 64, Q % 2, H % 224],
-    > = weight.to_dm(&mut ctx.tdma, 0x3100);
+    > = weight.to_dm_at(&mut ctx.tdma, 0x3100);
 
     // Reorder Q weight blocks so H fragments align with contraction groups.
     let weight_it: DmTensor<
@@ -279,7 +279,7 @@ pub(crate) fn k_proj(
     let k_bias_hbm: HbmTensor<f32, Chip, m![1 # 2, 1 # 2, S / 32, S / 4 % 8, S / 2 % 2, K % 32]> =
         unsafe { HbmTensor::from_addr(0x4000) };
     let k_bias_dm: DmTensor<f32, Chip, Cluster, m![1 # 2, 1 # 2, S / 32, S / 4 % 8, S / 2 % 2], m![K % 32]> =
-        k_bias_hbm.to_dm(&mut ctx.tdma, 0x400);
+        k_bias_hbm.to_dm_at(&mut ctx.tdma, 0x400);
     let k_bias_vrf: VrfTensor<f32, Chip, Cluster, m![1 # 2, 1 # 2, S / 32, S / 4 % 8, S / 2 % 2], m![K % 32]> = ctx
         .sub
         .begin(k_bias_dm.view())
@@ -288,7 +288,7 @@ pub(crate) fn k_proj(
         .to_vrf_at(0x0);
 
     let weight_dm: DmTensor<bf16, Chip, Cluster, m![K / 8, H / 224, K / 2 % 4], m![K % 2, H % 224]> =
-        weight.to_dm(&mut ctx.tdma, 0x0);
+        weight.to_dm_at(&mut ctx.tdma, 0x0);
 
     // Reorder the weight tile so H blocks align with DPE contraction.
     let weight_it: DmTensor<bf16, Chip, Cluster, m![K / 8, H / 224, H / 56 % 4], m![K % 8, H % 56 # 64]> = ctx

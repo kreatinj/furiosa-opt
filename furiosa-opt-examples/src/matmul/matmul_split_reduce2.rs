@@ -15,7 +15,7 @@ pub fn matmul_with_split_reduce2(
     type Chip = m![1];
     type Cluster = m![1 # 2];
 
-    let mut acc: DmTensor<bf16, Chip, Cluster, m![1 # 4, M], m![N]> = acc_zero.to_dm(&mut ctx.tdma, 0x0000_0000);
+    let mut acc: DmTensor<bf16, Chip, Cluster, m![1 # 4, M], m![N]> = acc_zero.to_dm_at(&mut ctx.tdma, 0x0000_0000);
 
     for i in 0..4 {
         let t87: DmTensor<bf16, Chip, Cluster, m![1 # 4, M], m![K % 128]> = a

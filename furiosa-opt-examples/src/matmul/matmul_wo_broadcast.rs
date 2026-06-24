@@ -12,8 +12,8 @@ pub fn matmul_wo_broadcast(
     lhs: &HbmTensor<i8, Chip, m![A, B]>,
     rhs: &HbmTensor<i8, Chip, m![A, B]>,
 ) -> HbmTensor<i8, Chip, m![1]> {
-    let lhs = lhs.to_dm::<Cluster, m![A / 16], m![A / 8 % 2, B, A % 8]>(&mut ctx.tdma, 0);
-    let rhs = rhs.to_dm::<Cluster, m![A / 16], m![A / 8 % 2, B, A % 8]>(&mut ctx.tdma, 0);
+    let lhs = lhs.to_dm_at::<Cluster, m![A / 16], m![A / 8 % 2, B, A % 8]>(&mut ctx.tdma, 0);
+    let rhs = rhs.to_dm_at::<Cluster, m![A / 16], m![A / 8 % 2, B, A % 8]>(&mut ctx.tdma, 0);
     let rhs: TrfTensor<i8, Chip, Cluster, m![A / 16], m![1], m![A / 8 % 2, B, A % 8]> = ctx
         .sub
         .begin(rhs.view())

@@ -34,9 +34,9 @@ pub(crate) fn residual_norm(
     HbmTensor<bf16, Chip, m![S, H]>,
 ) {
     let hidden_dm: DmTensor<bf16, Chip, Cluster, m![S / 2, H / 224], m![S % 2, H % 224]> =
-        hidden_states.to_dm(&mut ctx.tdma, 0x8000);
+        hidden_states.to_dm_at(&mut ctx.tdma, 0x8000);
     let oproj_dm: DmTensor<bf16, Chip, Cluster, m![S / 2, H / 224], m![S % 2, H % 224]> =
-        o_proj_out.to_dm(&mut ctx.tdma, 0x18500);
+        o_proj_out.to_dm_at(&mut ctx.tdma, 0x18500);
 
     // Add residual and projection outputs elementwise.
     let residual_dm: DmTensor<bf16, Chip, Cluster, m![S / 2, H / 224], m![S % 2, H % 224]> = ctx
@@ -60,7 +60,7 @@ pub(crate) fn residual_norm(
 
     let norm_hbm: HbmTensor<bf16, Chip, m![S, H]> = normalized.to_hbm(&mut ctx.tdma, 0x10e10000);
     let retiled: DmTensor<bf16, Chip, Cluster, m![Y, S / 32, H / 56], m![S % 32, H % 56]> =
-        norm_hbm.to_dm(&mut ctx.tdma, 0x1300);
+        norm_hbm.to_dm_at(&mut ctx.tdma, 0x1300);
     (retiled, residual_hbm)
 }
 
@@ -74,9 +74,9 @@ pub(crate) fn residual_norm_post(
 ) -> DmTensor<bf16, Chip, Cluster, m![Y, S / 32, H / 56], m![S % 32, H % 56]> {
     // Load both inputs using the normalization-friendly tile shape.
     let residual_dm: DmTensor<bf16, Chip, Cluster, m![S / 2, H / 224], m![S % 2, H % 224]> =
-        residual.to_dm(&mut ctx.tdma, 0x8000);
+        residual.to_dm_at(&mut ctx.tdma, 0x8000);
     let mlp_dm: DmTensor<bf16, Chip, Cluster, m![S / 2, H / 224], m![S % 2, H % 224]> =
-        mlp_out.to_dm(&mut ctx.tdma, 0x18500);
+        mlp_out.to_dm_at(&mut ctx.tdma, 0x18500);
 
     let residual_sum: DmTensor<bf16, Chip, Cluster, m![S / 2, H / 224], m![S % 2, H % 224]> = ctx
         .main
@@ -98,7 +98,7 @@ pub(crate) fn residual_norm_post(
     let rms_result = rms_norm_pipeline(ctx, &residual_sum, norm_weight);
     // Retile normalized output for the next block.
     let norm_hbm: HbmTensor<bf16, Chip, m![S, H]> = rms_result.to_hbm(&mut ctx.tdma, 0x10e10000);
-    norm_hbm.to_dm(&mut ctx.tdma, 0x1300)
+    norm_hbm.to_dm_at(&mut ctx.tdma, 0x1300)
 }
 
 /// RMS norm VE pipeline shared by all variants.
@@ -108,7 +108,7 @@ fn rms_norm_pipeline(
     norm_weight: &HbmTensor<bf16, Chip, m![H]>,
 ) -> DmTensor<bf16, Chip, Cluster, m![S / 2, H / 224], m![S % 2, H % 224]> {
     let weight_dm: DmTensor<bf16, Chip, Cluster, m![W, H / 224], m![H % 224]> =
-        norm_weight.to_dm(&mut ctx.tdma, 0x9000);
+        norm_weight.to_dm_at(&mut ctx.tdma, 0x9000);
 
     let weight_vrf: VrfTensor<f32, Chip, Cluster, m![S / 2, H / 224], m![H % 224]> = ctx
         .sub
@@ -196,9 +196,9 @@ pub(crate) fn final_norm(
     norm_weight: &HbmTensor<bf16, Chip, m![H]>,
 ) -> DmTensor<bf16, Chip, Cluster, m![Y, H / 14], m![H % 14, S]> {
     let residual_dm: DmTensor<bf16, Chip, Cluster, m![S / 2, H / 224], m![S % 2, H % 224]> =
-        residual.to_dm(&mut ctx.tdma, 0x8000);
+        residual.to_dm_at(&mut ctx.tdma, 0x8000);
     let mlp_dm: DmTensor<bf16, Chip, Cluster, m![S / 2, H / 224], m![S % 2, H % 224]> =
-        mlp_out.to_dm(&mut ctx.tdma, 0x18500);
+        mlp_out.to_dm_at(&mut ctx.tdma, 0x18500);
     let residual_sum: DmTensor<bf16, Chip, Cluster, m![S / 2, H / 224], m![S % 2, H % 224]> = ctx
         .main
         .begin_interleaved::<I, _, _, _, _, _>(residual_dm.view(), mlp_dm.view())
@@ -215,7 +215,7 @@ pub(crate) fn final_norm(
     // Use an HBM round-trip to retile from H-contiguous to S-contiguous layout.
     let residual_hbm: HbmTensor<bf16, Chip, m![S, H]> = residual_sum.to_hbm(&mut ctx.tdma, 0x10e10000);
     let retiled: DmTensor<bf16, Chip, Cluster, m![Y, H / 14], m![H % 14, S]> =
-        residual_hbm.to_dm(&mut ctx.tdma, 0x1e000);
+        residual_hbm.to_dm_at(&mut ctx.tdma, 0x1e000);
 
     // Compute variance per token and add epsilon.
     let variance: DmTensor<f32, Chip, Cluster, m![Y, H / 14], m![1]> = ctx
@@ -253,7 +253,7 @@ pub(crate) fn final_norm(
         .vector_final()
         .to_vrf_at(0);
 
-    let weight_dm: DmTensor<bf16, Chip, Cluster, m![Y, H / 14], m![H % 14]> = norm_weight.to_dm(&mut ctx.tdma, 0xc200);
+    let weight_dm: DmTensor<bf16, Chip, Cluster, m![Y, H / 14], m![H % 14]> = norm_weight.to_dm_at(&mut ctx.tdma, 0xc200);
 
     let weight_vrf: VrfTensor<f32, Chip, Cluster, m![Y, H / 14], m![H % 14]> = ctx
         .sub

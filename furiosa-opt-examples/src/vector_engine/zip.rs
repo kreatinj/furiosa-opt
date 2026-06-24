@@ -6,8 +6,8 @@ pub fn ve_group_pair_add(
     lhs: &HbmTensor<i32, Chip, m![A]>,
     rhs: &HbmTensor<i32, Chip, m![A]>,
 ) -> HbmTensor<i32, Chip, m![A]> {
-    let lhs_dm = lhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
-    let rhs_dm = rhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
+    let lhs_dm = lhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
+    let rhs_dm = rhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
 
     let result: DmTensor<i32, Chip, Cluster, m![A / 2], m![A % 2]> = ctx
         .main
@@ -31,8 +31,8 @@ pub fn ve_group_pair_preprocess_both(
     lhs: &HbmTensor<i32, Chip, m![A]>,
     rhs: &HbmTensor<i32, Chip, m![A]>,
 ) -> HbmTensor<i32, Chip, m![A]> {
-    let lhs_dm = lhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
-    let rhs_dm = rhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
+    let lhs_dm = lhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
+    let rhs_dm = rhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
 
     let result: DmTensor<i32, Chip, Cluster, m![A / 2], m![A % 2]> = ctx
         .main
@@ -57,8 +57,8 @@ pub fn ve_group_pair_preprocess_g0(
     lhs: &HbmTensor<i32, Chip, m![A]>,
     rhs: &HbmTensor<i32, Chip, m![A]>,
 ) -> HbmTensor<i32, Chip, m![A]> {
-    let lhs_dm = lhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
-    let rhs_dm = rhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
+    let lhs_dm = lhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
+    let rhs_dm = rhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
 
     let result: DmTensor<i32, Chip, Cluster, m![A / 2], m![A % 2]> = ctx
         .main
@@ -83,8 +83,8 @@ pub fn ve_group_pair_preprocess_g1(
     lhs: &HbmTensor<i32, Chip, m![A]>,
     rhs: &HbmTensor<i32, Chip, m![A]>,
 ) -> HbmTensor<i32, Chip, m![A]> {
-    let lhs_dm = lhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
-    let rhs_dm = rhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
+    let lhs_dm = lhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
+    let rhs_dm = rhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
 
     let result: DmTensor<i32, Chip, Cluster, m![A / 2], m![A % 2]> = ctx
         .main
@@ -109,8 +109,8 @@ pub fn ve_group_pair_chain(
     lhs: &HbmTensor<i32, Chip, m![A]>,
     rhs: &HbmTensor<i32, Chip, m![A]>,
 ) -> HbmTensor<i32, Chip, m![A]> {
-    let lhs_dm = lhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
-    let rhs_dm = rhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
+    let lhs_dm = lhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
+    let rhs_dm = rhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
 
     let result: DmTensor<i32, Chip, Cluster, m![A / 2], m![A % 2]> = ctx
         .main
@@ -135,8 +135,8 @@ pub fn ve_group_pair_fxp(
     lhs: &HbmTensor<i32, Chip, m![A]>,
     rhs: &HbmTensor<i32, Chip, m![A]>,
 ) -> HbmTensor<i32, Chip, m![A]> {
-    let lhs_dm = lhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
-    let rhs_dm = rhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
+    let lhs_dm = lhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
+    let rhs_dm = rhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
 
     let result: DmTensor<i32, Chip, Cluster, m![A / 2], m![A % 2]> = ctx
         .main
@@ -160,8 +160,8 @@ pub fn ve_group_pair_logic(
     lhs: &HbmTensor<i32, Chip, m![A]>,
     rhs: &HbmTensor<i32, Chip, m![A]>,
 ) -> HbmTensor<i32, Chip, m![A]> {
-    let lhs_dm = lhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
-    let rhs_dm = rhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
+    let lhs_dm = lhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
+    let rhs_dm = rhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
 
     let result: DmTensor<i32, Chip, Cluster, m![A / 2], m![A % 2]> = ctx
         .main
@@ -185,8 +185,8 @@ pub fn ve_group_pair_fp(
     lhs: &HbmTensor<i32, Chip, m![A]>,
     rhs: &HbmTensor<i32, Chip, m![A]>,
 ) -> HbmTensor<f32, Chip, m![A]> {
-    let lhs_dm = lhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
-    let rhs_dm = rhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
+    let lhs_dm = lhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
+    let rhs_dm = rhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
 
     let result: DmTensor<f32, Chip, Cluster, m![A / 2], m![A % 2]> = ctx
         .main
@@ -217,8 +217,8 @@ pub fn ve_group_pair_fp_multi_packet(
     lhs: &HbmTensor<i32, Chip, m![Q, A]>,
     rhs: &HbmTensor<i32, Chip, m![Q, A]>,
 ) -> HbmTensor<f32, Chip, m![Q, A]> {
-    let lhs_dm = lhs.to_dm::<Cluster, m![A / 2], m![Q, A % 2]>(&mut ctx.tdma, 0x1000);
-    let rhs_dm = rhs.to_dm::<Cluster, m![A / 2], m![Q, A % 2]>(&mut ctx.tdma, 0x2000);
+    let lhs_dm = lhs.to_dm_at::<Cluster, m![A / 2], m![Q, A % 2]>(&mut ctx.tdma, 0x1000);
+    let rhs_dm = rhs.to_dm_at::<Cluster, m![A / 2], m![Q, A % 2]>(&mut ctx.tdma, 0x2000);
 
     let result: DmTensor<f32, Chip, Cluster, m![A / 2], m![Q, A % 2]> = ctx
         .main
@@ -245,8 +245,8 @@ pub fn ve_group_pair_unary(
     lhs: &HbmTensor<i32, Chip, m![A]>,
     rhs: &HbmTensor<i32, Chip, m![A]>,
 ) -> HbmTensor<f32, Chip, m![A]> {
-    let lhs_dm = lhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
-    let rhs_dm = rhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
+    let lhs_dm = lhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
+    let rhs_dm = rhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
 
     let result: DmTensor<f32, Chip, Cluster, m![A / 2], m![A % 2]> = ctx
         .main
@@ -274,8 +274,8 @@ pub fn ve_group_pair_unary_selective(
     lhs: &HbmTensor<i32, Chip, m![A]>,
     rhs: &HbmTensor<i32, Chip, m![A]>,
 ) -> HbmTensor<f32, Chip, m![A]> {
-    let lhs_dm = lhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
-    let rhs_dm = rhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
+    let lhs_dm = lhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
+    let rhs_dm = rhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
 
     let result: DmTensor<f32, Chip, Cluster, m![A / 2], m![A % 2]> = ctx
         .main
@@ -305,7 +305,7 @@ pub fn ve_group_pair_unary_selective(
 /// output = input * 2.0 + 3.0  (using MulAdd: a*b+c where a=input, b=2.0, c=3.0)
 #[device(chip = 1)]
 pub fn ve_elementwise_ternary(ctx: &mut Context, input: &HbmTensor<f32, Chip, m![A]>) -> HbmTensor<f32, Chip, m![A]> {
-    let input_dm = input.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
+    let input_dm = input.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
 
     let result: DmTensor<f32, Chip, Cluster, m![A / 2], m![A % 2]> = ctx
         .main
@@ -335,7 +335,7 @@ pub fn ve_elementwise_ternary_stash(
     ctx: &mut Context,
     input: &HbmTensor<f32, Chip, m![A]>,
 ) -> HbmTensor<f32, Chip, m![A]> {
-    let input_dm = input.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
+    let input_dm = input.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
 
     let result: DmTensor<f32, Chip, Cluster, m![A / 2], m![A % 2]> = ctx
         .main
@@ -367,8 +367,8 @@ pub fn ve_group_pair_ternary(
     lhs: &HbmTensor<f32, Chip, m![A]>,
     rhs: &HbmTensor<f32, Chip, m![A]>,
 ) -> HbmTensor<f32, Chip, m![A]> {
-    let lhs_dm = lhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
-    let rhs_dm = rhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
+    let lhs_dm = lhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
+    let rhs_dm = rhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
 
     let result: DmTensor<f32, Chip, Cluster, m![A / 2], m![A % 2]> = ctx
         .main
@@ -400,8 +400,8 @@ pub fn ve_group_pair_ternary_selective(
     lhs: &HbmTensor<f32, Chip, m![A]>,
     rhs: &HbmTensor<f32, Chip, m![A]>,
 ) -> HbmTensor<f32, Chip, m![A]> {
-    let lhs_dm = lhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
-    let rhs_dm = rhs.to_dm::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
+    let lhs_dm = lhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x1000);
+    let rhs_dm = rhs.to_dm_at::<Cluster, m![A / 2], m![A % 2]>(&mut ctx.tdma, 0x2000);
 
     let result: DmTensor<f32, Chip, Cluster, m![A / 2], m![A % 2]> = ctx
         .main

@@ -15,7 +15,7 @@ pub mod cluster_size {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<m![1 # 4], Slice, m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<m![1 # 4], Slice, m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, m![1 # 4], Slice, m![A, B]> = ctx
             .main
@@ -35,7 +35,7 @@ pub mod cluster_size {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, Slice, m![A, B]> = ctx
             .main
@@ -59,7 +59,7 @@ pub mod slice_size {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![1 # 512], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![1 # 512], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![1 # 512], m![A, B]> = ctx
             .main
@@ -79,7 +79,7 @@ pub mod slice_size {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, Slice, m![A, B]> = ctx
             .main

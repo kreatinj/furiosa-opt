@@ -24,7 +24,7 @@ pub(super) fn rms_norm(
 ) -> DmTensor<bf16, Chip, Cluster, m![Y, S / 32, H / 56], m![S % 32, H % 56]> {
     // Reload hidden states into a tiled SRAM layout for RMSNorm.
     let hidden_dm_0: DmTensor<bf16, Chip, Cluster, m![Y, S / 32, H / 224, S / 8 % 4], m![S % 8, H % 224]> =
-        hidden_hbm.to_dm(&mut ctx.tdma, 0x500);
+        hidden_hbm.to_dm_at(&mut ctx.tdma, 0x500);
 
     // Reorder tiles so hidden channels map to 56-wide vector lanes.
     let hidden_dm_1: DmTensor<bf16, Chip, Cluster, m![Y, S / 32, H / 224, S / 8 % 4], m![S % 32, H % 56 # 64]> = ctx
@@ -46,7 +46,7 @@ pub(super) fn rms_norm(
 
     // Load norm weights.
     let weight_dm_0: DmTensor<bf16, Chip, Cluster, m![X, H / 112, 1 # 2], m![H % 112]> =
-        norm_weight.to_dm(&mut ctx.tdma, 0x0);
+        norm_weight.to_dm_at(&mut ctx.tdma, 0x0);
 
     // Reorder weight tiles into 56-wide channel groups.
     let weight_dm_1: DmTensor<bf16, Chip, Cluster, m![X, H / 112, H / 56 % 2], m![1 # 2, H % 56 # 64]> = ctx

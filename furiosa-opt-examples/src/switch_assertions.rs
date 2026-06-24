@@ -15,7 +15,7 @@ pub mod alignment {
         input: &HbmTensor<i4, Chip, m![A, B]>,
         output: &mut HbmTensor<i4, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, Slice, m![A, B # 64]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B # 64]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i4, Chip, Cluster, Slice, m![A, B]> = ctx
             .main
@@ -35,7 +35,7 @@ pub mod alignment {
         input: &HbmTensor<i4, Chip, m![A, B # 64]>,
         output: &mut HbmTensor<i4, Chip, m![A, B # 64]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, Slice, m![A, B # 64]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B # 64]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i4, Chip, Cluster, Slice, m![A, B # 64]> = ctx
             .main
@@ -55,7 +55,7 @@ pub mod alignment {
         input: &HbmTensor<i8, Chip, m![A, B / 2]>,
         output: &mut HbmTensor<i8, Chip, m![A, B / 2]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, Slice, m![A, B / 2]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B / 2]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, Slice, m![A, B / 2]> = ctx
             .main
@@ -75,7 +75,7 @@ pub mod alignment {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, Slice, m![A, B]> = ctx
             .main
@@ -95,7 +95,7 @@ pub mod alignment {
         input: &HbmTensor<bf16, Chip, m![A, B / 4]>,
         output: &mut HbmTensor<bf16, Chip, m![A, B / 4]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, Slice, m![A, B / 4]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B / 4]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<bf16, Chip, Cluster, Slice, m![A, B / 4]> = ctx
             .main
@@ -115,7 +115,7 @@ pub mod alignment {
         input: &HbmTensor<bf16, Chip, m![A, B]>,
         output: &mut HbmTensor<bf16, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<bf16, Chip, Cluster, Slice, m![A, B]> = ctx
             .main
@@ -139,7 +139,7 @@ pub mod packet {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, Slice, m![A, B]> = ctx
             .main
@@ -159,7 +159,7 @@ pub mod packet {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, Slice, m![A, B]> = ctx
             .main
@@ -179,7 +179,7 @@ pub mod packet {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, Slice, m![A, B]> = ctx
             .main
@@ -199,7 +199,7 @@ pub mod packet {
         input: &HbmTensor<i8, Chip, m![A, C]>,
         output: &mut HbmTensor<i8, Chip, m![A, C / 16, C % 16]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, Slice, m![A, C]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, C]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, Slice, m![A, C / 16, C % 16]> = ctx
             .main
@@ -219,7 +219,7 @@ pub mod packet {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, Slice, m![A, B]> = ctx
             .main
@@ -239,7 +239,7 @@ pub mod packet {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, Slice, m![A, B]> = ctx
             .main
@@ -259,7 +259,7 @@ pub mod packet {
         input: &HbmTensor<bf16, Chip, m![A, B]>,
         output: &mut HbmTensor<bf16, Chip, m![A, B % 16]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
 
         // bf16 B=32 elements = 64 bytes = 2 flits.
         // Correct Time2 would be m![A, B / 16] (absorbing outer flit into time).
@@ -282,7 +282,7 @@ pub mod packet {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B # 64]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, Slice, m![A, B # 64]> = ctx
             .main
@@ -306,7 +306,7 @@ pub mod slice {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, Slice, m![A, B]> = ctx
             .main
@@ -330,7 +330,7 @@ pub mod broadcast1 {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 16, 1 # 4, C % 4, A, C / 4 % 4, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 16, 1 # 4, C % 4], m![A, C / 4 % 4, B]> = ctx
             .main
@@ -351,7 +351,7 @@ pub mod broadcast1 {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 4, 1 # 4, A, C % 4, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![1 # 4, C % 64], m![A, C / 64, B]> = ctx
             .main
@@ -372,7 +372,7 @@ pub mod broadcast1 {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 4, D % 4, A, C % 4, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 4, D % 4], m![A, C % 4, B]> = ctx
             .main
@@ -393,7 +393,7 @@ pub mod broadcast1 {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 4, D % 4, A, C % 4, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 4, D % 4], m![A, C % 4, B]> = ctx
             .main
@@ -414,7 +414,7 @@ pub mod broadcast1 {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![D % 4, C % 64, A, C / 64, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![D % 4, C % 64], m![A, C / 64, B]> = ctx
             .main
@@ -435,7 +435,7 @@ pub mod broadcast1 {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 4, C % 4, A, C % 4, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 64, C % 64], m![A, C / 64, B]> = ctx
             .main
@@ -456,7 +456,7 @@ pub mod broadcast1 {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 4, D % 4, A, C % 2, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![1 # 4, D % 64], m![A, C / 64, B]> = ctx
             .main
@@ -477,7 +477,7 @@ pub mod broadcast1 {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 4, D % 4, A, E % 4, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![1 # 4, C % 64], m![A, E % 4, B]> = ctx
             .main
@@ -502,7 +502,7 @@ pub mod broadcast01 {
         input: &HbmTensor<i8, Chip, m![B]>,
         output: &mut HbmTensor<i8, Chip, m![F / 4, E / 4, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![E / 4], m![1, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![E / 4], m![1, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![F / 4], m![E / 4, B]> = ctx
             .main
@@ -527,7 +527,7 @@ pub mod broadcast01 {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 4, D % 4, A / 2, C / 2 % 2, A % 2, C % 2, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 4, D % 4], m![A / 2, C / 2 % 2, A % 2, C % 2, B]> = ctx
             .main
@@ -552,7 +552,7 @@ pub mod broadcast01 {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 4, 1 # 4, A, C / 2 % 2, C % 2, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 4, 1 # 4], m![A, C / 2 % 2, C % 2, B]> = ctx
             .main
@@ -577,7 +577,7 @@ pub mod broadcast01 {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 4, D % 4, A, C / 2 % 2, C % 2, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 4, D % 4], m![A, C / 2 % 2, C % 2, B]> = ctx
             .main
@@ -602,7 +602,7 @@ pub mod broadcast01 {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 4, D % 4, A, C / 2 % 2, C % 2, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 4, D % 4], m![A, C / 2 % 2, C % 2, B]> = ctx
             .main
@@ -627,7 +627,7 @@ pub mod broadcast01 {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 4, D % 4, A, C / 2 % 2, C % 2, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 4, D % 4], m![A, C / 2 % 2, C % 2, B]> = ctx
             .main
@@ -652,7 +652,7 @@ pub mod broadcast01 {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 8, D % 8, A / 2, C / 2 % 2, A % 2, C % 2, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 8, D % 8], m![A / 2, C / 2 % 2, A % 2, C % 2, B]> = ctx
             .main
@@ -677,7 +677,7 @@ pub mod broadcast01 {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 4, C % 4, A, C / 2 % 2, C % 2, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 4, C % 4], m![A, C / 2 % 2, C % 2, B]> = ctx
             .main
@@ -702,7 +702,7 @@ pub mod broadcast01 {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 4, A % 4, A, C / 2 % 2, C % 2, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 4, A % 4], m![A, C / 2 % 2, C % 2, B]> = ctx
             .main
@@ -727,7 +727,7 @@ pub mod broadcast01 {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 4, E % 4, A / 2, C / 2, A % 2, C % 2, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 4, E % 4], m![A / 2, C / 2, A % 2, C % 2, B]> = ctx
             .main
@@ -756,7 +756,7 @@ pub mod transpose {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 64, C % 2, C / 2 % 32, A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 64, C % 2, C / 2 % 32], m![A, B]> = ctx
             .main
@@ -777,7 +777,7 @@ pub mod transpose {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 128, C % 8, C / 8 % 16, A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C / 128, C / 8 % 16, C % 8], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C / 128, C / 8 % 16, C % 8], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 128, C % 8, C / 8 % 16], m![A, B]> = ctx
             .main
@@ -798,7 +798,7 @@ pub mod transpose {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 16, C % 4, C / 4 % 4, A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C / 16, C % 16], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C / 16, C % 16], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 16, C % 4, C / 4 % 4], m![A, B]> = ctx
             .main
@@ -819,7 +819,7 @@ pub mod transpose {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 64, C % 2, C / 2 % 32, D, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 64, C % 2, C / 2 % 32], m![D, B]> = ctx
             .main
@@ -840,7 +840,7 @@ pub mod transpose {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 64, C % 2, C / 2 % 32, E % 8, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 64, C % 2, C / 2 % 32], m![E % 8, B]> = ctx
             .main
@@ -861,7 +861,7 @@ pub mod transpose {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C / 128, C / 8 % 16, C % 8], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C / 128, C / 8 % 16, C % 8], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C % 8, C / 128, C / 8 % 16], m![A, B]> = ctx
             .main
@@ -886,7 +886,7 @@ pub mod inter_transpose {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![C / 32, A / 2 % 2, C % 16, A / 4, A % 2, C / 16 % 2, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 32, A / 2 % 2, C % 16], m![A / 4, A % 2, C / 16 % 2, B]> = ctx
             .main
@@ -911,7 +911,7 @@ pub mod inter_transpose {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, C % 32, C / 32 % 8, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![A, C % 32], m![C / 32 % 8, B]> = ctx
             .main
@@ -936,7 +936,7 @@ pub mod inter_transpose {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![A, C % 32], m![C / 32 % 8, B]> = ctx
             .main
@@ -961,7 +961,7 @@ pub mod inter_transpose {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, Slice, m![A, B]> = ctx
             .main
@@ -986,7 +986,7 @@ pub mod inter_transpose {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![A, C % 32], m![C / 32 % 8, B]> = ctx
             .main
@@ -1011,7 +1011,7 @@ pub mod inter_transpose {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C / 128, C % 128], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C / 128, C % 128], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![D % 2, A, C % 16], m![B / 16, E % 2, C / 16 % 8, B]> = ctx
             .main
@@ -1036,7 +1036,7 @@ pub mod inter_transpose {
         input: &HbmTensor<i8, Chip, m![B]>,
         output: &mut HbmTensor<i8, Chip, m![B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![D % 2, A, C % 16], m![B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![D % 2, A, C % 16], m![B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![D % 2, A, B / 2], m![B / 8, B / 4 % 2, B % 2, C / 16 % 8, B]> = ctx
             .main
@@ -1061,7 +1061,7 @@ pub mod inter_transpose {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C / 128, C % 128], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C / 128, C % 128], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 32, D % 2, C % 16], m![A / 2, G / 16, A % 2, B]> = ctx
             .main
@@ -1086,7 +1086,7 @@ pub mod inter_transpose {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 32, A / 2 % 2, C % 16], m![A / 2, A % 2, C / 16 % 2, B]> = ctx
             .main
@@ -1111,7 +1111,7 @@ pub mod inter_transpose {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 32, A / 2 % 2, C % 16], m![A / 4, A / 2 % 2, D % 2, B]> = ctx
             .main
@@ -1136,7 +1136,7 @@ pub mod inter_transpose {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let input_dm = input.to_dm::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm_at::<Cluster, m![C], m![A, B]>(&mut ctx.tdma, 0);
 
         let result: DmTensor<i8, Chip, Cluster, m![C / 32, A / 2 % 2, C % 16], m![A / 4, A % 2, D % 2, B]> = ctx
             .main

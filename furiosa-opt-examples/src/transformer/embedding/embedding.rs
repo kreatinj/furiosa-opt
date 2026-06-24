@@ -22,7 +22,7 @@ pub(super) fn embed(
     embedding_table: &HbmTensor<bf16, Chip, m![W, H]>,
 ) -> DmTensor<bf16, Chip, Cluster, m![H / 128 # 8, S / 4], m![S % 4, H % 128]> {
     // Load token ids to SRAM.
-    let ids_dm = input_ids.to_dm::<Cluster, m![1 # 256], m![S]>(&mut ctx.tdma, 0x200);
+    let ids_dm = input_ids.to_dm_at::<Cluster, m![1 # 256], m![S]>(&mut ctx.tdma, 0x200);
 
     // Convert token ids into byte offsets for table gather.
     let ids_scaled: DmTensor<i32, Chip, Cluster, m![1 # 256], m![S]> = ctx

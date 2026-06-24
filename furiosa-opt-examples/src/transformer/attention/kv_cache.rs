@@ -23,7 +23,7 @@ pub(super) fn cache_kv(
 
     // Load V scatter indices from HBM to DM.
     let v_idx_dm: DmTensor<i32, Chip, Cluster, m![T / 32, 1 # 8], m![T % 32]> =
-        v_scatter_index.to_dm(&mut ctx.tdma, 0x0);
+        v_scatter_index.to_dm_at(&mut ctx.tdma, 0x0);
 
     // Reorder index tiles to match the downstream scatter-friendly layout.
     let v_idx_it: DmTensor<i32, Chip, Cluster, m![T / 32, T / 4 % 8], m![T % 4 # 32]> = ctx
@@ -79,7 +79,7 @@ pub(super) fn cache_kv(
     let v_idx_hbm: HbmTensor<i32, Chip, m![T]> = v_idx_d0b.to_hbm(&mut ctx.tdma, 0x10e36000);
 
     // Load V rows into SRAM, then reinterpret as [N, D] blocks for cache scatter.
-    attn_v.to_dm::<Cluster, m![T / 16], m![T % 16, K]>(&mut ctx.tdma, 0x200);
+    attn_v.to_dm_at::<Cluster, m![T / 16], m![T % 16, K]>(&mut ctx.tdma, 0x200);
     let v_scatter_reshaped: DmTensor<bf16, Chip, Cluster, m![T / 16], m![T % 16, N, D]> =
         unsafe { DmTensor::from_addr(0x200) };
 
@@ -90,7 +90,7 @@ pub(super) fn cache_kv(
 
     // Load K scatter indices from HBM to DM.
     let k_idx_dm: DmTensor<i32, Chip, Cluster, m![T / 32, 1 # 8], m![T % 32]> =
-        k_scatter_index.to_dm(&mut ctx.tdma, 0x0);
+        k_scatter_index.to_dm_at(&mut ctx.tdma, 0x0);
 
     // Reorder K index tiles to the scatter-friendly layout.
     let k_idx_it: DmTensor<i32, Chip, Cluster, m![T / 32, T / 4 % 8], m![T % 4 # 32]> = ctx
@@ -146,7 +146,7 @@ pub(super) fn cache_kv(
     let k_idx_hbm: HbmTensor<i32, Chip, m![T]> = k_idx_d0b.to_hbm(&mut ctx.tdma, 0x10e40000);
 
     // Load K rows into SRAM, then reinterpret as [N, D] blocks for cache scatter.
-    attn_k.to_dm::<Cluster, m![T / 4], m![T % 4, K]>(&mut ctx.tdma, 0x5e00);
+    attn_k.to_dm_at::<Cluster, m![T / 4], m![T % 4, K]>(&mut ctx.tdma, 0x5e00);
     let k_scatter_reshaped: DmTensor<bf16, Chip, Cluster, m![T / 4], m![T % 4, N, D]> =
         unsafe { DmTensor::from_addr(0x5e00) };
 

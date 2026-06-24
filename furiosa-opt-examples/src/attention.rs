@@ -16,7 +16,7 @@ pub fn compile_llama3_1_mlperf_latest_8pe_4chip_w8a16kv16_prefill_first_block_b1
     norm_weight_hbm: &HbmTensor<f32, Chip, m![E]>,
 ) {
     let input_ids_sram_1 =
-        input_ids_hbm.to_dm::<m![S / 512], m![S / 16 % 32, 1 # 8], m![S % 16]>(&mut ctx.tdma, 0x00010000);
+        input_ids_hbm.to_dm_at::<m![S / 512], m![S / 16 % 32, 1 # 8], m![S % 16]>(&mut ctx.tdma, 0x00010000);
     let input_ids_sram_1 = ctx
         .main
         .begin(input_ids_sram_1.view())
@@ -61,7 +61,7 @@ pub fn compile_llama3_1_mlperf_latest_8pe_4chip_w8a16kv16_prefill_first_block_b1
         embedding_table_hbm.dma_gather(&input_ids_scaled_dram, 0x00018000, true);
 
     let norm_weight_sram_0: DmTensor<f32, Chip, m![X], m![E / 128, 1 # 2], m![E % 64]> =
-        norm_weight_hbm.to_dm(&mut ctx.tdma, 0x00010200);
+        norm_weight_hbm.to_dm_at(&mut ctx.tdma, 0x00010200);
     let norm_weight_sram_1: DmTensor<f32, Chip, m![X], m![E / 128, 1 # 2], m![1 # 2, E % 32]> = ctx
         .main
         .begin(norm_weight_sram_0.view())

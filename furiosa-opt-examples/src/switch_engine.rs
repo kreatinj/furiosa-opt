@@ -14,7 +14,7 @@ pub fn custom_broadcast(
     ctx: &mut Context,
     input: &HbmTensor<bf16, Chip, m![A, B, V]>,
 ) -> HbmTensor<bf16, Chip, m![A, Y, B, V]> {
-    let dm: DmTensor<bf16, Chip, Cluster, Slice, m![B, V]> = input.to_dm::<Cluster, Slice, m![B, V]>(&mut ctx.tdma, 0);
+    let dm: DmTensor<bf16, Chip, Cluster, Slice, m![B, V]> = input.to_dm_at::<Cluster, Slice, m![B, V]>(&mut ctx.tdma, 0);
 
     let result: DmTensor<bf16, Chip, Cluster, OutSlice, m![B, V]> = ctx
         .main

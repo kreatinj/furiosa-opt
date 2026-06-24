@@ -14,8 +14,8 @@ pub fn matmul_4096(
     lhs: &HbmTensor<i8, m![1], m![A, B]>,
     rhs: &HbmTensor<i8, m![1], m![B]>,
 ) -> HbmTensor<i8, m![1], m![A]> {
-    let lhs = lhs.to_dm::<Cluster, m![A / 1024 % 2, B / 32], m![A % 1024, B % 32]>(&mut ctx.tdma, 0);
-    let rhs = rhs.to_dm::<Cluster, m![A / 1024 % 2, B / 32], m![B % 32]>(&mut ctx.tdma, 0);
+    let lhs = lhs.to_dm_at::<Cluster, m![A / 1024 % 2, B / 32], m![A % 1024, B % 32]>(&mut ctx.tdma, 0);
+    let rhs = rhs.to_dm_at::<Cluster, m![A / 1024 % 2, B / 32], m![B % 32]>(&mut ctx.tdma, 0);
     let rhs: TrfTensor<i8, Chip, Cluster, m![A / 1024 % 2, B / 32], m![1], m![B % 32]> = ctx
         .sub
         .begin(rhs.view())

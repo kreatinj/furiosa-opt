@@ -28,7 +28,7 @@ pub(crate) fn mlp(
     down_weight: &HbmTensor<bf16, Chip, m![H, M]>,
 ) -> HbmTensor<bf16, Chip, m![S, H]> {
     let gate_dm: DmTensor<bf16, Chip, Cluster, m![M / 76, M / 19 % 4], m![M % 19, H]> =
-        gate_weight.to_dm(&mut ctx.tdma, 0x0);
+        gate_weight.to_dm_at(&mut ctx.tdma, 0x0);
 
     let gate_it: DmTensor<bf16, Chip, Cluster, m![M / 76, H / 224], m![M / 19 % 4, M % 19, H % 224]> = ctx
         .main
@@ -150,7 +150,7 @@ pub(crate) fn mlp(
         .commit_at(0x18000);
 
     let up_dm: DmTensor<bf16, Chip, Cluster, m![M / 76, M / 19 % 4], m![M % 19, H]> =
-        up_weight.to_dm(&mut ctx.tdma, 0x20000);
+        up_weight.to_dm_at(&mut ctx.tdma, 0x20000);
 
     let up_it: DmTensor<bf16, Chip, Cluster, m![M / 76, H / 224], m![M / 19 % 4, M % 19, H % 224]> = ctx
         .main
@@ -252,7 +252,7 @@ pub(crate) fn mlp(
     let gated_hbm: HbmTensor<bf16, Chip, m![M, S]> = gated.to_hbm(&mut ctx.tdma, 0x256d000);
 
     let gated_retiled: DmTensor<bf16, Chip, Cluster, m![Y, M / 76], m![M % 76, S]> =
-        gated_hbm.to_dm(&mut ctx.tdma, 0x9000);
+        gated_hbm.to_dm_at(&mut ctx.tdma, 0x9000);
 
     // Reshape gated activation Slice for down-projection TRF alignment.
     let gated_retiled: DmTensor<bf16, Chip, Cluster, m![H / 224, M / 152, M / 76 % 2], m![M % 76, S]> =
@@ -266,7 +266,7 @@ pub(crate) fn mlp(
         .collect::<m![M % 76], m![S]>()
         .to_trf_at(TrfAddress::Full);
     let down_dm: DmTensor<bf16, Chip, Cluster, m![H / 224, M / 152, H / 112 % 2], m![H % 112, M % 152]> =
-        down_weight.to_dm(&mut ctx.tdma, 0x30000);
+        down_weight.to_dm_at(&mut ctx.tdma, 0x30000);
     let down_it: DmTensor<
         bf16,
         Chip,

@@ -10,8 +10,8 @@ fn fc1_matmul(
     input: &HbmTensor<bf16, Chip, m![X]>,
     weight: &HbmTensor<bf16, Chip, m![H, X]>,
 ) -> DmTensor<bf16, Chip, Cluster, m![H], m![1 # 16]> {
-    let input_dm: DmTensor<bf16, Chip, Cluster, m![H], m![X]> = input.to_dm(&mut ctx.tdma, 0);
-    let weight_dm: DmTensor<bf16, Chip, Cluster, m![H], m![X]> = weight.to_dm(&mut ctx.tdma, 0x10000);
+    let input_dm: DmTensor<bf16, Chip, Cluster, m![H], m![X]> = input.to_dm_at(&mut ctx.tdma, 0);
+    let weight_dm: DmTensor<bf16, Chip, Cluster, m![H], m![X]> = weight.to_dm_at(&mut ctx.tdma, 0x10000);
 
     let input_trf: TrfTensor<bf16, Chip, Cluster, m![H], m![1], m![X]> = ctx
         .sub
@@ -37,7 +37,7 @@ fn fc1_bias_prepared(
     ctx: &mut Context,
     bias: &HbmTensor<bf16, Chip, m![H]>,
 ) -> DmTensor<bf16, Chip, Cluster, m![H], m![1 # 16]> {
-    let bias_dm_0: DmTensor<bf16, Chip, Cluster, m![H / 8, 1 # 8], m![H % 8]> = bias.to_dm(&mut ctx.tdma, 0x30000);
+    let bias_dm_0: DmTensor<bf16, Chip, Cluster, m![H / 8, 1 # 8], m![H % 8]> = bias.to_dm_at(&mut ctx.tdma, 0x30000);
     let bias_dm_1: DmTensor<bf16, Chip, Cluster, m![H / 8, 1 # 8], m![H % 8, 1 # 8]> = ctx
         .main
         .begin(bias_dm_0.view())
@@ -94,7 +94,7 @@ fn fc2_matmul(
     weight: &HbmTensor<bf16, Chip, m![C, H]>,
 ) -> DmTensor<bf16, Chip, Cluster, m![C, 1 # 16], m![1 # 16]> {
     let input_dm: DmTensor<bf16, Chip, Cluster, m![C, 1 # 16], m![H]> = fc2_input_prepared(ctx, input);
-    let weight_dm: DmTensor<bf16, Chip, Cluster, m![C, 1 # 16], m![H]> = weight.to_dm(&mut ctx.tdma, 0x50000);
+    let weight_dm: DmTensor<bf16, Chip, Cluster, m![C, 1 # 16], m![H]> = weight.to_dm_at(&mut ctx.tdma, 0x50000);
 
     let input_trf: TrfTensor<bf16, Chip, Cluster, m![C, 1 # 16], m![1], m![H]> = ctx
         .sub
@@ -134,7 +134,7 @@ fn fc2_bias_prepared(
     ctx: &mut Context,
     bias: &HbmTensor<bf16, Chip, m![C]>,
 ) -> DmTensor<bf16, Chip, Cluster, m![C, 1 # 16], m![1 # 16]> {
-    let bias_dm_0: DmTensor<bf16, Chip, Cluster, m![1 # 16, 1 # 16], m![C]> = bias.to_dm(&mut ctx.tdma, 0x70000);
+    let bias_dm_0: DmTensor<bf16, Chip, Cluster, m![1 # 16, 1 # 16], m![C]> = bias.to_dm_at(&mut ctx.tdma, 0x70000);
     let bias_dm_1: DmTensor<bf16, Chip, Cluster, m![Dummy16, 1 # 16], m![C]> = unsafe { bias_dm_0.reshape() };
     let bias_dm_2: DmTensor<bf16, Chip, Cluster, m![C, 1 # 16], m![Dummy16]> = ctx
         .main

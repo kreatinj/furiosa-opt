@@ -415,6 +415,16 @@ impl<D: Scalar, Chip: M, Element: M, B: Backend> HbmTensor<D, Chip, Element, B> 
     pub fn to_dm<Cluster: M, Slice: M, Element2: M>(
         &self,
         _dma: &mut DmaContext<{ Dma::Tensor }>,
+    ) -> DmTensor<D, Chip, Cluster, Slice, Element2, B> {
+        assert_dma_layout::<D, m![{ Chip }, { Element }], Element2>(DMA_SRAM_WRITE_WIDTH);
+        DmTensor::new(self.inner.transpose(true), None)
+    }
+
+    /// Converts to data memory tensor at `address`.
+    #[primitive(HbmTensor::to_dm_at)]
+    pub fn to_dm_at<Cluster: M, Slice: M, Element2: M>(
+        &self,
+        _dma: &mut DmaContext<{ Dma::Tensor }>,
         address: Address,
     ) -> DmTensor<D, Chip, Cluster, Slice, Element2, B> {
         assert_dma_layout::<D, m![{ Chip }, { Element }], Element2>(DMA_SRAM_WRITE_WIDTH);
