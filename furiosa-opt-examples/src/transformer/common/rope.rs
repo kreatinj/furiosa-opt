@@ -90,7 +90,7 @@ pub(crate) fn rope(
         .begin(rope_reshaped.view())
         .fetch::<m![R], m![R, D % 16]>()
         .collect::<m![R], m![R, D % 16]>()
-        .to_trf_at(TrfAddress::FirstHalf);
+        .to_trf();
 
     // K RoPE: load K in rotation-pair layout and place it in TRF SecondHalf.
     let k_dm: DmTensor<bf16, Chip, Cluster, m![S, D / 16 % 2], m![R, R, D % 16]> = k.to_dm(&mut ctx.tdma);
@@ -99,7 +99,7 @@ pub(crate) fn rope(
         .begin(k_dm.view())
         .fetch::<m![R], m![R, D % 16]>()
         .collect::<m![R], m![R, D % 16]>()
-        .to_trf_at(TrfAddress::SecondHalf);
+        .to_trf();
 
     // Apply RoPE to K by contracting each 2x2 coefficient matrix with K pairs.
     let k_rotated: DmTensor<bf16, Chip, Cluster, m![S, D / 16 % 2], m![R, R, D % 16]> = ctx

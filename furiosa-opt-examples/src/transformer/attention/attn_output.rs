@@ -71,7 +71,7 @@ pub(super) fn attn_output(
         .fetch::<m![T % 8], m![K % 64]>()
         .switch::<m![S / 8, N], m![T % 8]>(SwitchConfig::Broadcast1 { slice1: 128, slice0: 2 })
         .collect::<m![T % 8], m![K % 64]>()
-        .to_trf_at(TrfAddress::FirstHalf);
+        .to_trf();
 
     // Load second V half into TRF second half.
     let v_trf_second: TrfTensor<bf16, Chip, Cluster, m![S / 8, N], m![T % 8], m![K % 64]> = ctx
@@ -80,7 +80,7 @@ pub(super) fn attn_output(
         .fetch::<m![T % 8], m![K % 64]>()
         .switch::<m![S / 8, N], m![T % 8]>(SwitchConfig::Broadcast1 { slice1: 128, slice0: 2 })
         .collect::<m![T % 8], m![K % 64]>()
-        .to_trf_at(TrfAddress::SecondHalf);
+        .to_trf();
 
     // Split the score T axis into two T halves for cascaded matmul.
     let scores_reshaped: DmTensor<bf16, Chip, Cluster, m![S / 8, N], m![T / 512, S % 8, G, T % 512]> = ctx

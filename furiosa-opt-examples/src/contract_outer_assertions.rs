@@ -173,7 +173,7 @@ pub mod lane_size {
             .fetch::<m![R], m![B]>()
             .fetch_cast::<i8>()
             .collect::<m![R, B / 32], m![B % 32]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![A, R # 8]> = ctx
             .main
@@ -207,7 +207,7 @@ pub mod lane_size {
             .fetch::<m![R], m![B]>()
             .fetch_cast::<i8>()
             .collect::<m![R, B / 32], m![B % 32]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![A, R # 8]> = ctx
             .main
@@ -245,7 +245,7 @@ pub mod cpacket_size {
             .fetch::<m![R], m![B]>()
             .fetch_cast::<i8>()
             .collect::<m![R, B / 32], m![B % 32]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![A, R # 8]> = ctx
             .main
@@ -279,7 +279,7 @@ pub mod cpacket_size {
             .fetch::<m![R], m![B / 2]>()
             .fetch_cast::<i8>()
             .collect::<m![R], m![B / 2]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![A, R # 8]> = ctx
             .main
@@ -313,7 +313,7 @@ pub mod cpacket_size {
             .fetch::<m![R], m![C]>()
             .fetch_cast::<i8>()
             .collect::<m![R, C / 32], m![C % 32]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![A, R # 8]> = ctx
             .main
@@ -351,7 +351,7 @@ pub mod cpacket_mapping {
             .fetch::<m![R], m![E]>()
             .fetch_cast::<i8>()
             .collect::<m![R], m![E]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![A, R # 8]> = ctx
             .main
@@ -385,7 +385,7 @@ pub mod cpacket_mapping {
             .fetch::<m![R], m![B]>()
             .fetch_cast::<i8>()
             .collect::<m![R, B / 32], m![B % 32]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![A, R # 8]> = ctx
             .main
@@ -419,7 +419,7 @@ pub mod cpacket_mapping {
             .fetch::<m![R], m![B]>()
             .fetch_cast::<i8>()
             .collect::<m![R, B / 32], m![B % 32]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![A, R # 8]> = ctx
             .main
@@ -453,7 +453,7 @@ pub mod cpacket_mapping {
             .fetch::<m![R], m![B]>()
             .fetch_cast::<i8>()
             .collect::<m![R, B / 32], m![B % 32]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![A, R # 8]> = ctx
             .main
@@ -487,7 +487,7 @@ pub mod cpacket_mapping {
             .fetch::<m![R], m![B]>()
             .fetch_cast::<i8>()
             .collect::<m![R, B / 32], m![B % 32]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![A, R # 8]> = ctx
             .main
@@ -525,7 +525,7 @@ pub mod time_broadcast {
             .fetch::<m![R, T], m![E]>()
             .fetch_cast::<i8>()
             .collect::<m![R, T], m![E]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![A, T, R # 8]> = ctx
             .main
@@ -559,7 +559,7 @@ pub mod time_broadcast {
             .fetch::<m![R, U, T], m![E]>()
             .fetch_cast::<i8>()
             .collect::<m![R, U, T], m![E]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![A, U, T, R # 8]> = ctx
             .main
@@ -593,7 +593,7 @@ pub mod time_broadcast {
             .fetch::<m![R], m![E]>()
             .fetch_cast::<i8>()
             .collect::<m![R], m![E]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![A, T, R # 8]> = ctx
             .main
@@ -627,7 +627,7 @@ pub mod time_broadcast {
             .fetch::<m![R, T, V], m![E]>()
             .fetch_cast::<i8>()
             .collect::<m![R, T, V], m![E]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![A, V, T, R # 8]> = ctx
             .main
@@ -661,7 +661,7 @@ pub mod time_broadcast {
             .fetch::<m![R], m![E]>()
             .fetch_cast::<i8>()
             .collect::<m![R], m![E]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![F, R # 8]> = ctx
             .main
@@ -695,7 +695,7 @@ pub mod time_broadcast {
             .fetch::<m![R, T, V], m![E]>()
             .fetch_cast::<i8>()
             .collect::<m![R, T, V], m![E]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![V, A, T, R # 8]> = ctx
             .main
@@ -729,7 +729,7 @@ pub mod time_broadcast {
             .fetch::<m![R, T], m![E]>()
             .fetch_cast::<i8>()
             .collect::<m![R, T], m![E]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![T, A, R # 8]> = ctx
             .main
@@ -766,7 +766,7 @@ pub mod trf_mapping {
             .fetch::<m![R], m![B]>()
             .fetch_cast::<i8>()
             .collect::<m![R, B / 32], m![B % 32]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
     }
 
     #[device(chip = 1)]
@@ -779,7 +779,7 @@ pub mod trf_mapping {
             .fetch::<m![1], m![E]>()
             .fetch_cast::<i8>()
             .collect::<m![1], m![E]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
     }
 
     #[device(chip = 1)]
@@ -796,7 +796,7 @@ pub mod trf_mapping {
             .fetch::<m![A], m![B]>()
             .fetch_cast::<i8>()
             .collect::<m![A, B / 32], m![B % 32]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
     }
 
     #[device(chip = 1)]
@@ -814,7 +814,7 @@ pub mod trf_mapping {
             .fetch::<m![R], m![B]>()
             .fetch_cast::<i8>()
             .collect::<m![R, B / 32], m![B % 32]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
     }
 
     #[device(chip = 1)]
@@ -827,7 +827,7 @@ pub mod trf_mapping {
             .fetch::<m![F], m![E]>()
             .fetch_cast::<i8>()
             .collect::<m![F], m![E]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
     }
 }
 
@@ -848,7 +848,7 @@ pub mod trf_lane_time {
             .fetch::<m![A / 4], m![E]>()
             .fetch_cast::<i8>()
             .collect::<m![A / 4], m![E]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
     }
 }
 
@@ -869,7 +869,7 @@ pub mod trf_size {
             .fetch::<m![A], m![B]>()
             .fetch_cast::<i8>()
             .collect::<m![A, B / 32], m![B % 32]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
     }
 
     #[device(chip = 1)]
@@ -886,7 +886,7 @@ pub mod trf_size {
             .fetch::<m![A], m![B]>()
             .fetch_cast::<i8>()
             .collect::<m![A, B / 32], m![B % 32]>()
-            .to_trf_at(TrfAddress::FirstHalf);
+            .to_trf();
     }
 
     #[device(chip = 1)]
@@ -903,7 +903,7 @@ pub mod trf_size {
             .fetch::<m![A], m![B]>()
             .fetch_cast::<i8>()
             .collect::<m![A, B / 32], m![B % 32]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
     }
 
     #[device(chip = 1)]
@@ -920,6 +920,6 @@ pub mod trf_size {
             .fetch::<m![A], m![B]>()
             .fetch_cast::<i8>()
             .collect::<m![A, B / 32], m![B % 32]>()
-            .to_trf_at(TrfAddress::FirstHalf);
+            .to_trf();
     }
 }

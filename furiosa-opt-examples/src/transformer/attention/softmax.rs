@@ -75,7 +75,7 @@ pub(super) fn softmax(
             .vector_final()
             .cast::<bf16, m![T % 8 # 16]>()
             .commit_trim::<m![T % 8]>()
-            .commit_at(*addr);
+            .commit();
 
         // Compute per-row max for numerical stability.
         let max_vrf: VrfTensor<f32, Chip, Cluster, m![S / 8, N], m![S % 8]> = ctx
@@ -126,7 +126,7 @@ pub(super) fn softmax(
             .vector_final()
             .cast::<bf16, m![T % 8 # 16]>()
             .commit_trim::<m![T % 8]>()
-            .commit_at(*addr);
+            .commit();
     }
 
     // Return the concatenated softmax output view across all groups.

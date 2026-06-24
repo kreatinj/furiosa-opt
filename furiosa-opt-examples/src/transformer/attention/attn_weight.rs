@@ -57,7 +57,7 @@ pub(super) fn attn_weight(
         .fetch::<m![T % 8], m![T / 8 % 2, K % 64]>()
         .switch::<m![S / 256, W, N], m![T % 8]>(SwitchConfig::Broadcast1 { slice1: 32, slice0: 2 })
         .collect::<m![T % 8], m![K % 64]>()
-        .to_trf_at(TrfAddress::FirstHalf);
+        .to_trf();
 
     // Load first key half into TRF second half for cascade accumulation.
     let k_trf_0s: TrfTensor<bf16, Chip, Cluster, m![S / 256, W, N], m![T % 8], m![K % 64]> = ctx
@@ -66,7 +66,7 @@ pub(super) fn attn_weight(
         .fetch::<m![T % 8], m![T / 8 % 2, K % 64]>()
         .switch::<m![S / 256, W, N], m![T % 8]>(SwitchConfig::Broadcast1 { slice1: 32, slice0: 2 })
         .collect::<m![T % 8], m![K % 64]>()
-        .to_trf_at(TrfAddress::SecondHalf);
+        .to_trf();
 
     // Load query tensor from HBM to DM.
     let q_dm: DmTensor<bf16, Chip, Cluster, m![S / 256, W, N], m![S % 8, G, D]> = attn_q.to_dm(&mut ctx.tdma);
@@ -110,7 +110,7 @@ pub(super) fn attn_weight(
         .fetch::<m![T % 8], m![T / 8 % 2, K % 64]>()
         .switch::<m![S / 256, W, N], m![T % 8]>(SwitchConfig::Broadcast1 { slice1: 32, slice0: 2 })
         .collect::<m![T % 8], m![K % 64]>()
-        .to_trf_at(TrfAddress::FirstHalf);
+        .to_trf();
 
     // Load second key half into TRF second half for cascade accumulation.
     let k_trf_1s: TrfTensor<bf16, Chip, Cluster, m![S / 256, W, N], m![T % 8], m![K % 64]> = ctx
@@ -119,7 +119,7 @@ pub(super) fn attn_weight(
         .fetch::<m![T % 8], m![T / 8 % 2, K % 64]>()
         .switch::<m![S / 256, W, N], m![T % 8]>(SwitchConfig::Broadcast1 { slice1: 32, slice0: 2 })
         .collect::<m![T % 8], m![K % 64]>()
-        .to_trf_at(TrfAddress::SecondHalf);
+        .to_trf();
 
     // Compute Q x K^T for the second T half using TRF first half.
     ctx.main

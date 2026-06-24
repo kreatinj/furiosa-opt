@@ -53,7 +53,7 @@ pub fn matmul_with_split_reduce2(
             .begin(t89.view())
             .fetch::<m![M % 8], m![K % 128 % 16]>()
             .collect::<m![M % 8], m![K % 128 % 16]>()
-            .to_trf_at(TrfAddress::FirstHalf);
+            .to_trf();
         let t88: DmTensor<
             bf16,
             Chip,
@@ -139,7 +139,7 @@ pub fn matmul_with_split_reduce2(
             .begin(t110.view())
             .fetch::<m![M % 8], m![K % 128 % 16]>()
             .collect::<m![M % 8], m![K % 128 % 16]>()
-            .to_trf_at(TrfAddress::SecondHalf);
+            .to_trf();
 
         let t111: DmTensor<bf16, Chip, Cluster, m![1 # 4, M / 8, M % 8], m![N / 32, N % 32]> = ctx
             .main
