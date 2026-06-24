@@ -24,7 +24,7 @@ pub(super) fn attn_output(
 ) {
     // Load value tensor from HBM to DM for the score x V matmul.
     let v_dm: DmTensor<bf16, Chip, Cluster, m![Z, T / 8 % 64, T / 512], m![T % 8, K]> =
-        attn_v.to_dm_at(&mut ctx.tdma, 0x200);
+        attn_v.to_dm(&mut ctx.tdma);
 
     // Reorder value tiles to prepare V for TRF loading.
     let v_it: DmTensor<bf16, Chip, Cluster, m![Z, T / 8 % 64, K / 64], m![T / 512, T % 8, K % 64]> = ctx
@@ -38,7 +38,7 @@ pub(super) fn attn_output(
         })
         .collect::<m![T / 512, T % 8], m![K % 64]>()
         .commit_trim::<m![K % 64]>()
-        .commit_at(0xa00);
+        .commit();
 
     // Transpose V packet layout for TRF consumption.
     let v_transpose: DmTensor<bf16, Chip, Cluster, m![Z, T / 8 % 64, K / 64], m![T / 512, K % 64, T % 8]> = ctx
@@ -47,7 +47,7 @@ pub(super) fn attn_output(
         .fetch::<m![T / 512, K / 64], m![T % 8, K % 64]>()
         .collect::<m![T / 512, K / 64], m![K % 64, T % 8]>()
         .commit_trim::<m![K % 64, T % 8]>()
-        .commit_at(0x1200);
+        .commit();
 
     // Copy the first T half of V.
     let mut v_half_0: DmTensor<bf16, Chip, Cluster, m![Z, T / 8 % 64, K / 64], m![K % 64, T % 8]> =
@@ -90,7 +90,7 @@ pub(super) fn attn_output(
         .fetch::<m![S % 8, G], m![T]>()
         .collect::<m![S % 8, G, T / 8], m![T % 8]>()
         .commit_trim::<m![T % 8]>()
-        .commit_at(0x28000);
+        .commit();
     let mut scores_half_0: DmTensor<bf16, Chip, Cluster, m![S / 8, N], m![S % 8, G, T % 512]> =
         unsafe { DmTensor::from_addr(0x28000) };
     scores_reshaped
@@ -119,7 +119,7 @@ pub(super) fn attn_output(
         .vector_final()
         .cast::<bf16, m![D % 8 # 16]>()
         .commit_trim::<m![D % 8]>()
-        .commit_at(0x2200);
+        .commit();
 
     // Accumulate first score half with second TRF-loaded V half.
     let matmul_98: DmTensor<bf16, Chip, Cluster, m![S / 8, N], m![S % 8, G, D]> = ctx
@@ -136,7 +136,7 @@ pub(super) fn attn_output(
         .vector_final()
         .cast::<bf16, m![D % 8 # 16]>()
         .commit_trim::<m![D % 8]>()
-        .commit_at(0x2200);
+        .commit();
 
     // Multiply second score half with first TRF-loaded V half.
     let _matmul_100: DmTensor<bf16, Chip, Cluster, m![S / 8, N], m![S % 8, G, D]> = ctx
@@ -153,7 +153,7 @@ pub(super) fn attn_output(
         .vector_final()
         .cast::<bf16, m![D % 8 # 16]>()
         .commit_trim::<m![D % 8]>()
-        .commit_at(0x3e00);
+        .commit();
 
     // Accumulate second score half with second TRF-loaded V half.
     let matmul_102: DmTensor<bf16, Chip, Cluster, m![S / 8, N], m![S % 8, G, D]> = ctx
@@ -170,7 +170,7 @@ pub(super) fn attn_output(
         .vector_final()
         .cast::<bf16, m![D % 8 # 16]>()
         .commit_trim::<m![D % 8]>()
-        .commit_at(0x3e00);
+        .commit();
 
     // Add both T-half matmul outputs to form the final attention output block.
     let matmul_out: DmTensor<bf16, Chip, Cluster, m![S / 8, N], m![S % 8, G, D]> = ctx
@@ -185,7 +185,7 @@ pub(super) fn attn_output(
         .vector_final()
         .cast::<bf16, m![D]>()
         .commit_trim::<m![D]>()
-        .commit_at(0x2200);
+        .commit();
 
     // Reshape output from [N, G, D] back to hidden-size layout H.
     let output_reshaped: DmTensor<bf16, Chip, Cluster, m![S / 8, S / 4 % 2], m![S % 4, H]> = ctx
@@ -199,7 +199,7 @@ pub(super) fn attn_output(
         })
         .collect::<m![S % 4, H / 448], m![H % 448]>()
         .commit_trim::<m![H % 448]>()
-        .commit_at(0x0);
+        .commit();
 
     // Write reshaped attention output back to HBM.
     output_reshaped.view().to_hbm_view(&mut ctx.tdma, out_attn.view_mut());

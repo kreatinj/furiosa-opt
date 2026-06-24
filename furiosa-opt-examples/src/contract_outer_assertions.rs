@@ -28,8 +28,8 @@ pub mod lane_size {
         input_trf: &HbmTensor<i8, Chip, m![B]>,
         output: &mut HbmTensor<i32, Chip, m![A, 1 # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![B]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, m![1], m![B]> = ctx
             .sub
@@ -50,7 +50,7 @@ pub mod lane_size {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![1 # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![1 # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -62,8 +62,8 @@ pub mod lane_size {
         input_trf: &HbmTensor<i8, Chip, m![R / 4, B]>,
         output: &mut HbmTensor<i32, Chip, m![A, R / 4 # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R / 4, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R / 4, B]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, m![R / 4], m![B]> = ctx
             .sub
@@ -84,7 +84,7 @@ pub mod lane_size {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R / 4 # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R / 4 # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -96,8 +96,8 @@ pub mod lane_size {
         input_trf: &HbmTensor<i8, Chip, m![R / 2, B]>,
         output: &mut HbmTensor<i32, Chip, m![A, R / 2 # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R / 2, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R / 2, B]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, m![R / 2], m![B]> = ctx
             .sub
@@ -118,7 +118,7 @@ pub mod lane_size {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R / 2 # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R / 2 # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -130,8 +130,8 @@ pub mod lane_size {
         input_trf: &HbmTensor<i8, Chip, m![R, B]>,
         output: &mut HbmTensor<i32, Chip, m![A, R # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R, B]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, m![R], m![B]> = ctx
             .sub
@@ -152,7 +152,7 @@ pub mod lane_size {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -164,8 +164,8 @@ pub mod lane_size {
         input_trf: &HbmTensor<i8, Chip, m![R, B]>,
         output: &mut HbmTensor<i32, Chip, m![A, R # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R, B]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, m![1 # 3], m![R, B]> = ctx
             .sub
@@ -186,7 +186,7 @@ pub mod lane_size {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -198,8 +198,8 @@ pub mod lane_size {
         input_trf: &HbmTensor<i8, Chip, m![R, B]>,
         output: &mut HbmTensor<i32, Chip, m![A, R # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R, B]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, m![1 # 16], m![R, B]> = ctx
             .sub
@@ -220,7 +220,7 @@ pub mod lane_size {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -236,8 +236,8 @@ pub mod cpacket_size {
         input_trf: &HbmTensor<i8, Chip, m![R, B]>,
         output: &mut HbmTensor<i32, Chip, m![A, R # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R, B]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, Lane, m![B]> = ctx
             .sub
@@ -258,7 +258,7 @@ pub mod cpacket_size {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -270,8 +270,8 @@ pub mod cpacket_size {
         input_trf: &HbmTensor<i8, Chip, m![R, B / 2]>,
         output: &mut HbmTensor<i32, Chip, m![A, R # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B / 2]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R, B / 2]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, B / 2]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R, B / 2]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, Lane, m![B / 2]> = ctx
             .sub
@@ -292,7 +292,7 @@ pub mod cpacket_size {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -304,8 +304,8 @@ pub mod cpacket_size {
         input_trf: &HbmTensor<i8, Chip, m![R, C]>,
         output: &mut HbmTensor<i32, Chip, m![A, R # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, C]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R, C]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, C]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R, C]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, Lane, m![C]> = ctx
             .sub
@@ -326,7 +326,7 @@ pub mod cpacket_size {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -342,8 +342,8 @@ pub mod cpacket_mapping {
         input_trf: &HbmTensor<i8, Chip, m![R, E]>,
         output: &mut HbmTensor<i32, Chip, m![A, R # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, E]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R, E]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, E]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R, E]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, Lane, m![E]> = ctx
             .sub
@@ -364,7 +364,7 @@ pub mod cpacket_mapping {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -376,8 +376,8 @@ pub mod cpacket_mapping {
         input_trf: &HbmTensor<i8, Chip, m![R, B]>,
         output: &mut HbmTensor<i32, Chip, m![A, R # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R, B]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, Lane, m![B]> = ctx
             .sub
@@ -398,7 +398,7 @@ pub mod cpacket_mapping {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -410,8 +410,8 @@ pub mod cpacket_mapping {
         input_trf: &HbmTensor<i8, Chip, m![R, B]>,
         output: &mut HbmTensor<i32, Chip, m![A, R # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R, B]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, Lane, m![B]> = ctx
             .sub
@@ -432,7 +432,7 @@ pub mod cpacket_mapping {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -444,8 +444,8 @@ pub mod cpacket_mapping {
         input_trf: &HbmTensor<i8, Chip, m![R, B]>,
         output: &mut HbmTensor<i32, Chip, m![A, R # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R, B]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, Lane, m![B]> = ctx
             .sub
@@ -466,7 +466,7 @@ pub mod cpacket_mapping {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -478,8 +478,8 @@ pub mod cpacket_mapping {
         input_trf: &HbmTensor<i8, Chip, m![R, B]>,
         output: &mut HbmTensor<i32, Chip, m![A, R # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R, B]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R, B]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, Lane, m![B]> = ctx
             .sub
@@ -500,7 +500,7 @@ pub mod cpacket_mapping {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -516,8 +516,8 @@ pub mod time_broadcast {
         input_trf: &HbmTensor<i8, Chip, m![R, T, E]>,
         output: &mut HbmTensor<i32, Chip, m![A, T, R # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, E]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R, T, E]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, E]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R, T, E]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, Lane, m![T, E]> = ctx
             .sub
@@ -538,7 +538,7 @@ pub mod time_broadcast {
             .contract_time::<m![A, T]>()
             .contract_lane::<m![A, T], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -550,8 +550,8 @@ pub mod time_broadcast {
         input_trf: &HbmTensor<i8, Chip, m![R, U, T, E]>,
         output: &mut HbmTensor<i32, Chip, m![A, U, T, R # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, E]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R, U, T, E]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, E]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R, U, T, E]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, Lane, m![U, T, E]> = ctx
             .sub
@@ -572,7 +572,7 @@ pub mod time_broadcast {
             .contract_time::<m![A, U, T]>()
             .contract_lane::<m![A, U, T], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -584,8 +584,8 @@ pub mod time_broadcast {
         input_trf: &HbmTensor<i8, Chip, m![R, E]>,
         output: &mut HbmTensor<i32, Chip, m![A, T, R # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, E]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R, E]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, E]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R, E]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, Lane, m![E]> = ctx
             .sub
@@ -606,7 +606,7 @@ pub mod time_broadcast {
             .contract_time::<m![A, T]>()
             .contract_lane::<m![A, T], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -618,8 +618,8 @@ pub mod time_broadcast {
         input_trf: &HbmTensor<i8, Chip, m![R, T, V, E]>,
         output: &mut HbmTensor<i32, Chip, m![A, V, T, R # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, E]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R, T, V, E]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, E]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R, T, V, E]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, Lane, m![T, V, E]> = ctx
             .sub
@@ -640,7 +640,7 @@ pub mod time_broadcast {
             .contract_time::<m![A, V, T]>()
             .contract_lane::<m![A, V, T], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -652,8 +652,8 @@ pub mod time_broadcast {
         input_trf: &HbmTensor<i8, Chip, m![R, E]>,
         output: &mut HbmTensor<i32, Chip, m![F, R # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, E]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R, E]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, E]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R, E]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, Lane, m![E]> = ctx
             .sub
@@ -674,7 +674,7 @@ pub mod time_broadcast {
             .contract_time::<m![F]>()
             .contract_lane::<m![F], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -686,8 +686,8 @@ pub mod time_broadcast {
         input_trf: &HbmTensor<i8, Chip, m![R, T, V, E]>,
         output: &mut HbmTensor<i32, Chip, m![V, A, T, R # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, V, E]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R, T, V, E]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, V, E]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R, T, V, E]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, Lane, m![T, V, E]> = ctx
             .sub
@@ -708,7 +708,7 @@ pub mod time_broadcast {
             .contract_time::<m![V, A, T]>()
             .contract_lane::<m![V, A, T], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -720,8 +720,8 @@ pub mod time_broadcast {
         input_trf: &HbmTensor<i8, Chip, m![R, T, E]>,
         output: &mut HbmTensor<i32, Chip, m![T, A, R # 8]>,
     ) {
-        let input_dm = input.to_dm_at::<Cluster, Slice, m![A, E]>(&mut ctx.tdma, 0);
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R, T, E]>(&mut ctx.tdma, 0);
+        let input_dm = input.to_dm::<Cluster, Slice, m![A, E]>(&mut ctx.tdma);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R, T, E]>(&mut ctx.tdma);
 
         let trf: TrfTensor<i8, Chip, Cluster, Slice, Lane, m![T, E]> = ctx
             .sub
@@ -742,7 +742,7 @@ pub mod time_broadcast {
             .contract_time::<m![T, A]>()
             .contract_lane::<m![T, A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit_at(0);
+            .commit();
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -758,7 +758,7 @@ pub mod trf_mapping {
         input_trf: &HbmTensor<i8, Chip, m![R, B]>,
         _output: &mut HbmTensor<i32, Chip, m![A, 1 # 8]>,
     ) {
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R, B]>(&mut ctx.tdma, 0);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R, B]>(&mut ctx.tdma);
 
         let _trf: TrfTensor<i8, Chip, Cluster, Slice, Lane, m![B]> = ctx
             .sub
@@ -771,7 +771,7 @@ pub mod trf_mapping {
 
     #[device(chip = 1)]
     pub fn valid_unit_time_lane(ctx: &mut Context, input_trf: &HbmTensor<i8, Chip, m![E]>) {
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![E]>(&mut ctx.tdma, 0);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![E]>(&mut ctx.tdma);
 
         let _trf: TrfTensor<i8, Chip, Cluster, Slice, m![1], m![E]> = ctx
             .sub
@@ -788,7 +788,7 @@ pub mod trf_mapping {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         _output: &mut HbmTensor<i32, Chip, m![A, 1 # 8]>,
     ) {
-        let trf_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 0);
+        let trf_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma);
 
         let _trf: TrfTensor<i8, Chip, Cluster, Slice, m![E / 4], m![B]> = ctx
             .sub
@@ -806,7 +806,7 @@ pub mod trf_mapping {
         input_trf: &HbmTensor<i8, Chip, m![R, B]>,
         _output: &mut HbmTensor<i32, Chip, m![A, 1 # 8]>,
     ) {
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![R, B]>(&mut ctx.tdma, 0);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![R, B]>(&mut ctx.tdma);
 
         let _trf: TrfTensor<i8, Chip, Cluster, Slice, Lane, m![A, C]> = ctx
             .sub
@@ -819,7 +819,7 @@ pub mod trf_mapping {
 
     #[device(chip = 1)]
     pub fn invalid_lane_not_divisible_by_time(ctx: &mut Context, input_trf: &HbmTensor<i8, Chip, m![F, E]>) {
-        let trf_dm = input_trf.to_dm_at::<Cluster, Slice, m![F, E]>(&mut ctx.tdma, 0);
+        let trf_dm = input_trf.to_dm::<Cluster, Slice, m![F, E]>(&mut ctx.tdma);
 
         let _trf: TrfTensor<i8, Chip, Cluster, Slice, m![R / 2], m![F, E]> = ctx
             .sub
@@ -840,7 +840,7 @@ pub mod trf_lane_time {
         input: &HbmTensor<i8, Chip, m![A / 4, E]>,
         _output: &mut HbmTensor<i8, Chip, m![A / 4, E]>,
     ) {
-        let trf_dm = input.to_dm_at::<Cluster, Slice, m![A / 4, E]>(&mut ctx.tdma, 0);
+        let trf_dm = input.to_dm::<Cluster, Slice, m![A / 4, E]>(&mut ctx.tdma);
 
         let _trf: TrfTensor<i8, Chip, Cluster, Slice, m![R / 2], m![A / 4, E]> = ctx
             .sub
@@ -861,7 +861,7 @@ pub mod trf_size {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         _output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let trf_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 128 * 1024);
+        let trf_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma);
 
         let _trf: TrfTensor<i8, Chip, Cluster, Slice, m![A], m![B]> = ctx
             .sub
@@ -878,7 +878,7 @@ pub mod trf_size {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         _output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let trf_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 128 * 1024);
+        let trf_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma);
 
         let _trf: TrfTensor<i8, Chip, Cluster, Slice, m![A], m![B]> = ctx
             .sub
@@ -895,7 +895,7 @@ pub mod trf_size {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         _output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let trf_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 128 * 1024);
+        let trf_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma);
 
         let _trf: TrfTensor<i8, Chip, Cluster, Slice, m![A], m![A, B, C]> = ctx
             .sub
@@ -912,7 +912,7 @@ pub mod trf_size {
         input: &HbmTensor<i8, Chip, m![A, B]>,
         _output: &mut HbmTensor<i8, Chip, m![A, B]>,
     ) {
-        let trf_dm = input.to_dm_at::<Cluster, Slice, m![A, B]>(&mut ctx.tdma, 128 * 1024);
+        let trf_dm = input.to_dm::<Cluster, Slice, m![A, B]>(&mut ctx.tdma);
 
         let _trf: TrfTensor<i8, Chip, Cluster, Slice, m![A], m![B, C]> = ctx
             .sub

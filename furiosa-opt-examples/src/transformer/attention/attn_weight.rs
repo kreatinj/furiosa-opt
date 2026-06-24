@@ -21,7 +21,7 @@ pub(super) fn attn_weight(
 ) -> DmTensor<bf16, Chip, Cluster, m![S / 8, N], m![S % 8, G, T]> {
     // Load key tensor from HBM to DM.
     let k_dm: DmTensor<bf16, Chip, Cluster, m![Y, T / 16 % 32, T / 512], m![T % 16, K]> =
-        attn_k.to_dm_at(&mut ctx.tdma, 0x200);
+        attn_k.to_dm(&mut ctx.tdma);
 
     // Reorder key tiles to split K into head chunks for TRF loading.
     let k_it: DmTensor<bf16, Chip, Cluster, m![Y, T / 16 % 32, K / 64], m![T / 512, T % 16, K % 64]> = ctx
@@ -35,7 +35,7 @@ pub(super) fn attn_weight(
         })
         .collect::<m![T / 512, T % 16], m![K % 64]>()
         .commit_trim::<m![K % 64]>()
-        .commit_at(0x1200);
+        .commit();
 
     // Copy the first T half for matmul.
     let mut k_half_0: DmTensor<bf16, Chip, Cluster, m![Y, T / 16 % 32, K / 64], m![T % 16, K % 64]> =
@@ -71,7 +71,7 @@ pub(super) fn attn_weight(
 
     // Load query tensor from HBM to DM.
     let q_dm: DmTensor<bf16, Chip, Cluster, m![S / 256, W, N], m![S % 8, G, D]> =
-        attn_q.to_dm_at(&mut ctx.tdma, 0x2200);
+        attn_q.to_dm(&mut ctx.tdma);
 
     // Compute Q x K^T using TRF first half and write partial scores.
     ctx.main
@@ -87,7 +87,7 @@ pub(super) fn attn_weight(
         .vector_final()
         .cast::<bf16, m![T % 512]>()
         .commit_trim::<m![T % 512]>()
-        .commit_at::<m![S % 8, G, T % 512]>(0x8000);
+        .commit::<m![S % 8, G, T % 512]>();
 
     // Accumulate Q x K^T with TRF second half into the same score buffer.
     ctx.main
@@ -103,7 +103,7 @@ pub(super) fn attn_weight(
         .vector_final()
         .cast::<bf16, m![T % 512]>()
         .commit_trim::<m![T % 512]>()
-        .commit_at::<m![S % 8, G, T % 512]>(0x8000);
+        .commit::<m![S % 8, G, T % 512]>();
 
     // Load second key half into TRF first half.
     let k_trf_1: TrfTensor<bf16, Chip, Cluster, m![S / 256, W, N], m![T % 8], m![K % 64]> = ctx
@@ -137,7 +137,7 @@ pub(super) fn attn_weight(
         .vector_final()
         .cast::<bf16, m![T % 512]>()
         .commit_trim::<m![T % 512]>()
-        .commit_at::<m![S % 8, G, T % 512]>(0x16000);
+        .commit::<m![S % 8, G, T % 512]>();
 
     // Accumulate the second T-half scores with TRF second half.
     ctx.main
@@ -153,7 +153,7 @@ pub(super) fn attn_weight(
         .vector_final()
         .cast::<bf16, m![T % 512]>()
         .commit_trim::<m![T % 512]>()
-        .commit_at::<m![S % 8, G, T % 512]>(0x16000);
+        .commit::<m![S % 8, G, T % 512]>();
 
     // View both T-half score blocks as one concatenated tensor.
     let qk_concat: DmTensor<bf16, Chip, Cluster, m![S / 8, N], m![T / 512, S % 8, G, T % 512]> =
@@ -166,7 +166,7 @@ pub(super) fn attn_weight(
         .fetch::<m![T / 512, S % 8, G], m![T % 512]>()
         .collect::<m![T / 512, S % 8, G], m![T % 512]>()
         .commit_trim::<m![T % 512]>()
-        .commit_at(0x28000);
+        .commit();
 
     qk_scores
 }

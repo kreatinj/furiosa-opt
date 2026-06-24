@@ -53,7 +53,7 @@ pub fn forward(
     // PyTorch Qwen2Decoder.forward() equivalent:
     //   residual = hidden_states
     //   hidden_states = input_layernorm(hidden_states)
-    //   hidden_states = self_attn(hidden_states, ...)
+    //   hidden_states = selftn(hidden_states)
     //   hidden_states = residual + hidden_states
     //   residual = hidden_states
     //   hidden_states = post_attention_layernorm(hidden_states)

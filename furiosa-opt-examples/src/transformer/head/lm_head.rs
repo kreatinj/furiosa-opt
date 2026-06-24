@@ -31,7 +31,7 @@ pub(super) fn lm_head(
         .switch::<m![Y, H / 56, S / 32], m![H % 14, H / 14 % 4]>(SwitchConfig::Transpose { slice1: 4, slice0: 16 })
         .collect::<m![H % 14, H / 14 % 4], m![S % 32]>()
         .commit_trim::<m![S % 32]>()
-        .commit_at(0x1e000);
+        .commit();
 
     // Reorder packet dimensions so sequence stays contiguous for TRF staging.
     let input_tiled: DmTensor<bf16, Chip, Cluster, m![Y, H / 56, S / 32], m![S % 32, H % 56 # 64]> = ctx
@@ -40,7 +40,7 @@ pub(super) fn lm_head(
         .fetch::<m![H % 14, H / 14 % 4], m![S % 32]>()
         .collect::<m![H % 14, H / 14 % 4], m![S % 32]>()
         .commit_trim::<m![S % 32]>()
-        .commit_at(0x1ee00);
+        .commit();
 
     // Split sequence into two halves and stage both halves in TRF.
     let first_half = input_tiled.view().tile::<m![S / 16], 2, m![S % 16, H % 56 # 64]>(0);
@@ -140,7 +140,7 @@ pub(super) fn lm_head(
             .vector_final()
             .cast::<bf16, m![S % 32]>()
             .commit_trim::<m![S % 32]>()
-            .commit_at(0x08000);
+            .commit();
 
         // Accumulate both halves to form final logits for the chunk.
         let accumulated: DmTensor<bf16, Chip, Cluster, m![C / 128, S / 32], m![S % 32, C % 128]> = ctx
