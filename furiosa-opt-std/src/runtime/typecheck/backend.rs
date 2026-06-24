@@ -32,7 +32,7 @@ impl Backend for Typecheck {
         _host: &HostTensor<D, Element, Self>,
         address: Address,
     ) -> HbmTensor<D, Chip, Element2, Self> {
-        HbmTensor::new(Tensor::empty(), address)
+        HbmTensor::new(Tensor::empty(), Some(address))
     }
 
     async fn from_hbm<D: Scalar, Chip: M, Element: M, Element2: M>(

@@ -20,7 +20,7 @@ impl Backend for Simulation {
         host: &HostTensor<D, Element, Self>,
         address: Address,
     ) -> HbmTensor<D, Chip, Element2, Self> {
-        HbmTensor::new(host.inner_tensor().transpose(true), address)
+        HbmTensor::new(host.inner_tensor().transpose(true), Some(address))
     }
 
     async fn from_hbm<D: Scalar, Chip: M, Element: M, Element2: M>(
