@@ -22,8 +22,7 @@ pub(super) fn cache_kv(
     // V scatter index path.
 
     // Load V scatter indices from HBM to DM.
-    let v_idx_dm: DmTensor<i32, Chip, Cluster, m![T / 32, 1 # 8], m![T % 32]> =
-        v_scatter_index.to_dm(&mut ctx.tdma, 0x0);
+    let v_idx_dm: DmTensor<i32, Chip, Cluster, m![T / 32, 1 # 8], m![T % 32]> = v_scatter_index.to_dm(&mut ctx.tdma);
 
     // Reorder index tiles to match the downstream scatter-friendly layout.
     let v_idx_it: DmTensor<i32, Chip, Cluster, m![T / 32, T / 4 % 8], m![T % 4 # 32]> = ctx
@@ -37,7 +36,7 @@ pub(super) fn cache_kv(
         })
         .collect::<m![1 # 8], m![T % 4]>()
         .commit_trim::<m![T % 4]>()
-        .commit(0x100);
+        .commit();
 
     // Restore compact T%4 index lanes before scaling.
     let v_idx_stripped: DmTensor<i32, Chip, Cluster, m![T / 32, T / 4 % 8], m![T % 4]> = ctx
@@ -46,7 +45,7 @@ pub(super) fn cache_kv(
         .fetch::<m![1], m![T % 4]>()
         .collect::<m![1], m![T % 4]>()
         .commit_trim::<m![T % 4]>()
-        .commit(0x0);
+        .commit();
 
     // Convert row indices to byte offsets (row stride = K * sizeof(bf16) = 256).
     let v_idx_scaled: DmTensor<i32, Chip, Cluster, m![T / 32, T / 4 % 8], m![T % 4 # 8]> = ctx
@@ -59,7 +58,7 @@ pub(super) fn cache_kv(
         .vector_fxp(FxpBinaryOp::MulInt, 256)
         .vector_final()
         .commit_trim::<m![T % 4 # 8]>()
-        .commit(0x0);
+        .commit();
 
     // Pack offsets into a contiguous T-major layout for DMA spill.
     let v_idx_d0b: DmTensor<i32, Chip, Cluster, m![T / 64, 1 # 16], m![T % 64]> = ctx
@@ -73,13 +72,13 @@ pub(super) fn cache_kv(
         })
         .collect::<m![1], m![T % 4]>()
         .commit_trim::<m![T % 4]>()
-        .commit(0x100);
+        .commit();
 
     // Spill prepared V offsets back to HBM for dma_scatter.
-    let v_idx_hbm: HbmTensor<i32, Chip, m![T]> = v_idx_d0b.to_hbm(&mut ctx.tdma, 0x10e36000);
+    let v_idx_hbm: HbmTensor<i32, Chip, m![T]> = v_idx_d0b.to_hbm(&mut ctx.tdma);
 
     // Load V rows into SRAM, then reinterpret as [N, D] blocks for cache scatter.
-    attn_v.to_dm::<Cluster, m![T / 16], m![T % 16, K]>(&mut ctx.tdma, 0x200);
+    attn_v.to_dm::<Cluster, m![T / 16], m![T % 16, K]>(&mut ctx.tdma);
     let v_scatter_reshaped: DmTensor<bf16, Chip, Cluster, m![T / 16], m![T % 16, N, D]> =
         unsafe { DmTensor::from_addr(0x200) };
 
@@ -89,8 +88,7 @@ pub(super) fn cache_kv(
     // K scatter index path.
 
     // Load K scatter indices from HBM to DM.
-    let k_idx_dm: DmTensor<i32, Chip, Cluster, m![T / 32, 1 # 8], m![T % 32]> =
-        k_scatter_index.to_dm(&mut ctx.tdma, 0x0);
+    let k_idx_dm: DmTensor<i32, Chip, Cluster, m![T / 32, 1 # 8], m![T % 32]> = k_scatter_index.to_dm(&mut ctx.tdma);
 
     // Reorder K index tiles to the scatter-friendly layout.
     let k_idx_it: DmTensor<i32, Chip, Cluster, m![T / 32, T / 4 % 8], m![T % 4 # 32]> = ctx
@@ -104,7 +102,7 @@ pub(super) fn cache_kv(
         })
         .collect::<m![1 # 8], m![T % 4]>()
         .commit_trim::<m![T % 4]>()
-        .commit(0x100);
+        .commit();
 
     // Restore compact T%4 index lanes before scaling.
     let k_idx_stripped: DmTensor<i32, Chip, Cluster, m![T / 32, T / 4 % 8], m![T % 4]> = ctx
@@ -113,7 +111,7 @@ pub(super) fn cache_kv(
         .fetch::<m![1], m![T % 4]>()
         .collect::<m![1], m![T % 4]>()
         .commit_trim::<m![T % 4]>()
-        .commit(0x0);
+        .commit();
 
     // Convert K row indices to byte offsets.
     let k_idx_scaled: DmTensor<i32, Chip, Cluster, m![T / 32, T / 4 % 8], m![T % 4 # 8]> = ctx
@@ -126,7 +124,7 @@ pub(super) fn cache_kv(
         .vector_fxp(FxpBinaryOp::MulInt, 256)
         .vector_final()
         .commit_trim::<m![T % 4 # 8]>()
-        .commit(0x0);
+        .commit();
 
     // Pack K offsets into a contiguous T-major layout for DMA spill.
     let k_idx_d0b: DmTensor<i32, Chip, Cluster, m![T / 64, 1 # 16], m![T % 64]> = ctx
@@ -140,13 +138,13 @@ pub(super) fn cache_kv(
         })
         .collect::<m![1], m![T % 4]>()
         .commit_trim::<m![T % 4]>()
-        .commit(0x100);
+        .commit();
 
     // Spill prepared K offsets back to HBM for dma_scatter.
-    let k_idx_hbm: HbmTensor<i32, Chip, m![T]> = k_idx_d0b.to_hbm(&mut ctx.tdma, 0x10e40000);
+    let k_idx_hbm: HbmTensor<i32, Chip, m![T]> = k_idx_d0b.to_hbm(&mut ctx.tdma);
 
     // Load K rows into SRAM, then reinterpret as [N, D] blocks for cache scatter.
-    attn_k.to_dm::<Cluster, m![T / 4], m![T % 4, K]>(&mut ctx.tdma, 0x5e00);
+    attn_k.to_dm::<Cluster, m![T / 4], m![T % 4, K]>(&mut ctx.tdma);
     let k_scatter_reshaped: DmTensor<bf16, Chip, Cluster, m![T / 4], m![T % 4, N, D]> =
         unsafe { DmTensor::from_addr(0x5e00) };
 

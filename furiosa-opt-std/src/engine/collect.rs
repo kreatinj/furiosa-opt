@@ -52,12 +52,19 @@ impl<'l, const T: Tu, P: CanApplyToTrf, D: Scalar, Chip: M, Cluster: M, Slice: M
 {
     /// Stores to the tensor register file.
     #[primitive(TuTensor::to_trf)]
-    pub fn to_trf<Lane: M, Element: M>(
+    pub fn to_trf<Lane: M, Element: M>(self) -> TrfTensor<D, Chip, Cluster, Slice, Lane, Element, B> {
+        verify_to_trf::<D, Lane, Time, Packet, Element>(&TrfAddress::Full);
+        TrfTensor::new(self.inner.transpose(false), None)
+    }
+
+    /// Stores to the tensor register file at `address`.
+    #[primitive(TuTensor::to_trf_at)]
+    pub fn to_trf_at<Lane: M, Element: M>(
         self,
         address: TrfAddress,
     ) -> TrfTensor<D, Chip, Cluster, Slice, Lane, Element, B> {
         verify_to_trf::<D, Lane, Time, Packet, Element>(&address);
-        TrfTensor::new(self.inner.transpose(false), address)
+        TrfTensor::new(self.inner.transpose(false), Some(address))
     }
 }
 // ANCHOR_END: collect_to_trf
@@ -68,8 +75,14 @@ impl<'l, const T: Tu, P: CanApplyToVrf, D: VeScalar, Chip: M, Cluster: M, Slice:
 {
     /// Stores to the vector register file.
     #[primitive(TuTensor::to_vrf)]
-    pub fn to_vrf<Element: M>(self, address: Address) -> VrfTensor<D, Chip, Cluster, Slice, Element, B> {
-        VrfTensor::new(self.inner.transpose(false), address)
+    pub fn to_vrf<Element: M>(self) -> VrfTensor<D, Chip, Cluster, Slice, Element, B> {
+        VrfTensor::new(self.inner.transpose(false), None)
+    }
+
+    /// Stores to the vector register file at `address`.
+    #[primitive(TuTensor::to_vrf_at)]
+    pub fn to_vrf_at<Element: M>(self, address: Address) -> VrfTensor<D, Chip, Cluster, Slice, Element, B> {
+        VrfTensor::new(self.inner.transpose(false), Some(address))
     }
 }
 // ANCHOR_END: collect_to_vrf

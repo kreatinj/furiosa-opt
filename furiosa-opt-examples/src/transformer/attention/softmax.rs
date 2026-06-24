@@ -21,7 +21,7 @@ pub(super) fn softmax(
     qk_scores: &DmTensor<bf16, Chip, Cluster, m![S / 8, N], m![S % 8, G, T]>,
     attention_mask: &HbmTensor<i32, Chip, m![1, S, T]>,
 ) -> DmTensor<bf16, Chip, Cluster, m![S / 8, N], m![S % 8, G, T]> {
-    let mask_dm: DmTensor<i32, Chip, Cluster, m![S / 8, N], m![S % 8, T]> = attention_mask.to_dm(&mut ctx.tdma, 0x3e00); // Load attention mask to DM.
+    let mask_dm: DmTensor<i32, Chip, Cluster, m![S / 8, N], m![S % 8, T]> = attention_mask.to_dm(&mut ctx.tdma); // Load attention mask to DM.
 
     // Build mask branches in VRF for masked softmax.
     let _mask_vrf: VrfTensor<i32, Chip, Cluster, m![S / 8, N], m![S % 8, T]> = ctx
@@ -37,7 +37,7 @@ pub(super) fn softmax(
             InputCmp::I32(InputCmpI32::True),
         ]))
         .vector_final()
-        .to_vrf(0);
+        .to_vrf();
     // TagMode::Vrf reads this branch state implicitly.
 
     // Pre-allocate full output tensor. Each group commits into its tile address.
@@ -75,7 +75,7 @@ pub(super) fn softmax(
             .vector_final()
             .cast::<bf16, m![T % 8 # 16]>()
             .commit_trim::<m![T % 8]>()
-            .commit(*addr);
+            .commit();
 
         // Compute per-row max for numerical stability.
         let max_vrf: VrfTensor<f32, Chip, Cluster, m![S / 8, N], m![S % 8]> = ctx
@@ -90,7 +90,7 @@ pub(super) fn softmax(
             .vector_intra_slice_reduce::<T, m![S % 8], m![1 # 4]>(IntraSliceReduceOpF32::Max)
             .vector_widen_pad::<m![1 # 8]>()
             .vector_final()
-            .to_vrf(0);
+            .to_vrf();
 
         // Compute sum(exp(x - max)) per row.
         let sum_exp_vrf: VrfTensor<f32, Chip, Cluster, m![S / 8, N], m![S % 8]> = ctx
@@ -107,7 +107,7 @@ pub(super) fn softmax(
             .vector_intra_slice_reduce::<T, m![S % 8], m![1 # 4]>(IntraSliceReduceOpF32::Add)
             .vector_widen_pad::<m![1 # 8]>() // TODO: use filter to move Time -> Packet
             .vector_final()
-            .to_vrf(1);
+            .to_vrf();
 
         // Normalize each row to produce probabilities.
         let _softmax: DmTensor<bf16, Chip, Cluster, m![S / 8, N], m![S % 8, T]> = ctx
@@ -126,7 +126,7 @@ pub(super) fn softmax(
             .vector_final()
             .cast::<bf16, m![T % 8 # 16]>()
             .commit_trim::<m![T % 8]>()
-            .commit(*addr);
+            .commit();
     }
 
     // Return the concatenated softmax output view across all groups.

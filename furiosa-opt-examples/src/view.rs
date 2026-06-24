@@ -12,7 +12,7 @@ pub mod simpl {
         // - (A=512/256) on the cluster dimension,
         // - (A=512%256) on the slice dimension,
         // - (B=4) on the element dimension.
-        let input = input_hbm.to_dm::<m![A / 256], m![A % 256], m![B]>(&mut ctx.tdma, 0x2000);
+        let input = input_hbm.to_dm::<m![A / 256], m![A % 256], m![B]>(&mut ctx.tdma);
 
         // Allocate output tensor in DM with the same shape as input.
         let mut output = unsafe { DmTensor::<i32, m![1], m![A / 256], m![A % 256], m![B]>::from_addr(0x3000) };
@@ -28,7 +28,7 @@ pub mod simpl {
         input3.to_dm_view(&mut ctx.tdma, output0);
 
         // Transfer output tensor back to HBM.
-        output.to_hbm(&mut ctx.tdma, 0x4000)
+        output.to_hbm(&mut ctx.tdma)
     }
 }
 
@@ -43,13 +43,13 @@ pub mod padding {
         input_hbm: &HbmTensor<i32, m![1], m![[A, B] # 64]>,
     ) -> HbmTensor<i32, m![1], m![[A, B] # 64]> {
         let input_hbm_transposed: HbmTensor<i32, m![1], m![[A, B] # 64 % 8, [A, B] # 64 / 8]> =
-            input_hbm.to_hbm::<_, _>(&mut ctx.tdma, 0x2000);
+            input_hbm.to_hbm::<_, _>(&mut ctx.tdma);
         // Transfer input tensor to DM with shape:
         // - 1 on the cluster dimension,
         // - (A=9)(B=7)=64/16 on the slice dimension,
         // - ((A=9)(B=7)=64%8) * ((A=9)(B=7)=64/8%2) on the element dimension.
         let input = input_hbm_transposed
-            .to_dm::<m![1], m![[A, B] # 64 / 16], m![[A, B] # 64 % 8, [A, B] # 64 / 8 % 2]>(&mut ctx.tdma, 0x3000);
+            .to_dm::<m![1], m![[A, B] # 64 / 16], m![[A, B] # 64 % 8, [A, B] # 64 / 8 % 2]>(&mut ctx.tdma);
 
         // Allocate output tensor in DM with the same shape as input.
         let mut output = unsafe {
@@ -77,6 +77,6 @@ pub mod padding {
         input3.to_dm_view(&mut ctx.tdma, output0);
 
         // Transfer output tensor back to HBM.
-        output.to_hbm(&mut ctx.tdma, 0x5000)
+        output.to_hbm(&mut ctx.tdma)
     }
 }

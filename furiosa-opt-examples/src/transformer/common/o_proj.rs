@@ -26,12 +26,11 @@ pub(crate) fn o_proj(
     weight: &HbmTensor<bf16, Chip, m![H, H]>,
 ) -> HbmTensor<bf16, Chip, m![S, H]> {
     // Load input to SRAM with 112-wide hidden tiling.
-    let input_dm: DmTensor<bf16, Chip, Cluster, m![Z, H / 112, S / 8], m![S % 8, H % 112]> =
-        input.to_dm(&mut ctx.tdma, 0xbb00);
+    let input_dm: DmTensor<bf16, Chip, Cluster, m![Z, H / 112, S / 8], m![S % 8, H % 112]> = input.to_dm(&mut ctx.tdma);
 
     // Load projection weights to SRAM.
     let weight_dm: DmTensor<bf16, Chip, Cluster, m![H / 28, H / 448, H / 7 % 4], m![H % 7, H % 448]> =
-        weight.to_dm(&mut ctx.tdma, 0x8900);
+        weight.to_dm(&mut ctx.tdma);
 
     // Reorder weight tiles for contraction over 112 hidden channels.
     let weight_it: DmTensor<bf16, Chip, Cluster, m![H / 28, H / 448, H / 112 % 4], m![H / 7 % 4, H % 7, H % 112]> = ctx
@@ -45,7 +44,7 @@ pub(crate) fn o_proj(
         })
         .collect::<m![H / 7 % 4, H % 7], m![H % 112]>()
         .commit_trim::<m![H % 112]>()
-        .commit(0xa200);
+        .commit();
 
     // Stage input in TRF FirstHalf for reversed matmul ordering.
     let input_trf: TrfTensor<
@@ -61,7 +60,7 @@ pub(crate) fn o_proj(
         .fetch::<m![S % 8], m![H % 112]>()
         .switch::<m![H / 448, X, H / 112], m![S % 8]>(SwitchConfig::Broadcast1 { slice1: 16, slice0: 8 })
         .collect::<m![S % 8], m![H / 16 % 7, S / 8, S % 8 # 16]>()
-        .to_trf(TrfAddress::FirstHalf);
+        .to_trf();
 
     // Reshape weight Slice to match TRF Slice for alignment.
     let weight_it: DmTensor<bf16, Chip, Cluster, m![H / 448, X, H / 112], m![H / 7 % 4, H % 7, H % 112]> =
@@ -82,8 +81,8 @@ pub(crate) fn o_proj(
         .vector_final()
         .cast::<bf16, m![S % 64]>()
         .commit_trim::<m![S % 64]>()
-        .commit(0x8400);
+        .commit();
 
     // Store projected output to HBM.
-    result.to_hbm(&mut ctx.tdma, 0x10e36000)
+    result.to_hbm(&mut ctx.tdma)
 }
