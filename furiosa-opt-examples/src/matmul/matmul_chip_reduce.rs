@@ -39,7 +39,7 @@ pub fn matmul_chip_reduce(
         .fetch::<m![C / 4], m![C % 4 # 8]>()
         .fetch_cast::<i32>()
         .collect::<m![C / 4], m![C % 4 # 8]>()
-        .to_vrf(0);
+        .to_vrf_at(0);
 
     // Perform elementwise mul
     // The B dimension is in Chip (=4), which will be reduced later via reduce_over_chip

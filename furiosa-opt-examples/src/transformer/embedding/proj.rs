@@ -64,7 +64,7 @@ pub(crate) fn v_proj(
         .begin(v_bias_dm.view())
         .fetch::<m![1], m![V % 32]>()
         .collect::<m![1], m![V % 32]>()
-        .to_vrf(0x0);
+        .to_vrf_at(0x0);
 
     // Compute V = input @ V_weight and apply bias in the VE path.
     let result: DmTensor<bf16, Chip, Cluster, m![1 # 2, 1 # 2, S / 32, S / 4 % 8, S / 2 % 2], m![S % 2, V % 32]> = ctx
@@ -153,7 +153,7 @@ pub(crate) fn q_proj(
         .fetch::<m![1], m![Q / 64 # 16]>()
         .fetch_cast::<f32>()
         .collect::<m![1], m![Q / 64 # 16]>()
-        .to_vrf(0x0);
+        .to_vrf_at(0x0);
 
     // Pad the input packet axis for TRF-friendly alignment.
     let input_padded: DmTensor<bf16, Chip, Cluster, m![Y, S / 32, H / 56], m![S % 32, H % 56 # 64]> = ctx
@@ -285,7 +285,7 @@ pub(crate) fn k_proj(
         .begin(k_bias_dm.view())
         .fetch::<m![1], m![K % 32]>()
         .collect::<m![1], m![K % 32]>()
-        .to_vrf(0x0);
+        .to_vrf_at(0x0);
 
     let weight_dm: DmTensor<bf16, Chip, Cluster, m![K / 8, H / 224, K / 2 % 4], m![K % 2, H % 224]> =
         weight.to_dm(&mut ctx.tdma, 0x0);

@@ -91,7 +91,7 @@ pub(super) fn rms_norm(
         .fetch::<m![H / 8 % 7 # 8], m![H % 8]>()
         .fetch_cast::<f32>()
         .collect::<m![H / 8 % 7 # 8], m![H % 8]>()
-        .to_vrf(0);
+        .to_vrf_at(0);
 
     // Duplicate hidden states so variance and final scaling can run independently.
     let mut hidden_copy: DmTensor<
@@ -138,7 +138,7 @@ pub(super) fn rms_norm(
         .vector_fp_div_with_mode(BinaryArgMode::Mode10, 1.0f32)
         .vector_widen_concat::<m![S / 8 % 4], m![S % 8]>()
         .vector_final()
-        .to_vrf(0);
+        .to_vrf_at(0);
 
     // Reshape hidden copy to match VRF Slice decomposition for vector operations.
     let hidden_copy: DmTensor<bf16, Chip, Cluster, m![Y, S / 32, H / 56], m![S / 8 % 4, S % 8, H % 56]> =

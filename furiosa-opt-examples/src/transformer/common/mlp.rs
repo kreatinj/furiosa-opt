@@ -115,7 +115,7 @@ pub(crate) fn mlp(
         .fetch::<m![M % 19], m![S % 128]>()
         .fetch_cast::<f32>()
         .collect::<m![M % 19], m![S % 128]>()
-        .to_vrf(0);
+        .to_vrf_at(0);
 
     let gate_sum: DmTensor<bf16, Chip, Cluster, m![M / 19, S / 128], m![M % 19, S % 128]> = ctx
         .main
@@ -207,7 +207,7 @@ pub(crate) fn mlp(
         .fetch::<m![M % 19], m![S % 128]>()
         .fetch_cast::<f32>()
         .collect::<m![M % 19, S / 8 % 16], m![S % 8]>()
-        .to_vrf(0);
+        .to_vrf_at(0);
 
     let up_sum: DmTensor<bf16, Chip, Cluster, m![M / 19, S / 128], m![M % 19, S % 128]> = ctx
         .main
@@ -231,7 +231,7 @@ pub(crate) fn mlp(
         .fetch::<m![M % 19], m![S % 128]>()
         .fetch_cast::<f32>()
         .collect::<m![M % 19, S / 8 % 16], m![S % 8]>()
-        .to_vrf(0);
+        .to_vrf_at(0);
 
     let gated: DmTensor<bf16, Chip, Cluster, m![M / 19, S / 128], m![M % 19, S % 128]> = ctx
         .main

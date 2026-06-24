@@ -28,7 +28,7 @@ fn vrf_add_kernel(
         .fetch::<m![1], m![B]>()
         .fetch_cast::<i32>()
         .collect::<m![B / 8], m![B % 8]>()
-        .to_vrf(0);
+        .to_vrf_at(0);
 
     // Perform addition: lhs_dm + rhs_vrf using vector engine
     ctx.main

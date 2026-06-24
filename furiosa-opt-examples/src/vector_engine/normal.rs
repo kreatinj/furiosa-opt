@@ -458,7 +458,7 @@ pub fn ve_elementwise_vrf(
         .fetch::<m![1], m![B]>()
         .fetch_cast::<i32>()
         .collect::<m![B / 8], m![B % 8]>()
-        .to_vrf(0);
+        .to_vrf_at(0);
 
     let result: DmTensor<i32, Chip, Cluster, m![A / 2], m![B, A % 2]> = ctx
         .main
@@ -494,7 +494,7 @@ pub fn ve_elementwise_multi_vrf(
         .fetch::<m![1], m![B]>()
         .fetch_cast::<i32>()
         .collect::<m![B / 8], m![B % 8]>()
-        .to_vrf(0);
+        .to_vrf_at(0);
 
     let vrf2: VrfTensor<i32, Chip, Cluster, m![A / 2], m![B]> = ctx
         .sub
@@ -502,7 +502,7 @@ pub fn ve_elementwise_multi_vrf(
         .fetch::<m![1], m![B]>()
         .fetch_cast::<i32>()
         .collect::<m![B / 8], m![B % 8]>()
-        .to_vrf(1024);
+        .to_vrf_at(1024);
 
     let result: DmTensor<i32, Chip, Cluster, m![A / 2], m![B, A % 2]> = ctx
         .main

@@ -121,7 +121,7 @@ fn rms_norm_pipeline(
             time0: 1,
         })
         .collect::<m![H / 8 % 28], m![H % 8]>()
-        .to_vrf(0);
+        .to_vrf_at(0);
 
     // Copy input so variance and final scale can read independently.
     let mut input_copy: DmTensor<bf16, Chip, Cluster, m![S / 2, H / 224], m![S % 2, H % 224]> =
@@ -162,7 +162,7 @@ fn rms_norm_pipeline(
         .vector_fp_div_with_mode(BinaryArgMode::Mode10, 1.0f32)
         .vector_widen_pad::<m![1 # 8]>() // TODO: use filter to move Time -> Packet
         .vector_final()
-        .to_vrf(0);
+        .to_vrf_at(0);
 
     // Apply RMS scaling and affine weight.
     let result: DmTensor<bf16, Chip, Cluster, m![S / 2, H / 224], m![S % 2, H % 224]> = ctx
@@ -251,7 +251,7 @@ pub(crate) fn final_norm(
         .vector_fp_div_with_mode(BinaryArgMode::Mode10, 1.0f32)
         .vector_widen_pad::<m![1 # 8]>()
         .vector_final()
-        .to_vrf(0);
+        .to_vrf_at(0);
 
     let weight_dm: DmTensor<bf16, Chip, Cluster, m![Y, H / 14], m![H % 14]> = norm_weight.to_dm(&mut ctx.tdma, 0xc200);
 
@@ -266,7 +266,7 @@ pub(crate) fn final_norm(
             time0: 1,
         })
         .collect::<m![1], m![H % 14]>()
-        .to_vrf(0);
+        .to_vrf_at(0);
 
     // Apply RMS scaling and affine weight.
     let result: DmTensor<bf16, Chip, Cluster, m![Y, H / 14], m![H % 14, S]> = ctx
