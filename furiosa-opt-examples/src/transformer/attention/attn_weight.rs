@@ -20,8 +20,7 @@ pub(super) fn attn_weight(
     attn_k: &HbmTensor<bf16, Chip, m![T, K]>,
 ) -> DmTensor<bf16, Chip, Cluster, m![S / 8, N], m![S % 8, G, T]> {
     // Load key tensor from HBM to DM.
-    let k_dm: DmTensor<bf16, Chip, Cluster, m![Y, T / 16 % 32, T / 512], m![T % 16, K]> =
-        attn_k.to_dm(&mut ctx.tdma);
+    let k_dm: DmTensor<bf16, Chip, Cluster, m![Y, T / 16 % 32, T / 512], m![T % 16, K]> = attn_k.to_dm(&mut ctx.tdma);
 
     // Reorder key tiles to split K into head chunks for TRF loading.
     let k_it: DmTensor<bf16, Chip, Cluster, m![Y, T / 16 % 32, K / 64], m![T / 512, T % 16, K % 64]> = ctx
@@ -70,8 +69,7 @@ pub(super) fn attn_weight(
         .to_trf_at(TrfAddress::SecondHalf);
 
     // Load query tensor from HBM to DM.
-    let q_dm: DmTensor<bf16, Chip, Cluster, m![S / 256, W, N], m![S % 8, G, D]> =
-        attn_q.to_dm(&mut ctx.tdma);
+    let q_dm: DmTensor<bf16, Chip, Cluster, m![S / 256, W, N], m![S % 8, G, D]> = attn_q.to_dm(&mut ctx.tdma);
 
     // Compute Q x K^T using TRF first half and write partial scores.
     ctx.main

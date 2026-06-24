@@ -149,8 +149,7 @@ pub(crate) fn mlp(
         .commit_trim::<m![S % 8]>()
         .commit();
 
-    let up_dm: DmTensor<bf16, Chip, Cluster, m![M / 76, M / 19 % 4], m![M % 19, H]> =
-        up_weight.to_dm(&mut ctx.tdma);
+    let up_dm: DmTensor<bf16, Chip, Cluster, m![M / 76, M / 19 % 4], m![M % 19, H]> = up_weight.to_dm(&mut ctx.tdma);
 
     let up_it: DmTensor<bf16, Chip, Cluster, m![M / 76, H / 224], m![M / 19 % 4, M % 19, H % 224]> = ctx
         .main
@@ -251,8 +250,7 @@ pub(crate) fn mlp(
 
     let gated_hbm: HbmTensor<bf16, Chip, m![M, S]> = gated.to_hbm(&mut ctx.tdma);
 
-    let gated_retiled: DmTensor<bf16, Chip, Cluster, m![Y, M / 76], m![M % 76, S]> =
-        gated_hbm.to_dm(&mut ctx.tdma);
+    let gated_retiled: DmTensor<bf16, Chip, Cluster, m![Y, M / 76], m![M % 76, S]> = gated_hbm.to_dm(&mut ctx.tdma);
 
     // Reshape gated activation Slice for down-projection TRF alignment.
     let gated_retiled: DmTensor<bf16, Chip, Cluster, m![H / 224, M / 152, M / 76 % 2], m![M % 76, S]> =

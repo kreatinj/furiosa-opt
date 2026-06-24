@@ -174,8 +174,7 @@ pub fn ve_intra_slice_reduce_split_slice_time(
     input: &HbmTensor<i32, Chip, m![S, A]>,
 ) -> HbmTensor<i32, Chip, m![S # 16 / 4, A]> {
     let input_transposed: HbmTensor<i32, Chip, m![S, A]> = input.to_hbm(&mut ctx.tdma);
-    let input_dm =
-        input_transposed.to_dm::<Cluster, m![S # 16 / 4, A / 8], m![S # 16 % 4, A % 8]>(&mut ctx.tdma);
+    let input_dm = input_transposed.to_dm::<Cluster, m![S # 16 / 4, A / 8], m![S # 16 % 4, A % 8]>(&mut ctx.tdma);
 
     let result: DmTensor<i32, Chip, Cluster, m![S # 16 / 4, A / 8], m![A % 8]> = ctx
         .main

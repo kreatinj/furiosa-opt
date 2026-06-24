@@ -22,8 +22,7 @@ pub(super) fn cache_kv(
     // V scatter index path.
 
     // Load V scatter indices from HBM to DM.
-    let v_idx_dm: DmTensor<i32, Chip, Cluster, m![T / 32, 1 # 8], m![T % 32]> =
-        v_scatter_index.to_dm(&mut ctx.tdma);
+    let v_idx_dm: DmTensor<i32, Chip, Cluster, m![T / 32, 1 # 8], m![T % 32]> = v_scatter_index.to_dm(&mut ctx.tdma);
 
     // Reorder index tiles to match the downstream scatter-friendly layout.
     let v_idx_it: DmTensor<i32, Chip, Cluster, m![T / 32, T / 4 % 8], m![T % 4 # 32]> = ctx
@@ -89,8 +88,7 @@ pub(super) fn cache_kv(
     // K scatter index path.
 
     // Load K scatter indices from HBM to DM.
-    let k_idx_dm: DmTensor<i32, Chip, Cluster, m![T / 32, 1 # 8], m![T % 32]> =
-        k_scatter_index.to_dm(&mut ctx.tdma);
+    let k_idx_dm: DmTensor<i32, Chip, Cluster, m![T / 32, 1 # 8], m![T % 32]> = k_scatter_index.to_dm(&mut ctx.tdma);
 
     // Reorder K index tiles to the scatter-friendly layout.
     let k_idx_it: DmTensor<i32, Chip, Cluster, m![T / 32, T / 4 % 8], m![T % 4 # 32]> = ctx

@@ -42,8 +42,7 @@ pub(crate) fn rope(
     // Position IDs -> rope-table gather.
 
     // Load position IDs into DM tiles used by the offset-scaling step.
-    let pos_dm: DmTensor<i32, Chip, Cluster, m![1 # 128, S / 64], m![S % 64]> =
-        position_ids.to_dm(&mut ctx.tdma);
+    let pos_dm: DmTensor<i32, Chip, Cluster, m![1 # 128, S / 64], m![S % 64]> = position_ids.to_dm(&mut ctx.tdma);
 
     // Convert each position ID into a byte offset for rope-table row access.
     let pos_scaled: DmTensor<i32, Chip, Cluster, m![1 # 128, S / 64], m![S % 64]> = ctx

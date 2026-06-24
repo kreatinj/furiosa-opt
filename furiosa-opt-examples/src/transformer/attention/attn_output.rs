@@ -23,8 +23,7 @@ pub(super) fn attn_output(
     out_attn: &mut HbmTensor<bf16, Chip, m![S, H]>,
 ) {
     // Load value tensor from HBM to DM for the score x V matmul.
-    let v_dm: DmTensor<bf16, Chip, Cluster, m![Z, T / 8 % 64, T / 512], m![T % 8, K]> =
-        attn_v.to_dm(&mut ctx.tdma);
+    let v_dm: DmTensor<bf16, Chip, Cluster, m![Z, T / 8 % 64, T / 512], m![T % 8, K]> = attn_v.to_dm(&mut ctx.tdma);
 
     // Reorder value tiles to prepare V for TRF loading.
     let v_it: DmTensor<bf16, Chip, Cluster, m![Z, T / 8 % 64, K / 64], m![T / 512, T % 8, K % 64]> = ctx
