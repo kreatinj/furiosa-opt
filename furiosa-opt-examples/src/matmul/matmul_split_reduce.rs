@@ -52,18 +52,18 @@ pub fn matmul_with_split_reduce(
         let lhs_tile = lhs
             .view()
             .tile::<m![B / 512], 1, m![A, 1 # 4, B % 512]>(j)
-            .to_dm_at::<Cluster, m![A / 64 % 8, B / 16 % 32], m![A % 64, B % 16]>(&mut ctx.tdma, 0);
+            .to_dm::<Cluster, m![A / 64 % 8, B / 16 % 32], m![A % 64, B % 16]>(&mut ctx.tdma);
         let rhs_tile = rhs
             .view()
             .tile::<m![B / 512], 1, m![1 # 4, B % 512]>(j)
-            .to_dm_at::<Cluster, m![A / 64 % 8, B / 16 % 32], m![B % 16]>(&mut ctx.tdma, 256 * 1024);
+            .to_dm::<Cluster, m![A / 64 % 8, B / 16 % 32], m![B % 16]>(&mut ctx.tdma);
         let rhs_trf: TrfTensor<i8, Chip, Cluster, m![A / 64 % 8, B / 16 % 32], m![1], m![B % 16 # 32]> = ctx
             .sub
             .begin(rhs_tile.view())
             .fetch::<m![1], m![B % 16]>()
             .fetch_cast::<i8>()
             .collect::<m![1], m![B % 16 # 32]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         // Perform contraction for this tile
         if j == 0 {
