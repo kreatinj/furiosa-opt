@@ -37,7 +37,7 @@ pub mod lane_size {
             .fetch::<m![1], m![B]>()
             .fetch_cast::<i8>()
             .collect::<m![B / 32], m![B % 32]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![A, 1 # 8]> = ctx
             .main
@@ -71,7 +71,7 @@ pub mod lane_size {
             .fetch::<m![R / 4], m![B]>()
             .fetch_cast::<i8>()
             .collect::<m![R / 4, B / 32], m![B % 32]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![A, R / 4 # 8]> = ctx
             .main
@@ -105,7 +105,7 @@ pub mod lane_size {
             .fetch::<m![R / 2], m![B]>()
             .fetch_cast::<i8>()
             .collect::<m![R / 2, B / 32], m![B % 32]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![A, R / 2 # 8]> = ctx
             .main
@@ -139,7 +139,7 @@ pub mod lane_size {
             .fetch::<m![R], m![B]>()
             .fetch_cast::<i8>()
             .collect::<m![R, B / 32], m![B % 32]>()
-            .to_trf_at(TrfAddress::Full);
+            .to_trf();
 
         let result: DmTensor<i32, Chip, Cluster, Slice, m![A, R # 8]> = ctx
             .main
