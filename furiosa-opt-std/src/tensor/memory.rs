@@ -972,7 +972,7 @@ impl<'l, D: Scalar, Chip: M, Cluster: M, Slice: M, Element: M, B: Backend>
 pub struct TrfTensor<D: Scalar, Chip: M, Cluster: M, Slice: M, Lane: M, Element: M, B: Backend = CurrentBackend> {
     pub(crate) inner: Tensor<D, Pair<Chip, Pair<Cluster, Pair<Slice, Pair<Lane, Element>>>>, B>,
     #[expect(dead_code)]
-    address: TrfAddress,
+    address: Option<TrfAddress>,
     _marker: PhantomData<(D, Chip, Cluster, Slice, Lane, Element)>,
 }
 // ANCHOR_END: trf_tensor_def
@@ -983,7 +983,7 @@ impl<D: Scalar, Chip: M, Cluster: M, Slice: M, Lane: M, Element: M, B: Backend>
     /// Mapping type alias.
     pub type Mapping = m![{ Chip }, { Cluster }, { Slice }, { Lane }, { Element }];
 
-    pub(crate) fn new(inner: Tensor<D, Self::Mapping, B>, address: TrfAddress) -> Self {
+    pub(crate) fn new(inner: Tensor<D, Self::Mapping, B>, address: Option<TrfAddress>) -> Self {
         Self {
             inner,
             address,
@@ -1003,7 +1003,7 @@ impl<D: Scalar, Chip: M, Cluster: M, Slice: M, Lane: M, Element: M, B: Backend>
     /// with the tensor mapping.
     pub unsafe fn from_addr(address: TrfAddress) -> Self {
         let axes = gen_axes::<Pair<Chip, Pair<Cluster, Pair<Slice, Pair<Lane, Element>>>>>();
-        Self::new(Tensor::from_inner(B::RawTensor::uninit_from_axes(axes)), address)
+        Self::new(Tensor::from_inner(B::RawTensor::uninit_from_axes(axes)), Some(address))
     }
 }
 

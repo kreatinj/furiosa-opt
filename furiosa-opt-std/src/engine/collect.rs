@@ -57,7 +57,7 @@ impl<'l, const T: Tu, P: CanApplyToTrf, D: Scalar, Chip: M, Cluster: M, Slice: M
         address: TrfAddress,
     ) -> TrfTensor<D, Chip, Cluster, Slice, Lane, Element, B> {
         verify_to_trf::<D, Lane, Time, Packet, Element>(&address);
-        TrfTensor::new(self.inner.transpose(false), address)
+        TrfTensor::new(self.inner.transpose(false), Some(address))
     }
 }
 // ANCHOR_END: collect_to_trf
