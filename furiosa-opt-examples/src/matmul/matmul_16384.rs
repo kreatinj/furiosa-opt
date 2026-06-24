@@ -15,7 +15,7 @@ fn contraction_over_b_2048(
     out: DmTensorViewMut<'_, i8, Chip, Cluster, m![A / 2048, X], m![C % 64, A % 2048, C / 64 % 8]>,
 ) {
     // Load lhs into data memory.
-    let lhs = lhs.to_dm::<Cluster, m![A / 64], m![A % 64, B % 2048]>(&mut ctx.tdma, 0);
+    let lhs = lhs.to_dm_at::<Cluster, m![A / 64], m![A % 64, B % 2048]>(&mut ctx.tdma, 0);
     let lhs: DmTensor<i8, Chip, Cluster, m![A / 2048, B / 64 % 32], m![A % 2048, B % 64]> = ctx
         .main
         .begin(lhs.view())
@@ -31,7 +31,7 @@ fn contraction_over_b_2048(
 
     // Load rhs into TRF.
     // first TensorUnit execution: apply custom broadcast to match Slice shape
-    let rhs = rhs.to_dm::<Cluster, m![B / 8 % 256], m![B % 8, C % 512]>(&mut ctx.tdma, 256 * 1024);
+    let rhs = rhs.to_dm_at::<Cluster, m![B / 8 % 256], m![B % 8, C % 512]>(&mut ctx.tdma, 256 * 1024);
     let rhs = ctx
         .main
         .begin(rhs.view())

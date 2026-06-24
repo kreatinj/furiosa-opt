@@ -16,10 +16,10 @@ fn vrf_add_kernel(
     out: DmTensorViewMut<'_, i32, Chip, Cluster, m![A / 8 # 256], m![B, A % 8]>,
 ) {
     // Load lhs into DM (mainstream data)
-    let lhs_dm = lhs.to_dm::<Cluster, m![A / 8 # 256], m![B, A % 8]>(&mut ctx.tdma, 0);
+    let lhs_dm = lhs.to_dm_at::<Cluster, m![A / 8 # 256], m![B, A % 8]>(&mut ctx.tdma, 0);
 
     // Load rhs into DM
-    let rhs_dm = rhs.to_dm::<Cluster, m![A / 8 # 256], m![B]>(&mut ctx.tdma, 512);
+    let rhs_dm = rhs.to_dm_at::<Cluster, m![A / 8 # 256], m![B]>(&mut ctx.tdma, 512);
 
     // Prepare rhs data for VRF by committing to DM first
     let rhs_vrf: VrfTensor<i32, Chip, Cluster, m![A / 8 # 256], m![B]> = ctx

@@ -83,7 +83,7 @@ pub fn compile_llama3_1_mlperf_latest_8pe_4chip_w8a16kv16_prefill_first_block_b1
         let embedding_view = embeddings_hbm.view().tile::<m![S / 512], 1, m![1 # 2, S % 512, E]>(i);
 
         let embedding_view_sram_0: DmTensor<bf16, Chip, m![Y], m![E / 128, S / 128 % 4], m![S % 128, E % 128]> =
-            embedding_view.to_dm(&mut ctx.tdma, 0);
+            embedding_view.to_dm_at(&mut ctx.tdma, 0);
 
         let _embedding_view_sram_1: DmTensor<
             bf16,

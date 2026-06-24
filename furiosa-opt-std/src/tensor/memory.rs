@@ -560,6 +560,16 @@ impl<'l, D: Scalar, Chip: M, Element: M, B: Backend> HbmTensorView<'l, D, Chip, 
     pub fn to_dm<Cluster: M, Slice: M, Element2: M>(
         self,
         _dma: &mut DmaContext<{ Dma::Tensor }>,
+    ) -> DmTensor<D, Chip, Cluster, Slice, Element2, B> {
+        assert_dma_layout::<D, m![{ Chip }, { Element }], Element2>(DMA_SRAM_WRITE_WIDTH);
+        DmTensor::new(self.inner.read().transpose(true), None)
+    }
+
+    /// Converts to data memory tensor at `address`.
+    #[primitive(HbmTensorView::to_dm_at)]
+    pub fn to_dm_at<Cluster: M, Slice: M, Element2: M>(
+        self,
+        _dma: &mut DmaContext<{ Dma::Tensor }>,
         address: Address,
     ) -> DmTensor<D, Chip, Cluster, Slice, Element2, B> {
         assert_dma_layout::<D, m![{ Chip }, { Element }], Element2>(DMA_SRAM_WRITE_WIDTH);

@@ -21,7 +21,7 @@ pub fn matmul_with_split_reduce2(
         let t87: DmTensor<bf16, Chip, Cluster, m![1 # 4, M], m![K % 128]> = a
             .view()
             .tile::<m![K / 128], 1, m![M, 1 # 8, K % 128]>(i * 2)
-            .to_dm(&mut ctx.tdma, 0x0000_0100);
+            .to_dm_at(&mut ctx.tdma, 0x0000_0100);
 
         let t95: DmTensor<bf16, Chip, Cluster, m![1 # 4, M / 8, M % 8], m![K % 128 / 16, K % 128 % 16]> =
             unsafe { t87.reshape() };
@@ -40,7 +40,7 @@ pub fn matmul_with_split_reduce2(
         let t72: DmTensor<bf16, Chip, Cluster, m![1 # 4, K % 128 / 2], m![K % 128 % 2, N]> = b
             .view()
             .tile::<m![K / 128], 1, m![1 # 8, K % 128, N]>(i * 2)
-            .to_dm(&mut ctx.tdma, 0x0000_0300);
+            .to_dm_at(&mut ctx.tdma, 0x0000_0300);
         let t89: DmTensor<
             bf16,
             Chip,
@@ -83,13 +83,13 @@ pub fn matmul_with_split_reduce2(
         let t108: DmTensor<bf16, Chip, Cluster, m![1 # 4, M], m![K % 128]> = a
             .view()
             .tile::<m![K / 128], 1, m![M, 1 # 8, K % 128]>(1 + i * 2)
-            .to_dm(&mut ctx.tdma, 0x0000_0200);
+            .to_dm_at(&mut ctx.tdma, 0x0000_0200);
         let t116: DmTensor<bf16, Chip, Cluster, m![1 # 4, M / 8, M % 8], m![K % 128 / 16, K % 128 % 16]> =
             unsafe { t108.reshape() };
         let t103: DmTensor<bf16, Chip, Cluster, m![1 # 4, K % 128 / 2], m![K % 128 % 2, N]> = b
             .view()
             .tile::<m![K / 128], 1, m![1 # 8, K % 128, N]>(1 + i * 2)
-            .to_dm(&mut ctx.tdma, 0x0000_0500);
+            .to_dm_at(&mut ctx.tdma, 0x0000_0500);
         let t109: DmTensor<
             bf16,
             Chip,
