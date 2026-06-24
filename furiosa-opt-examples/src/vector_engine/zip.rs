@@ -20,7 +20,7 @@ pub fn ve_group_pair_add(
         .vector_clip_zip(ClipBinaryOpI32::AddFxp)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x3000);
+        .commit_at(0x3000);
 
     result.to_hbm(&mut ctx.tdma, 0x4000)
 }
@@ -46,7 +46,7 @@ pub fn ve_group_pair_preprocess_both(
         .vector_clip_zip(ClipBinaryOpI32::AddFxp)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x3000);
+        .commit_at(0x3000);
 
     result.to_hbm(&mut ctx.tdma, 0x4000)
 }
@@ -72,7 +72,7 @@ pub fn ve_group_pair_preprocess_g0(
         .vector_clip_zip(ClipBinaryOpI32::AddFxp)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x3000);
+        .commit_at(0x3000);
 
     result.to_hbm(&mut ctx.tdma, 0x4000)
 }
@@ -98,7 +98,7 @@ pub fn ve_group_pair_preprocess_g1(
         .vector_clip_zip(ClipBinaryOpI32::AddFxp)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x3000);
+        .commit_at(0x3000);
 
     result.to_hbm(&mut ctx.tdma, 0x4000)
 }
@@ -125,7 +125,7 @@ pub fn ve_group_pair_chain(
         .vector_clip_zip(ClipBinaryOpI32::AddFxp)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x3000);
+        .commit_at(0x3000);
 
     result.to_hbm(&mut ctx.tdma, 0x4000)
 }
@@ -149,7 +149,7 @@ pub fn ve_group_pair_fxp(
         .vector_fxp_zip(FxpBinaryOp::MulInt)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x3000);
+        .commit_at(0x3000);
 
     result.to_hbm(&mut ctx.tdma, 0x4000)
 }
@@ -174,7 +174,7 @@ pub fn ve_group_pair_logic(
         .vector_logic_zip(LogicBinaryOpI32::BitXor)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x3000);
+        .commit_at(0x3000);
 
     result.to_hbm(&mut ctx.tdma, 0x4000)
 }
@@ -202,7 +202,7 @@ pub fn ve_group_pair_fp(
         .vector_widen_concat::<m![1], m![A % 2 # 8]>()
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x3000);
+        .commit_at(0x3000);
 
     result.to_hbm(&mut ctx.tdma, 0x4000)
 }
@@ -234,7 +234,7 @@ pub fn ve_group_pair_fp_multi_packet(
         .vector_widen_concat::<m![Q], m![A % 2 # 8]>()
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x3000);
+        .commit_at(0x3000);
 
     result.to_hbm(&mut ctx.tdma, 0x4000)
 }
@@ -263,7 +263,7 @@ pub fn ve_group_pair_unary(
         .vector_widen_concat::<m![1], m![A % 2 # 8]>()
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x3000);
+        .commit_at(0x3000);
 
     result.to_hbm(&mut ctx.tdma, 0x4000)
 }
@@ -292,7 +292,7 @@ pub fn ve_group_pair_unary_selective(
         .vector_widen_concat::<m![1], m![A % 2 # 8]>()
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x3000);
+        .commit_at(0x3000);
 
     result.to_hbm(&mut ctx.tdma, 0x4000)
 }
@@ -322,7 +322,7 @@ pub fn ve_elementwise_ternary(ctx: &mut Context, input: &HbmTensor<f32, Chip, m!
         .vector_widen_pad::<m![A % 2 # 8]>()
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x2000);
+        .commit_at(0x2000);
 
     result.to_hbm(&mut ctx.tdma, 0x3000)
 }
@@ -352,7 +352,7 @@ pub fn ve_elementwise_ternary_stash(
         .vector_widen_pad::<m![A % 2 # 8]>()
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x2000);
+        .commit_at(0x2000);
 
     result.to_hbm(&mut ctx.tdma, 0x3000)
 }
@@ -385,7 +385,7 @@ pub fn ve_group_pair_ternary(
         .vector_widen_concat::<m![1], m![A % 2 # 8]>()
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x3000);
+        .commit_at(0x3000);
 
     result.to_hbm(&mut ctx.tdma, 0x4000)
 }
@@ -418,7 +418,7 @@ pub fn ve_group_pair_ternary_selective(
         .vector_widen_concat::<m![1], m![A % 2 # 8]>()
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x3000);
+        .commit_at(0x3000);
 
     result.to_hbm(&mut ctx.tdma, 0x4000)
 }

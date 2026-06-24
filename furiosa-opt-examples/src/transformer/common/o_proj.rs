@@ -45,7 +45,7 @@ pub(crate) fn o_proj(
         })
         .collect::<m![H / 7 % 4, H % 7], m![H % 112]>()
         .commit_trim::<m![H % 112]>()
-        .commit(0xa200);
+        .commit_at(0xa200);
 
     // Stage input in TRF FirstHalf for reversed matmul ordering.
     let input_trf: TrfTensor<
@@ -82,7 +82,7 @@ pub(crate) fn o_proj(
         .vector_final()
         .cast::<bf16, m![S % 64]>()
         .commit_trim::<m![S % 64]>()
-        .commit(0x8400);
+        .commit_at(0x8400);
 
     // Store projected output to HBM.
     result.to_hbm(&mut ctx.tdma, 0x10e36000)

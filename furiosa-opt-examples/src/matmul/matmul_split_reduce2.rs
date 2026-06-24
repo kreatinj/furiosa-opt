@@ -36,7 +36,7 @@ pub fn matmul_with_split_reduce2(
             })
             .collect::<m![M % 8], m![K % 128 % 16]>()
             .commit_trim::<m![K % 128 % 16]>()
-            .commit(0x0000_0200);
+            .commit_at(0x0000_0200);
         let t72: DmTensor<bf16, Chip, Cluster, m![1 # 4, K % 128 / 2], m![K % 128 % 2, N]> = b
             .view()
             .tile::<m![K / 128], 1, m![1 # 8, K % 128, N]>(i * 2)
@@ -78,7 +78,7 @@ pub fn matmul_with_split_reduce2(
             .vector_final()
             .cast::<bf16, m![N % 32 % 8 # 16]>()
             .commit_trim::<m![N % 32 % 8]>()
-            .commit(0x0000_0100);
+            .commit_at(0x0000_0100);
 
         let t108: DmTensor<bf16, Chip, Cluster, m![1 # 4, M], m![K % 128]> = a
             .view()
@@ -111,7 +111,7 @@ pub fn matmul_with_split_reduce2(
             })
             .collect::<m![M % 8], m![K % 128 % 16]>()
             .commit_trim::<m![K % 128 % 16]>()
-            .commit(0x0000_0300);
+            .commit_at(0x0000_0300);
         let t110: DmTensor<
             bf16,
             Chip,
@@ -132,7 +132,7 @@ pub fn matmul_with_split_reduce2(
             .vector_final()
             .cast::<bf16, m![N % 8 # 16]>()
             .commit_trim::<m![N % 8]>()
-            .commit(0x0000_0200);
+            .commit_at(0x0000_0200);
 
         let t115: TrfTensor<bf16, Chip, Cluster, m![1 # 4, M / 8, K % 128 / 16], m![M % 8], m![K % 128 % 16]> = ctx
             .sub
@@ -158,7 +158,7 @@ pub fn matmul_with_split_reduce2(
             .vector_final()
             .cast::<bf16, m![N % 32 % 8 # 16]>()
             .commit_trim::<m![N % 32 % 8]>()
-            .commit(0x0000_0100);
+            .commit_at(0x0000_0100);
         let t105: DmTensor<bf16, Chip, Cluster, m![1 # 4, M], m![N]> = unsafe { t111.reshape() };
 
         acc = ctx
@@ -173,7 +173,7 @@ pub fn matmul_with_split_reduce2(
             .vector_final()
             .cast::<bf16, m![N % 8 # 16]>()
             .commit_trim::<m![N % 8]>()
-            .commit(0x0000_0000);
+            .commit_at(0x0000_0000);
     }
 
     acc.to_hbm(&mut ctx.tdma, 0x3000)

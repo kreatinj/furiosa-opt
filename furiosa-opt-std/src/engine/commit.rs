@@ -20,9 +20,16 @@ use crate::tensor::tu::TuTensor;
 impl<'l, const T: Tu, P: CanApplyCommit, D: Scalar, Chip: M, Cluster: M, Slice: M, Time: M, Packet: M, B: Backend>
     TuTensor<'l, T, P, D, Chip, Cluster, Slice, Time, Packet, B>
 {
-    /// Commits to data memory at `address`.
+    /// Commits to data memory.
     #[primitive(TuTensor::commit)]
-    pub fn commit<Element: M>(self, address: Address) -> DmTensor<D, Chip, Cluster, Slice, Element, B> {
+    pub fn commit<Element: M>(self) -> DmTensor<D, Chip, Cluster, Slice, Element, B> {
+        verify_commit::<D, Time, Packet, Element>();
+        DmTensor::new(self.inner.transpose(false), None)
+    }
+
+    /// Commits to data memory at `address`.
+    #[primitive(TuTensor::commit_at)]
+    pub fn commit_at<Element: M>(self, address: Address) -> DmTensor<D, Chip, Cluster, Slice, Element, B> {
         verify_commit::<D, Time, Packet, Element>();
         DmTensor::new(self.inner.transpose(false), Some(address))
     }

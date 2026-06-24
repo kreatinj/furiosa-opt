@@ -51,7 +51,7 @@ pub(crate) fn residual_norm(
         .vector_final()
         .cast::<bf16, m![H % 224]>()
         .commit_trim::<m![H % 224]>()
-        .commit(0x8000);
+        .commit_at(0x8000);
 
     // Keep the residual sum for the next residual connection.
     let residual_hbm = residual_dm.to_hbm(&mut ctx.tdma, 0x10e00000);
@@ -90,7 +90,7 @@ pub(crate) fn residual_norm_post(
         .vector_final()
         .cast::<bf16, m![H % 224]>()
         .commit_trim::<m![H % 224]>()
-        .commit(0x8000);
+        .commit_at(0x8000);
 
     // Export residual sum for the next layer input.
     residual_sum.view().to_hbm_view(&mut ctx.tdma, out_hidden.view_mut());
@@ -147,7 +147,7 @@ fn rms_norm_pipeline(
         .vector_inter_slice_reduce::<m![S / 2, H / 224], m![1]>(InterSliceReduceOpF32::Add)
         .vector_final()
         .commit_trim::<m![S % 2]>()
-        .commit(0x18500);
+        .commit_at(0x18500);
 
     // Compute reciprocal RMS and store in VRF.
     let inv_rms_vrf: VrfTensor<f32, Chip, Cluster, m![S / 2, H / 224], m![S % 2]> = ctx
@@ -180,7 +180,7 @@ fn rms_norm_pipeline(
         .vector_final()
         .cast::<bf16, m![H % 8 # 16]>()
         .commit_trim::<m![H % 8]>()
-        .commit(0x8400);
+        .commit_at(0x8400);
 
     result
 }
@@ -211,7 +211,7 @@ pub(crate) fn final_norm(
         .vector_final()
         .cast::<bf16, m![H % 224]>()
         .commit_trim::<m![H % 224]>()
-        .commit(0x8000);
+        .commit_at(0x8000);
     // Use an HBM round-trip to retile from H-contiguous to S-contiguous layout.
     let residual_hbm: HbmTensor<bf16, Chip, m![S, H]> = residual_sum.to_hbm(&mut ctx.tdma, 0x10e10000);
     let retiled: DmTensor<bf16, Chip, Cluster, m![Y, H / 14], m![H % 14, S]> =
@@ -236,7 +236,7 @@ pub(crate) fn final_norm(
         .vector_inter_slice_reduce::<m![Y, H / 14], m![1]>(InterSliceReduceOpF32::Add)
         .vector_final()
         .commit_trim::<m![1]>()
-        .commit(0x1ee00);
+        .commit_at(0x1ee00);
 
     // Compute reciprocal RMS and store in VRF.
     let inv_rms_vrf: VrfTensor<f32, Chip, Cluster, m![Y, H / 14], m![1 # 8]> = ctx
@@ -284,7 +284,7 @@ pub(crate) fn final_norm(
         .vector_final()
         .cast::<bf16, m![S % 8 # 16]>()
         .commit_trim::<m![S % 8]>()
-        .commit(0x1ee00);
+        .commit_at(0x1ee00);
 
     result
 }

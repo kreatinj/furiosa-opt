@@ -37,7 +37,7 @@ pub fn matmul_4096(
         .vector_final()
         .cast::<i8, m![A % 2 # 32]>()
         .commit_trim::<m![A % 2 # 8]>()
-        .commit(0);
+        .commit_at(0);
 
     // write back to HBM.
     let mut out = unsafe { HbmTensor::<i8, m![1], m![A]>::from_addr(0x3000) };

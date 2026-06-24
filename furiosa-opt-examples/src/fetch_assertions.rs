@@ -24,7 +24,7 @@ pub mod cluster_size {
             .fetch_cast::<i8>()
             .collect::<m![A], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -44,7 +44,7 @@ pub mod cluster_size {
             .fetch_cast::<i8>()
             .collect::<m![A], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -68,7 +68,7 @@ pub mod slice_size {
             .fetch_cast::<i8>()
             .collect::<m![A], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -88,7 +88,7 @@ pub mod slice_size {
             .fetch_cast::<i8>()
             .collect::<m![A], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }

@@ -36,7 +36,7 @@ pub(super) fn embed(
         .vector_fxp(FxpBinaryOp::MulInt, 1792)
         .vector_final()
         .commit_trim::<m![S % 8]>()
-        .commit(0x200);
+        .commit_at(0x200);
 
     // Reshape indices for gather layout.
     let ids_reshaped: DmTensor<i32, Chip, Cluster, m![1 # 256], m![S % 4, S / 4]> = ctx
@@ -45,7 +45,7 @@ pub(super) fn embed(
         .fetch::<m![S / 4], m![S % 4]>()
         .collect::<m![S / 4], m![S % 4 # 8]>()
         .commit_trim::<m![S % 4]>()
-        .commit(0x0);
+        .commit_at(0x0);
 
     // Move reshaped indices to HBM for gather input.
     let ids_hbm: HbmTensor<i32, Chip, m![S % 4, S / 4]> = ids_reshaped.to_hbm(&mut ctx.tdma, 0x10e36000);

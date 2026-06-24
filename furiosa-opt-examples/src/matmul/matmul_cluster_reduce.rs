@@ -34,7 +34,7 @@ pub fn matmul_cluster_reduce(
         })
         .collect::<m![C / 4], m![C % 4 # 32]>()
         .commit_trim::<m![C % 4 # 8]>()
-        .commit(0);
+        .commit_at(0);
     let rhs_vrf: VrfTensor<i32, Chip, Cluster, m![A / 4], m![C / 4, C % 4 # 8]> = ctx
         .sub
         .begin(rhs_broadcasted.view())
@@ -58,7 +58,7 @@ pub fn matmul_cluster_reduce(
         .vector_final()
         .cast::<i8, m![A % 4 # 32]>()
         .commit_trim::<m![A % 4 # 8]>()
-        .commit(0);
+        .commit_at(0);
 
     // Now reduce over the Cluster dimension using ReduceScatter pattern
     let reduced = reduce_over_cluster(ctx, &mul_result);

@@ -30,7 +30,7 @@ fn fc1_matmul(
         .contract_lane::<m![1], m![1 # 8]>(LaneMode::Interleaved)
         .cast::<bf16, m![1 # 16]>()
         .commit_trim::<m![1 # 16]>()
-        .commit(0x20000)
+        .commit_at(0x20000)
 }
 
 fn fc1_bias_prepared(
@@ -45,7 +45,7 @@ fn fc1_bias_prepared(
         .collect::<m![1], m![H % 8 # 16]>()
         .transpose::<m![H % 8], m![1 # 16]>()
         .commit_trim::<m![1 # 8]>()
-        .commit(0x30000);
+        .commit_at(0x30000);
     let bias_dm_2: DmTensor<bf16, Chip, Cluster, m![H / 8, Dummy8], m![H % 8, 1 # 8]> = unsafe { bias_dm_1.reshape() };
     let bias_dm_3: DmTensor<bf16, Chip, Cluster, m![H], m![Dummy8 # 16]> = ctx
         .main
@@ -59,7 +59,7 @@ fn fc1_bias_prepared(
         .collect::<m![Dummy8], m![1 # 16]>()
         .transpose::<m![Dummy8 / 4], m![Dummy8 % 4 # 16]>()
         .commit_trim::<m![Dummy8 % 4]>()
-        .commit(0x20000);
+        .commit_at(0x20000);
 
     unsafe { bias_dm_3.reshape() }
 }
@@ -85,7 +85,7 @@ fn fc1_relu(
         .vector_final()
         .cast::<bf16, m![1 # 16]>()
         .commit_trim::<m![1 # 4]>()
-        .commit(0x20000)
+        .commit_at(0x20000)
 }
 
 fn fc2_matmul(
@@ -113,7 +113,7 @@ fn fc2_matmul(
         .contract_lane::<m![1], m![1 # 8]>(LaneMode::Interleaved)
         .cast::<bf16, m![1 # 16]>()
         .commit_trim::<m![1 # 16]>()
-        .commit(0x60000)
+        .commit_at(0x60000)
 }
 
 fn fc2_input_prepared(
@@ -127,7 +127,7 @@ fn fc2_input_prepared(
         .collect::<m![H], m![1 # 16]>()
         .transpose::<m![H / 4], m![H % 4 # 16]>()
         .commit_trim::<m![H % 4]>()
-        .commit(0x40000)
+        .commit_at(0x40000)
 }
 
 fn fc2_bias_prepared(
@@ -148,7 +148,7 @@ fn fc2_bias_prepared(
         .collect::<m![Dummy16], m![1 # 16]>()
         .transpose::<m![Dummy16 / 4], m![Dummy16 % 4 # 16]>()
         .commit_trim::<m![Dummy16 % 4]>()
-        .commit(0x71000);
+        .commit_at(0x71000);
     unsafe { bias_dm_2.reshape() }
 }
 
@@ -173,7 +173,7 @@ fn fc2(
         .vector_final()
         .cast::<bf16, m![1 # 16]>()
         .commit_trim::<m![1 # 16]>()
-        .commit(0x60000);
+        .commit_at(0x60000);
 
     logits.to_hbm(&mut ctx.tdma, 0x1100_0000)
 }

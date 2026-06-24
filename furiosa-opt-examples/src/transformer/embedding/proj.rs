@@ -43,7 +43,7 @@ pub(crate) fn v_proj(
         })
         .collect::<m![V / 2 % 4, V % 2], m![H % 56 # 64]>()
         .commit_trim::<m![H % 56 # 64]>()
-        .commit(0x800);
+        .commit_at(0x800);
 
     // Load reordered V weight into TRF for the DPE matmul.
     let weight_trf: TrfTensor<bf16, Chip, Cluster, m![Y, S / 32, H / 56], m![V % 8], m![V / 8 % 4, H % 56 # 64]> = ctx
@@ -85,7 +85,7 @@ pub(crate) fn v_proj(
         .vector_final()
         .cast::<bf16, m![V % 8 # 16]>()
         .commit_trim::<m![V % 8]>()
-        .commit(0x600);
+        .commit_at(0x600);
 
     let v_reassembled: DmTensor<bf16, Chip, Cluster, m![S / 2, Y], m![S % 2, V]> = ctx
         .main
@@ -94,7 +94,7 @@ pub(crate) fn v_proj(
         .switch::<m![S / 2, Y], m![S % 2]>(SwitchConfig::CustomBroadcast { ring_size: 256 })
         .collect::<m![S % 2], m![V % 32]>()
         .commit_trim::<m![V % 32]>()
-        .commit(0x800);
+        .commit_at(0x800);
 
     v_reassembled.view().to_hbm_view(&mut ctx.tdma, out.view_mut());
 }
@@ -119,7 +119,7 @@ pub(crate) fn q_proj(
         .fetch::<m![Q / 64], m![Q % 4]>()
         .collect::<m![Q / 64], m![Q % 4]>()
         .commit_trim::<m![Q % 4]>()
-        .commit(0x500);
+        .commit_at(0x500);
 
     let q_bias_it: DmTensor<bf16, Chip, Cluster, m![Q / 32 % 2, Q / 4 % 8, Q % 4, 1 # 4], m![1 # 4, Q / 64 # 16]> = ctx
         .main
@@ -132,7 +132,7 @@ pub(crate) fn q_proj(
         })
         .collect::<m![1 # 4], m![Q / 64 # 16]>()
         .commit_trim::<m![Q / 64 # 16]>()
-        .commit(0x600);
+        .commit_at(0x600);
 
     let q_bias_reassembled: DmTensor<bf16, Chip, Cluster, m![Q / 32 % 2, Q / 4 % 8, Q % 4, Y], m![Q / 64 # 16]> = ctx
         .main
@@ -141,7 +141,7 @@ pub(crate) fn q_proj(
         .switch::<m![Q / 32 % 2, Q / 4 % 8, Q % 4, Y], m![1]>(SwitchConfig::CustomBroadcast { ring_size: 4 })
         .collect::<m![1], m![Q / 64 # 16]>()
         .commit_trim::<m![Q / 64 # 16]>()
-        .commit(0x500);
+        .commit_at(0x500);
 
     // Reshape bias Slice to match the Q matmul pipeline's Slice.
     let q_bias_reassembled: DmTensor<bf16, Chip, Cluster, m![Q % 2, Q / 2 % 2, Y, H / 56], m![Q / 64 # 16]> =
@@ -162,7 +162,7 @@ pub(crate) fn q_proj(
         .fetch::<m![S % 32], m![H % 56]>()
         .collect::<m![S % 32], m![H % 56 # 64]>()
         .commit_trim::<m![H % 56 # 64]>()
-        .commit(0x2100);
+        .commit_at(0x2100);
 
     // Stage padded activations in TRF for Q projection.
     let input_trf: TrfTensor<
@@ -208,7 +208,7 @@ pub(crate) fn q_proj(
         )
         .collect::<m![Q / 64, Q % 2, Q / 448, Q / 2 % 2], m![H % 56 # 64]>()
         .commit_trim::<m![H % 56 # 64]>()
-        .commit(0x4a00);
+        .commit_at(0x4a00);
 
     // Strip packet padding before DPE alignment.
     let weight_stripped: DmTensor<
@@ -223,7 +223,7 @@ pub(crate) fn q_proj(
         .fetch::<m![Q / 448, Q / 64, Q / 2 % 2, Q % 2], m![H % 56]>()
         .collect::<m![Q / 448, Q / 64, Q / 2 % 2, Q % 2], m![H % 56]>()
         .commit_trim::<m![H % 56]>()
-        .commit(0x3100);
+        .commit_at(0x3100);
 
     // Reshape weight Slice to match TRF Slice for alignment.
     let weight_stripped: DmTensor<
@@ -251,7 +251,7 @@ pub(crate) fn q_proj(
         .vector_final()
         .cast::<bf16, m![S % 32]>()
         .commit_trim::<m![S % 32]>()
-        .commit(0x0A00);
+        .commit_at(0x0A00);
 
     let result_d0b: DmTensor<bf16, Chip, Cluster, m![Q % 2, Q / 2 % 32, 1 # 4], m![Q / 64, S]> = ctx
         .main
@@ -264,7 +264,7 @@ pub(crate) fn q_proj(
         })
         .collect::<m![Q / 64], m![S % 32]>()
         .commit_trim::<m![S % 32]>()
-        .commit(0x2100);
+        .commit_at(0x2100);
 
     result_d0b.to_hbm(&mut ctx.tdma, 0x10e36000)
 }
@@ -302,7 +302,7 @@ pub(crate) fn k_proj(
         })
         .collect::<m![K / 2 % 4, K % 2], m![H % 56 # 64]>()
         .commit_trim::<m![H % 56 # 64]>()
-        .commit(0x0E00);
+        .commit_at(0x0E00);
 
     // Load reordered K weight into TRF for the DPE matmul.
     let weight_trf: TrfTensor<bf16, Chip, Cluster, m![Y, S / 32, H / 56], m![K % 8], m![K / 8 % 4, H % 56 # 64]> = ctx
@@ -332,7 +332,7 @@ pub(crate) fn k_proj(
         .vector_final()
         .cast::<bf16, m![K % 8 # 16]>()
         .commit_trim::<m![K % 8]>()
-        .commit(0x0);
+        .commit_at(0x0);
 
     // Reorder K output slices into the final `[S, K]` layout.
     let k_xpose: DmTensor<bf16, Chip, Cluster, m![S / 2, Y], m![S % 2, K % 32]> = ctx
@@ -342,7 +342,7 @@ pub(crate) fn k_proj(
         .switch::<m![S / 2, Y], m![S % 2]>(SwitchConfig::Transpose { slice1: 4, slice0: 64 })
         .collect::<m![S % 2], m![K % 32]>()
         .commit_trim::<m![K % 32]>()
-        .commit(0x100);
+        .commit_at(0x100);
 
     // DMA K result → DRAM (for RoPE)
     k_xpose.to_hbm(&mut ctx.tdma, 0x8c800)

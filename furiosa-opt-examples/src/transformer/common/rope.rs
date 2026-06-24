@@ -56,7 +56,7 @@ pub(crate) fn rope(
         .vector_fxp(FxpBinaryOp::MulInt, 256)
         .vector_final()
         .commit_trim::<m![S % 8]>()
-        .commit(0x2300);
+        .commit_at(0x2300);
 
     // Reshape offsets into the layout expected by `dma_gather` indexing.
     let pos_reshaped: DmTensor<i32, Chip, Cluster, m![1 # 128, S / 64], m![S / 32 % 2, S % 16, S / 16 % 2]> = ctx
@@ -65,7 +65,7 @@ pub(crate) fn rope(
         .fetch::<m![S / 32 % 2, S / 16 % 2], m![S % 16]>()
         .collect::<m![S / 32 % 2, S / 16 % 2], m![S % 16]>()
         .commit_trim::<m![S % 16]>()
-        .commit(0x2300);
+        .commit_at(0x2300);
 
     // Spill reshaped offsets to HBM and use them as gather indices.
     let pos_hbm: HbmTensor<i32, Chip, m![S]> = pos_reshaped.to_hbm(&mut ctx.tdma, 0x10e36000);
@@ -83,7 +83,7 @@ pub(crate) fn rope(
         .fetch::<m![R, R], m![D % 16]>()
         .collect::<m![R, R], m![D % 16]>()
         .commit_trim::<m![D % 16]>()
-        .commit(0x700);
+        .commit_at(0x700);
 
     // Load rope coefficients into TRF FirstHalf for reuse across Q and K.
     let rope_trf: TrfTensor<bf16, Chip, Cluster, m![S, D / 16 % 2], m![R], m![R, D % 16]> = ctx
@@ -117,7 +117,7 @@ pub(crate) fn rope(
         .vector_final()
         .cast::<bf16, m![D % 16]>()
         .commit_trim::<m![D % 16]>()
-        .commit(0x0);
+        .commit_at(0x0);
 
     // Flatten rotated K from decomposed tiles back to contiguous K layout.
     let k_d0b: DmTensor<bf16, Chip, Cluster, m![S, 1 # 2], m![K]> = ctx
@@ -131,7 +131,7 @@ pub(crate) fn rope(
         })
         .collect::<m![R, R], m![D % 16]>()
         .commit_trim::<m![D % 16]>()
-        .commit(0x100);
+        .commit_at(0x100);
     // Write K result to output buffer.
     k_d0b.view().to_hbm_view(&mut ctx.tdma, out_k.view_mut());
 
@@ -148,7 +148,7 @@ pub(crate) fn rope(
         .fetch::<m![R, Q / 64], m![S % 16]>()
         .collect::<m![R, Q / 64], m![S % 16]>()
         .commit_trim::<m![S % 16]>()
-        .commit(0x600);
+        .commit_at(0x600);
 
     // Move Q into [Q-head-group, rotation, packet] form for contraction.
     let q_it: DmTensor<bf16, Chip, Cluster, m![S / 16, S % 16, D / 16 % 2], m![R, D % 16, Q / 64]> = ctx
@@ -162,7 +162,7 @@ pub(crate) fn rope(
         })
         .collect::<m![R, D % 16], m![Q / 64]>()
         .commit_trim::<m![Q / 64]>()
-        .commit(0x200);
+        .commit_at(0x200);
 
     // Reshape q_it Slice to match rope_trf Slice for alignment.
     let q_it: DmTensor<bf16, Chip, Cluster, m![S, D / 16 % 2], m![R, D % 16, Q / 64]> = unsafe { q_it.reshape() };
@@ -182,7 +182,7 @@ pub(crate) fn rope(
         .vector_final()
         .cast::<bf16, m![D % 16]>()
         .commit_trim::<m![D % 16]>()
-        .commit(0x600);
+        .commit_at(0x600);
 
     // Flatten rotated Q from decomposed tiles back to contiguous Q layout.
     let q_d0b: DmTensor<bf16, Chip, Cluster, m![S, 1 # 2], m![Q]> = ctx
@@ -196,7 +196,7 @@ pub(crate) fn rope(
         })
         .collect::<m![Q / 64, R], m![D % 16]>()
         .commit_trim::<m![D % 16]>()
-        .commit(0xa00);
+        .commit_at(0xa00);
     // Write Q result to output buffer.
     q_d0b.view().to_hbm_view(&mut ctx.tdma, out_q.view_mut());
 }

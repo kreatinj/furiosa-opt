@@ -32,7 +32,7 @@ pub fn matmul_chip_reduce(
         })
         .collect::<m![C / 4], m![C % 4 # 32]>()
         .commit_trim::<m![C % 4 # 8]>()
-        .commit(0);
+        .commit_at(0);
     let rhs_vrf: VrfTensor<i32, Chip, Cluster, m![A / 4], m![C / 4, C % 4 # 8]> = ctx
         .sub
         .begin(rhs_broadcasted.view())
@@ -55,7 +55,7 @@ pub fn matmul_chip_reduce(
         .vector_fxp(FxpBinaryOp::MulInt, &rhs_vrf)
         .vector_final()
         .commit_trim::<m![A % 4 # 8]>()
-        .commit(0);
+        .commit_at(0);
 
     // Now reduce over the Chip dimension using ReduceScatter pattern (for 4 chips)
     let reduced = reduce_over_chip(ctx, &mul_result);

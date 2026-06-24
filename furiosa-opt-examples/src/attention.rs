@@ -24,7 +24,7 @@ pub fn compile_llama3_1_mlperf_latest_8pe_4chip_w8a16kv16_prefill_first_block_b1
         .fetch_cast::<i32>()
         .collect::<m![1 # 8], m![S % 2 # 8]>()
         .commit_trim::<m![S % 2]>()
-        .commit::<m![1 # 8, S % 2]>(0x00010100);
+        .commit_at::<m![1 # 8, S % 2]>(0x00010100);
 
     let input_ids_sram: DmTensor<i32, Chip, m![S / 512], m![S / 16 % 32, 1 # 8], m![S % 2]> = ctx
         .main
@@ -33,7 +33,7 @@ pub fn compile_llama3_1_mlperf_latest_8pe_4chip_w8a16kv16_prefill_first_block_b1
         .fetch_cast::<i32>()
         .collect::<m![S / 8], m![S % 8]>()
         .commit_trim::<m![S % 2]>()
-        .commit(0x00010000);
+        .commit_at(0x00010000);
 
     let input_ids_scaled_sram = ctx
         .main
@@ -45,7 +45,7 @@ pub fn compile_llama3_1_mlperf_latest_8pe_4chip_w8a16kv16_prefill_first_block_b1
         .vector_fxp(FxpBinaryOp::MulInt, 16384) // 16384 = 8192(E) * 2(bf16 bytes). Computes byte offset for token lookup(byte offset of ith vocab inside V * E table).
         .vector_final()
         .commit_trim::<m![S % 2]>()
-        .commit::<m![S % 2]>(0x00010000);
+        .commit_at::<m![S % 2]>(0x00010000);
 
     let input_ids_scaled_dram: HbmTensor<i32, Chip, m![S]> = ctx
         .main
@@ -54,7 +54,7 @@ pub fn compile_llama3_1_mlperf_latest_8pe_4chip_w8a16kv16_prefill_first_block_b1
         .fetch_cast::<i32>()
         .collect::<m![S / 16 % 4, S / 2 % 8], m![S % 2 = 8]>()
         .commit_trim::<m![S % 2]>()
-        .commit::<m![S % 64]>(0x00010100)
+        .commit_at::<m![S % 64]>(0x00010100)
         .to_hbm(&mut ctx.tdma, 0x936ac000);
 
     let embeddings_sram: DmTensor<bf16, Chip, m![S / 512], m![S / 128 % 4, E / 128], m![E % 128]> =
@@ -68,14 +68,14 @@ pub fn compile_llama3_1_mlperf_latest_8pe_4chip_w8a16kv16_prefill_first_block_b1
         .fetch::<m![E / 32 % 2], m![E % 32]>()
         .collect::<m![1 # 2], m![E % 32]>()
         .commit_trim::<m![E % 32]>()
-        .commit(0x00010000); // 0x00010000
+        .commit_at(0x00010000); // 0x00010000
     let _norm_weight_sram_2: DmTensor<f32, Chip, m![X], m![E / 128, 1 # 2], m![E % 32]> = ctx
         .main
         .begin(norm_weight_sram_1.view())
         .fetch::<m![1], m![E % 32]>()
         .collect::<m![1], m![E % 32]>()
         .commit_trim::<m![E % 32]>()
-        .commit(0x001200);
+        .commit_at(0x001200);
 
     let embeddings_hbm: HbmTensor<bf16, m![1], m![S, E]> = embeddings_sram.to_hbm(&mut ctx.tdma, 0x936ad000);
 
@@ -97,7 +97,7 @@ pub fn compile_llama3_1_mlperf_latest_8pe_4chip_w8a16kv16_prefill_first_block_b1
             .fetch::<m![S % 128, E / 32 % 4], m![E % 32]>()
             .collect::<m![S % 128, S / 128 % 4], m![E % 32]>()
             .commit_trim::<m![E % 32]>()
-            .commit(0);
+            .commit_at(0);
 
         // TODO: Complete the function definition.
     }

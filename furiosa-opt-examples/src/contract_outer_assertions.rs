@@ -50,7 +50,7 @@ pub mod lane_size {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![1 # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![1 # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -84,7 +84,7 @@ pub mod lane_size {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R / 4 # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R / 4 # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -118,7 +118,7 @@ pub mod lane_size {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R / 2 # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R / 2 # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -152,7 +152,7 @@ pub mod lane_size {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -186,7 +186,7 @@ pub mod lane_size {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -220,7 +220,7 @@ pub mod lane_size {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -258,7 +258,7 @@ pub mod cpacket_size {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -292,7 +292,7 @@ pub mod cpacket_size {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -326,7 +326,7 @@ pub mod cpacket_size {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -364,7 +364,7 @@ pub mod cpacket_mapping {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -398,7 +398,7 @@ pub mod cpacket_mapping {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -432,7 +432,7 @@ pub mod cpacket_mapping {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -466,7 +466,7 @@ pub mod cpacket_mapping {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -500,7 +500,7 @@ pub mod cpacket_mapping {
             .contract_time::<m![A]>()
             .contract_lane::<m![A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -538,7 +538,7 @@ pub mod time_broadcast {
             .contract_time::<m![A, T]>()
             .contract_lane::<m![A, T], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -572,7 +572,7 @@ pub mod time_broadcast {
             .contract_time::<m![A, U, T]>()
             .contract_lane::<m![A, U, T], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -606,7 +606,7 @@ pub mod time_broadcast {
             .contract_time::<m![A, T]>()
             .contract_lane::<m![A, T], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -640,7 +640,7 @@ pub mod time_broadcast {
             .contract_time::<m![A, V, T]>()
             .contract_lane::<m![A, V, T], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -674,7 +674,7 @@ pub mod time_broadcast {
             .contract_time::<m![F]>()
             .contract_lane::<m![F], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -708,7 +708,7 @@ pub mod time_broadcast {
             .contract_time::<m![V, A, T]>()
             .contract_lane::<m![V, A, T], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -742,7 +742,7 @@ pub mod time_broadcast {
             .contract_time::<m![T, A]>()
             .contract_lane::<m![T, A], m![R # 8]>(LaneMode::Interleaved)
             .commit_trim::<m![R # 8]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }

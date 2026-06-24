@@ -35,7 +35,7 @@ pub fn matmul_wo_broadcast(
         .vector_final()
         .cast::<i8, m![1 # 32]>()
         .commit_trim::<m![1 # 8]>()
-        .commit(0);
+        .commit_at(0);
 
     // write back to HBM.
     matmul_result.to_hbm(&mut ctx.tdma, 0x3000)

@@ -24,7 +24,7 @@ pub mod alignment {
             .fetch_cast::<i4>()
             .collect::<m![A], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -44,7 +44,7 @@ pub mod alignment {
             .fetch_cast::<i4>()
             .collect::<m![A], m![B # 64]>()
             .commit_trim::<m![B # 64]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -64,7 +64,7 @@ pub mod alignment {
             .fetch_cast::<i8>()
             .collect::<m![A], m![B / 2]>()
             .commit_trim::<m![B / 2]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -84,7 +84,7 @@ pub mod alignment {
             .fetch_cast::<i8>()
             .collect::<m![A], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -104,7 +104,7 @@ pub mod alignment {
             .fetch_cast::<bf16>()
             .collect::<m![A], m![B / 4]>()
             .commit_trim::<m![B / 4]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -124,7 +124,7 @@ pub mod alignment {
             .fetch_cast::<bf16>()
             .collect::<m![A, B / 16], m![B % 16]>()
             .commit_trim::<m![B % 16]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -148,7 +148,7 @@ pub mod packet {
             .fetch_cast::<i8>()
             .collect::<m![A], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -168,7 +168,7 @@ pub mod packet {
             .fetch_cast::<i8>()
             .collect::<m![A], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -188,7 +188,7 @@ pub mod packet {
             .fetch_cast::<i8>()
             .collect::<m![A], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -208,7 +208,7 @@ pub mod packet {
             .fetch_cast::<i8>()
             .collect::<m![A, C / 32], m![C % 32]>()
             .commit_trim::<m![C % 32]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -228,7 +228,7 @@ pub mod packet {
             .fetch_cast::<i8>()
             .collect::<m![A], m![A # 32]>()
             .commit_trim::<m![A # 32]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -248,7 +248,7 @@ pub mod packet {
             .fetch_cast::<i8>()
             .collect::<m![A], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -271,7 +271,7 @@ pub mod packet {
             .fetch_cast::<bf16>()
             .collect::<m![A], m![B % 16]>()
             .commit_trim::<m![B % 16]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -291,7 +291,7 @@ pub mod packet {
             .fetch_cast::<i8>()
             .collect::<m![A], m![B # 64]>()
             .commit_trim::<m![B # 64]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -315,7 +315,7 @@ pub mod slice {
             .fetch_cast::<i8>()
             .collect::<m![A], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -340,7 +340,7 @@ pub mod broadcast1 {
             .switch::<m![C / 16, 1 # 4, C % 4], m![A, C / 4 % 4]>(SwitchConfig::Broadcast1 { slice1: 4, slice0: 4 })
             .collect::<m![A, C / 4 % 4], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -361,7 +361,7 @@ pub mod broadcast1 {
             .switch::<m![1 # 4, C % 64], m![A, C / 64]>(SwitchConfig::Broadcast1 { slice1: 4, slice0: 64 })
             .collect::<m![A, C / 64], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -382,7 +382,7 @@ pub mod broadcast1 {
             .switch::<m![C / 4, D % 4], m![A, C % 4]>(SwitchConfig::Broadcast1 { slice1: 0, slice0: 64 })
             .collect::<m![A, C % 4], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -403,7 +403,7 @@ pub mod broadcast1 {
             .switch::<m![C / 4, D % 4], m![A, C % 4]>(SwitchConfig::Broadcast1 { slice1: 3, slice0: 64 })
             .collect::<m![A, C % 4], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -424,7 +424,7 @@ pub mod broadcast1 {
             .switch::<m![D % 4, C % 64], m![A, C / 64]>(SwitchConfig::Broadcast1 { slice1: 4, slice0: 16 })
             .collect::<m![A, C / 64], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -445,7 +445,7 @@ pub mod broadcast1 {
             .switch::<m![C / 64, C % 64], m![A, C / 64]>(SwitchConfig::Broadcast1 { slice1: 4, slice0: 64 })
             .collect::<m![A, C / 64], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -466,7 +466,7 @@ pub mod broadcast1 {
             .switch::<m![1 # 4, D % 64], m![A, C / 64]>(SwitchConfig::Broadcast1 { slice1: 4, slice0: 64 })
             .collect::<m![A, C / 64], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -487,7 +487,7 @@ pub mod broadcast1 {
             .switch::<m![1 # 4, C % 64], m![A, E % 4]>(SwitchConfig::Broadcast1 { slice1: 4, slice0: 64 })
             .collect::<m![A, E % 4], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -516,7 +516,7 @@ pub mod broadcast01 {
             })
             .collect::<m![E / 4], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -541,7 +541,7 @@ pub mod broadcast01 {
             })
             .collect::<m![A / 2, C / 2 % 2, A % 2, C % 2], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -566,7 +566,7 @@ pub mod broadcast01 {
             })
             .collect::<m![A, C / 2 % 2, C % 2], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -591,7 +591,7 @@ pub mod broadcast01 {
             })
             .collect::<m![A, C / 2 % 2, C % 2], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -616,7 +616,7 @@ pub mod broadcast01 {
             })
             .collect::<m![A, C / 2 % 2, C % 2], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -641,7 +641,7 @@ pub mod broadcast01 {
             })
             .collect::<m![A, C / 2 % 2, C % 2], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -666,7 +666,7 @@ pub mod broadcast01 {
             })
             .collect::<m![A / 2, C / 2 % 2, A % 2, C % 2], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -691,7 +691,7 @@ pub mod broadcast01 {
             })
             .collect::<m![A, C / 2 % 2, C % 2], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -716,7 +716,7 @@ pub mod broadcast01 {
             })
             .collect::<m![A, C / 2 % 2, C % 2], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -741,7 +741,7 @@ pub mod broadcast01 {
             })
             .collect::<m![A / 2, C / 2, A % 2, C % 2], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -766,7 +766,7 @@ pub mod transpose {
             .switch::<m![C / 64, C % 2, C / 2 % 32], m![A]>(SwitchConfig::Transpose { slice1: 32, slice0: 2 })
             .collect::<m![A], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -787,7 +787,7 @@ pub mod transpose {
             .switch::<m![C / 128, C % 8, C / 8 % 16], m![A]>(SwitchConfig::Transpose { slice1: 16, slice0: 8 })
             .collect::<m![A], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -808,7 +808,7 @@ pub mod transpose {
             .switch::<m![C / 16, C % 4, C / 4 % 4], m![A]>(SwitchConfig::Transpose { slice1: 4, slice0: 4 })
             .collect::<m![A], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -829,7 +829,7 @@ pub mod transpose {
             .switch::<m![C / 64, C % 2, C / 2 % 32], m![D]>(SwitchConfig::Transpose { slice1: 32, slice0: 2 })
             .collect::<m![D], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -850,7 +850,7 @@ pub mod transpose {
             .switch::<m![C / 64, C % 2, C / 2 % 32], m![E % 8]>(SwitchConfig::Transpose { slice1: 32, slice0: 2 })
             .collect::<m![E % 8], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -871,7 +871,7 @@ pub mod transpose {
             .switch::<m![C % 8, C / 128, C / 8 % 16], m![A]>(SwitchConfig::Transpose { slice1: 16, slice0: 8 })
             .collect::<m![A], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -900,7 +900,7 @@ pub mod inter_transpose {
             })
             .collect::<m![A / 4, A % 2, C / 16 % 2], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -925,7 +925,7 @@ pub mod inter_transpose {
             })
             .collect::<m![C / 32 % 8], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -950,7 +950,7 @@ pub mod inter_transpose {
             })
             .collect::<m![C / 32 % 8], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -975,7 +975,7 @@ pub mod inter_transpose {
             })
             .collect::<m![A], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -1000,7 +1000,7 @@ pub mod inter_transpose {
             })
             .collect::<m![C / 32 % 8], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -1025,7 +1025,7 @@ pub mod inter_transpose {
             })
             .collect::<m![B / 16, E % 2, C / 16 % 8], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -1050,7 +1050,7 @@ pub mod inter_transpose {
             })
             .collect::<m![B / 8, B / 4 % 2, B % 2, C / 16 % 8], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -1075,7 +1075,7 @@ pub mod inter_transpose {
             })
             .collect::<m![A / 2, G / 16, A % 2], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -1100,7 +1100,7 @@ pub mod inter_transpose {
             })
             .collect::<m![A / 2, A % 2, C / 16 % 2], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -1125,7 +1125,7 @@ pub mod inter_transpose {
             })
             .collect::<m![A / 4, A / 2 % 2, D % 2], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }
@@ -1150,7 +1150,7 @@ pub mod inter_transpose {
             })
             .collect::<m![A / 4, A % 2, D % 2], m![B]>()
             .commit_trim::<m![B]>()
-            .commit(0);
+            .commit_at(0);
 
         result.view().to_hbm_view(&mut ctx.tdma, output.view_mut());
     }

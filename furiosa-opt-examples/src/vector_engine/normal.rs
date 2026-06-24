@@ -15,7 +15,7 @@ pub fn ve_elementwise_fxp_const(ctx: &mut Context, input: &HbmTensor<i32, Chip, 
         .vector_fxp(FxpBinaryOp::AddFxp, 100)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x2000);
+        .commit_at(0x2000);
 
     result.to_hbm(&mut ctx.tdma, 0x3000)
 }
@@ -43,7 +43,7 @@ pub fn ve_elementwise_fxp_chain(ctx: &mut Context, input: &HbmTensor<i32, Chip, 
         .vector_fxp(FxpBinaryOp::SubFxp, 5)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x2000);
+        .commit_at(0x2000);
 
     result.to_hbm(&mut ctx.tdma, 0x3000)
 }
@@ -73,7 +73,7 @@ pub fn ve_elementwise_full_pipeline(
         .vector_clip(ClipBinaryOpI32::Min, 1000)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x2000);
+        .commit_at(0x2000);
 
     result.to_hbm(&mut ctx.tdma, 0x3000)
 }
@@ -97,7 +97,7 @@ pub fn ve_elementwise_stash_f32(ctx: &mut Context, input: &HbmTensor<f32, Chip, 
         .vector_clip(ClipBinaryOpF32::Max, Stash)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x2000);
+        .commit_at(0x2000);
 
     result.to_hbm(&mut ctx.tdma, 0x3000)
 }
@@ -120,7 +120,7 @@ pub fn ve_elementwise_stash_i32(ctx: &mut Context, input: &HbmTensor<i32, Chip, 
         .vector_clip(ClipBinaryOpI32::Max, Stash)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x2000);
+        .commit_at(0x2000);
 
     result.to_hbm(&mut ctx.tdma, 0x3000)
 }
@@ -142,7 +142,7 @@ pub fn ve_elementwise_fp_unary(ctx: &mut Context, input: &HbmTensor<f32, Chip, m
         .vector_widen_pad::<m![A % 2 # 8]>()
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x2000);
+        .commit_at(0x2000);
 
     result.to_hbm(&mut ctx.tdma, 0x3000)
 }
@@ -167,7 +167,7 @@ pub fn ve_elementwise_fp_binary_with_mode(
         .vector_widen_pad::<m![A % 2 # 8]>()
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x2000);
+        .commit_at(0x2000);
 
     result.to_hbm(&mut ctx.tdma, 0x3000)
 }
@@ -192,7 +192,7 @@ pub fn ve_elementwise_fp_ternary_with_mode(
         .vector_widen_pad::<m![A % 2 # 8]>()
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x2000);
+        .commit_at(0x2000);
 
     result.to_hbm(&mut ctx.tdma, 0x3000)
 }
@@ -215,7 +215,7 @@ pub fn ve_elementwise_logic_with_mode(
         .vector_logic_with_mode(LogicBinaryOpI32::BitXor, BinaryArgMode::Mode11, 0xff)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x2000);
+        .commit_at(0x2000);
 
     result.to_hbm(&mut ctx.tdma, 0x3000)
 }
@@ -238,7 +238,7 @@ pub fn ve_elementwise_fxp_with_mode(
         .vector_fxp_with_mode(FxpBinaryOp::SubFxp, BinaryArgMode::Mode10, 7)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x2000);
+        .commit_at(0x2000);
 
     result.to_hbm(&mut ctx.tdma, 0x3000)
 }
@@ -263,7 +263,7 @@ pub fn ve_elementwise_fp_div_with_mode(
         .vector_widen_pad::<m![A % 2 # 8]>()
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x2000);
+        .commit_at(0x2000);
 
     result.to_hbm(&mut ctx.tdma, 0x3000)
 }
@@ -286,7 +286,7 @@ pub fn ve_elementwise_clip_with_mode(
         .vector_clip_with_mode(ClipBinaryOpI32::AddFxp, BinaryArgMode::Mode11, 3)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x2000);
+        .commit_at(0x2000);
 
     result.to_hbm(&mut ctx.tdma, 0x3000)
 }
@@ -313,7 +313,7 @@ pub fn ve_group_pair_fp_zip_with_mode(
         .vector_widen_concat::<m![1], m![A % 2 # 8]>()
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x3000);
+        .commit_at(0x3000);
 
     result.to_hbm(&mut ctx.tdma, 0x4000)
 }
@@ -337,7 +337,7 @@ pub fn ve_stash_fxp_fxp(ctx: &mut Context, input: &HbmTensor<i32, Chip, m![A]>) 
         .vector_clip(ClipBinaryOpI32::Max, Stash)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x2000);
+        .commit_at(0x2000);
 
     result.to_hbm(&mut ctx.tdma, 0x3000)
 }
@@ -362,7 +362,7 @@ pub fn ve_stash_fxp_fp(ctx: &mut Context, input: &HbmTensor<i32, Chip, m![A]>) -
         .vector_clip(ClipBinaryOpF32::Max, Stash)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x2000);
+        .commit_at(0x2000);
 
     result.to_hbm(&mut ctx.tdma, 0x3000)
 }
@@ -389,7 +389,7 @@ pub fn ve_stash_fp_fp(ctx: &mut Context, input: &HbmTensor<f32, Chip, m![A]>) ->
         .vector_clip(ClipBinaryOpF32::Max, Stash)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x2000);
+        .commit_at(0x2000);
 
     result.to_hbm(&mut ctx.tdma, 0x3000)
 }
@@ -416,7 +416,7 @@ pub fn ve_stash_fp_fxp(ctx: &mut Context, input: &HbmTensor<f32, Chip, m![A]>) -
         .vector_clip(ClipBinaryOpI32::Max, Stash)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x2000);
+        .commit_at(0x2000);
 
     result.to_hbm(&mut ctx.tdma, 0x3000)
 }
@@ -437,7 +437,7 @@ pub fn ve_elementwise_logic(ctx: &mut Context, input: &HbmTensor<i32, Chip, m![A
         .vector_logic(LogicBinaryOpI32::BitOr, 0x100)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x2000);
+        .commit_at(0x2000);
 
     result.to_hbm(&mut ctx.tdma, 0x3000)
 }
@@ -471,7 +471,7 @@ pub fn ve_elementwise_vrf(
         .vector_fxp(FxpBinaryOp::AddFxp, &vrf)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x3000);
+        .commit_at(0x3000);
 
     result.to_hbm(&mut ctx.tdma, 0x5000)
 }
@@ -517,7 +517,7 @@ pub fn ve_elementwise_multi_vrf(
         .vector_clip(ClipBinaryOpI32::AddFxp, &vrf1)
         .vector_final()
         .commit_trim::<m![A % 2]>()
-        .commit(0x4000);
+        .commit_at(0x4000);
 
     result.to_hbm(&mut ctx.tdma, 0x5000)
 }

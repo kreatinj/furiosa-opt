@@ -23,7 +23,7 @@ pub fn fetch_commit_simple(
         .fetch_cast::<i32>()
         .collect::<m![A / 8 % 2, A % 8], m![B]>()
         .commit_trim::<m![B]>()
-        .commit(0);
+        .commit_at(0);
 
     fetch_and_commit_tensor.to_hbm(&mut ctx.tdma, 0x3000)
 }

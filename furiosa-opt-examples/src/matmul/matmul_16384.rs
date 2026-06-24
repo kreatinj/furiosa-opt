@@ -27,7 +27,7 @@ fn contraction_over_b_2048(
         })
         .collect::<m![A % 64, B / 32 % 2, A / 64 % 32], m![B % 32]>()
         .commit_trim::<m![B % 32]>()
-        .commit(128 * 1024);
+        .commit_at(128 * 1024);
 
     // Load rhs into TRF.
     // first TensorUnit execution: apply custom broadcast to match Slice shape
@@ -43,7 +43,7 @@ fn contraction_over_b_2048(
         })
         .collect::<m![B % 8, C / 32 % 16, B / 8 % 8], m![C % 32]>()
         .commit_trim::<m![C % 32]>()
-        .commit::<m![B % 64, C % 512]>(260 * 1024);
+        .commit_at::<m![B % 64, C % 512]>(260 * 1024);
     // second TensorUnit execution: apply TransposeEngine to match Element shape
     let rhs: DmTensor<i8, Chip, Cluster, m![A / 2048, B / 64 % 32], m![C % 512, B % 64]> = ctx
         .main
@@ -52,7 +52,7 @@ fn contraction_over_b_2048(
         .collect::<m![C / 8 % 64, B % 64], m![C % 8 # 32]>()
         .transpose::<m![C / 8 % 64, B / 8 % 8, C % 8], m![B % 8 # 32]>()
         .commit_trim::<m![B % 8 # 32]>()
-        .commit(292 * 1024);
+        .commit_at(292 * 1024);
     // Loading into TRF. TRF is 64KB per slice, 32KB when using half mode.
     let rhs: TrfTensor<i8, Chip, Cluster, m![A / 2048, B / 64 % 32], m![C / 64 % 8], m![C % 64, B % 64]> = ctx
         .sub

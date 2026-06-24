@@ -23,7 +23,7 @@ pub fn custom_broadcast(
         .switch::<OutSlice, m![B]>(SwitchConfig::CustomBroadcast { ring_size: 4 })
         .collect::<m![B], m![V]>()
         .commit_trim::<m![V]>()
-        .commit(0x1000);
+        .commit_at(0x1000);
 
     result.to_hbm::<m![A, Y, B, V]>(&mut ctx.tdma, 0x4000)
 }

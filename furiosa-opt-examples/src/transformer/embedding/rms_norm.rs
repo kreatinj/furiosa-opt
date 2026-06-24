@@ -33,7 +33,7 @@ pub(super) fn rms_norm(
         .fetch::<m![S % 8, H / 56 % 4], m![H % 56]>()
         .collect::<m![S % 32], m![H % 56 # 64]>()
         .commit_trim::<m![H % 56 # 64]>()
-        .commit(0x1300);
+        .commit_at(0x1300);
 
     // Strip padded lanes and keep contiguous 56-wide channel blocks.
     let hidden_dm: DmTensor<bf16, Chip, Cluster, m![Y, S / 32, H / 224, S / 8 % 4], m![S % 32, H % 56]> = ctx
@@ -42,7 +42,7 @@ pub(super) fn rms_norm(
         .fetch::<m![S % 32], m![H % 56]>()
         .collect::<m![S % 32], m![H % 56]>()
         .commit_trim::<m![H % 56]>()
-        .commit(0x500);
+        .commit_at(0x500);
 
     // Load norm weights.
     let weight_dm_0: DmTensor<bf16, Chip, Cluster, m![X, H / 112, 1 # 2], m![H % 112]> =
@@ -60,7 +60,7 @@ pub(super) fn rms_norm(
         })
         .collect::<m![Z], m![H % 56 # 64]>()
         .commit_trim::<m![H % 56 # 64]>()
-        .commit(0x100);
+        .commit_at(0x100);
 
     // Channel padding strip pass.
     let weight_dm_2: DmTensor<bf16, Chip, Cluster, m![X, H / 112, H / 56 % 2], m![1 # 2, H % 56]> = ctx
@@ -69,7 +69,7 @@ pub(super) fn rms_norm(
         .fetch::<m![Z], m![H % 56]>()
         .collect::<m![Z], m![H % 56]>()
         .commit_trim::<m![H % 56]>()
-        .commit(0x0);
+        .commit_at(0x0);
 
     // Dummy-lane strip pass for compact per-channel weights.
     let weight_dm_3: DmTensor<bf16, Chip, Cluster, m![X, H / 112, H / 56 % 2], m![H % 56]> = ctx
@@ -78,7 +78,7 @@ pub(super) fn rms_norm(
         .fetch::<m![1], m![H % 56]>()
         .collect::<m![1], m![H % 56]>()
         .commit_trim::<m![H % 56]>()
-        .commit(0x100);
+        .commit_at(0x100);
 
     // Reshape weight tiles to match the normalization pipeline's Slice decomposition.
     let weight_dm_3: DmTensor<bf16, Chip, Cluster, m![Y, S / 32, H / 56], m![H % 56]> =
@@ -123,7 +123,7 @@ pub(super) fn rms_norm(
         .vector_inter_slice_reduce::<m![Y, S / 32, H / 56], m![1]>(InterSliceReduceOpF32::Add)
         .vector_final()
         .commit_trim::<m![S % 32]>()
-        .commit(0x2400);
+        .commit_at(0x2400);
 
     // Compute reciprocal RMS scale and keep it in VRF.
     let inv_rms_vrf: VrfTensor<f32, Chip, Cluster, m![Y, S / 32, H / 56], m![S % 32]> = ctx
@@ -160,7 +160,7 @@ pub(super) fn rms_norm(
         .vector_final()
         .cast::<bf16, m![H % 8 # 16]>()
         .commit_trim::<m![H % 8]>()
-        .commit(0x1300);
+        .commit_at(0x1300);
 
     let result_dm: DmTensor<bf16, Chip, Cluster, m![Y, S / 32, H / 56], m![S % 32, H % 56]> = ctx
         .main
@@ -168,7 +168,7 @@ pub(super) fn rms_norm(
         .fetch::<m![S % 32], m![H % 56]>()
         .collect::<m![S % 32], m![H % 56]>()
         .commit_trim::<m![H % 56]>()
-        .commit(0x1300);
+        .commit_at(0x1300);
 
     result_dm
 }
