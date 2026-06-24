@@ -52,9 +52,7 @@ impl<'l, const T: Tu, P: CanApplyToTrf, D: Scalar, Chip: M, Cluster: M, Slice: M
 {
     /// Stores to the tensor register file.
     #[primitive(TuTensor::to_trf)]
-    pub fn to_trf<Lane: M, Element: M>(
-        self,
-    ) -> TrfTensor<D, Chip, Cluster, Slice, Lane, Element, B> {
+    pub fn to_trf<Lane: M, Element: M>(self) -> TrfTensor<D, Chip, Cluster, Slice, Lane, Element, B> {
         verify_to_trf::<D, Lane, Time, Packet, Element>(&TrfAddress::Full);
         TrfTensor::new(self.inner.transpose(false), None)
     }

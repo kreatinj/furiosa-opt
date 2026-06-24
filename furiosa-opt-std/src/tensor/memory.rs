@@ -709,10 +709,7 @@ impl<D: Scalar, Chip: M, Cluster: M, Slice: M, Element: M, B: Backend> DmTensor<
 
     /// Converts to HBM tensor.
     #[primitive(DmTensor::to_hbm)]
-    pub fn to_hbm<Element2: M>(
-        &self,
-        _dma: &mut DmaContext<{ Dma::Tensor }>,
-    ) -> HbmTensor<D, Chip, Element2, B> {
+    pub fn to_hbm<Element2: M>(&self, _dma: &mut DmaContext<{ Dma::Tensor }>) -> HbmTensor<D, Chip, Element2, B> {
         HbmTensor::new(self.inner.transpose(true), None)
     }
 

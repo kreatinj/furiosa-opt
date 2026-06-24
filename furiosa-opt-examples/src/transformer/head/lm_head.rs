@@ -82,7 +82,8 @@ pub(super) fn lm_head(
         let sram_out = if chunk_idx % 2 == 0 { 0x3e000 } else { 0x10000 };
 
         // Load one embedding-table chunk.
-        let weight_dm = weight_chunk.to_dm_at::<Cluster, m![C / 128, C / 32 % 4], m![C % 32, H]>(&mut ctx.tdma, sram_dma);
+        let weight_dm =
+            weight_chunk.to_dm_at::<Cluster, m![C / 128, C / 32 % 4], m![C % 32, H]>(&mut ctx.tdma, sram_dma);
 
         // Reorder chunked weights for contraction alignment.
         let weight_it: DmTensor<bf16, Chip, Cluster, m![C / 128, H / 224], m![C % 128, H % 224]> = ctx

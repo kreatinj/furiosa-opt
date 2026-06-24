@@ -253,7 +253,8 @@ pub(crate) fn final_norm(
         .vector_final()
         .to_vrf_at(0);
 
-    let weight_dm: DmTensor<bf16, Chip, Cluster, m![Y, H / 14], m![H % 14]> = norm_weight.to_dm_at(&mut ctx.tdma, 0xc200);
+    let weight_dm: DmTensor<bf16, Chip, Cluster, m![Y, H / 14], m![H % 14]> =
+        norm_weight.to_dm_at(&mut ctx.tdma, 0xc200);
 
     let weight_vrf: VrfTensor<f32, Chip, Cluster, m![Y, H / 14], m![H % 14]> = ctx
         .sub

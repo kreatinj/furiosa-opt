@@ -21,7 +21,8 @@ pub(super) fn softmax(
     qk_scores: &DmTensor<bf16, Chip, Cluster, m![S / 8, N], m![S % 8, G, T]>,
     attention_mask: &HbmTensor<i32, Chip, m![1, S, T]>,
 ) -> DmTensor<bf16, Chip, Cluster, m![S / 8, N], m![S % 8, G, T]> {
-    let mask_dm: DmTensor<i32, Chip, Cluster, m![S / 8, N], m![S % 8, T]> = attention_mask.to_dm_at(&mut ctx.tdma, 0x3e00); // Load attention mask to DM.
+    let mask_dm: DmTensor<i32, Chip, Cluster, m![S / 8, N], m![S % 8, T]> =
+        attention_mask.to_dm_at(&mut ctx.tdma, 0x3e00); // Load attention mask to DM.
 
     // Build mask branches in VRF for masked softmax.
     let _mask_vrf: VrfTensor<i32, Chip, Cluster, m![S / 8, N], m![S % 8, T]> = ctx
