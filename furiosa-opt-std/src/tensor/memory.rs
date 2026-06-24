@@ -1028,7 +1028,7 @@ impl<D: Scalar, Chip: M, Cluster: M, Slice: M, Lane: M, Element: M, B: Backend>
 pub struct VrfTensor<D: VeScalar, Chip: M, Cluster: M, Slice: M, Element: M, B: Backend = CurrentBackend> {
     pub(crate) inner: Tensor<D, Pair<Chip, Pair<Cluster, Pair<Slice, Element>>>, B>,
     #[expect(dead_code)]
-    address: Address,
+    address: Option<Address>,
     _marker: PhantomData<(D, Chip, Cluster, Slice, Element)>,
 }
 // ANCHOR_END: vrf_tensor_def
@@ -1039,7 +1039,7 @@ impl<D: VeScalar, Chip: M, Cluster: M, Slice: M, Element: M, B: Backend>
     /// Mapping type alias.
     pub type Mapping = m![{ Chip }, { Cluster }, { Slice }, { Element }];
 
-    pub(crate) fn new(inner: Tensor<D, Self::Mapping, B>, address: Address) -> Self {
+    pub(crate) fn new(inner: Tensor<D, Self::Mapping, B>, address: Option<Address>) -> Self {
         Self {
             inner,
             address,
@@ -1059,7 +1059,7 @@ impl<D: VeScalar, Chip: M, Cluster: M, Slice: M, Element: M, B: Backend>
     /// with the tensor mapping.
     pub unsafe fn from_addr(address: Address) -> Self {
         let axes = gen_axes::<Pair<Chip, Pair<Cluster, Pair<Slice, Element>>>>();
-        Self::new(Tensor::from_inner(B::RawTensor::uninit_from_axes(axes)), address)
+        Self::new(Tensor::from_inner(B::RawTensor::uninit_from_axes(axes)), Some(address))
     }
 }
 

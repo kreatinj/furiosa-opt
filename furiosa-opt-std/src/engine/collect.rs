@@ -78,7 +78,7 @@ impl<'l, const T: Tu, P: CanApplyToVrf, D: VeScalar, Chip: M, Cluster: M, Slice:
     /// Stores to the vector register file.
     #[primitive(TuTensor::to_vrf)]
     pub fn to_vrf<Element: M>(self, address: Address) -> VrfTensor<D, Chip, Cluster, Slice, Element, B> {
-        VrfTensor::new(self.inner.transpose(false), address)
+        VrfTensor::new(self.inner.transpose(false), Some(address))
     }
 }
 // ANCHOR_END: collect_to_vrf
