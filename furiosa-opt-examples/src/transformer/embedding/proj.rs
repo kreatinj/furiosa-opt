@@ -52,7 +52,7 @@ pub(crate) fn v_proj(
         .fetch::<m![V % 8], m![H % 56]>()
         .switch::<m![Y, S / 32, H / 56], m![V % 8]>(SwitchConfig::Broadcast1 { slice1: 4, slice0: 16 })
         .collect::<m![V % 8], m![V / 8 % 4, H % 56 # 64]>()
-        .to_trf(TrfAddress::FirstHalf);
+        .to_trf_at(TrfAddress::FirstHalf);
 
     // Load the pre-tiled V bias buffer and stage it in VRF for fused bias add.
     let v_bias_hbm: HbmTensor<f32, Chip, m![1 # 2, 1 # 2, S / 32, S / 4 % 8, S / 2 % 2, V % 32]> =
@@ -178,7 +178,7 @@ pub(crate) fn q_proj(
         .fetch::<m![S % 8], m![H % 56]>()
         .switch::<m![Q % 2, Q / 2 % 2, Y, H / 56], m![S % 8]>(SwitchConfig::Broadcast1 { slice1: 4, slice0: 16 })
         .collect::<m![S % 8], m![H / 8 % 7, S / 8 % 4, S % 8 # 32]>()
-        .to_trf(TrfAddress::SecondHalf);
+        .to_trf_at(TrfAddress::SecondHalf);
 
     let weight_dm: DmTensor<
         bf16,
@@ -311,7 +311,7 @@ pub(crate) fn k_proj(
         .fetch::<m![K % 8], m![H % 56]>()
         .switch::<m![Y, S / 32, H / 56], m![K % 8]>(SwitchConfig::Broadcast1 { slice1: 4, slice0: 16 })
         .collect::<m![K % 8], m![K / 8 % 4, H % 56 # 64]>()
-        .to_trf(TrfAddress::FirstHalf);
+        .to_trf_at(TrfAddress::FirstHalf);
 
     // Compute K = input @ K_weight and apply bias in the VE path.
     let result: DmTensor<bf16, Chip, Cluster, m![1 # 2, 1 # 2, S / 32, S / 4 % 8, S / 2 % 2], m![S % 2, K % 32]> = ctx

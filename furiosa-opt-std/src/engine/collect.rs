@@ -54,6 +54,15 @@ impl<'l, const T: Tu, P: CanApplyToTrf, D: Scalar, Chip: M, Cluster: M, Slice: M
     #[primitive(TuTensor::to_trf)]
     pub fn to_trf<Lane: M, Element: M>(
         self,
+    ) -> TrfTensor<D, Chip, Cluster, Slice, Lane, Element, B> {
+        verify_to_trf::<D, Lane, Time, Packet, Element>(&TrfAddress::Full);
+        TrfTensor::new(self.inner.transpose(false), None)
+    }
+
+    /// Stores to the tensor register file at `address`.
+    #[primitive(TuTensor::to_trf_at)]
+    pub fn to_trf_at<Lane: M, Element: M>(
+        self,
         address: TrfAddress,
     ) -> TrfTensor<D, Chip, Cluster, Slice, Lane, Element, B> {
         verify_to_trf::<D, Lane, Time, Packet, Element>(&address);

@@ -60,7 +60,7 @@ pub(crate) fn mlp(
         .fetch::<m![S % 8], m![H / 8 % 7, H % 8]>()
         .switch::<m![M / 1216, X, H / 224], m![S % 8]>(SwitchConfig::Broadcast1 { slice1: 16, slice0: 8 })
         .collect::<m![S % 8], m![H / 8 % 7, H / 56 % 4, S / 32, S % 8 # 16]>()
-        .to_trf(TrfAddress::SecondHalf);
+        .to_trf_at(TrfAddress::SecondHalf);
 
     let input_trf_first: TrfTensor<
         bf16,
@@ -75,7 +75,7 @@ pub(crate) fn mlp(
         .fetch::<m![S % 8], m![H / 8 % 7, H % 8]>()
         .switch::<m![M / 1216, X, H / 224], m![S % 8]>(SwitchConfig::Broadcast1 { slice1: 16, slice0: 8 })
         .collect::<m![S % 8], m![H / 8 % 7, H / 56 % 4, S / 32, S % 8 # 16]>()
-        .to_trf(TrfAddress::FirstHalf);
+        .to_trf_at(TrfAddress::FirstHalf);
 
     let gate_second: DmTensor<bf16, Chip, Cluster, m![M / 19, S / 128], m![M % 19, S % 128]> = ctx
         .main
@@ -264,7 +264,7 @@ pub(crate) fn mlp(
         .begin(gated_retiled.view())
         .fetch::<m![M % 76], m![S]>()
         .collect::<m![M % 76], m![S]>()
-        .to_trf(TrfAddress::Full);
+        .to_trf_at(TrfAddress::Full);
     let down_dm: DmTensor<bf16, Chip, Cluster, m![H / 224, M / 152, H / 112 % 2], m![H % 112, M % 152]> =
         down_weight.to_dm(&mut ctx.tdma, 0x30000);
     let down_it: DmTensor<

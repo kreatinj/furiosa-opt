@@ -18,7 +18,7 @@ fn fc1_matmul(
         .begin(input_dm.view())
         .fetch::<m![1], m![X]>()
         .collect::<m![X / 16], m![X % 16]>()
-        .to_trf(TrfAddress::Full);
+        .to_trf_at(TrfAddress::Full);
 
     ctx.main
         .begin(weight_dm.view())
@@ -101,7 +101,7 @@ fn fc2_matmul(
         .begin(input_dm.view())
         .fetch::<m![1], m![H]>()
         .collect::<m![H / 16], m![H % 16]>()
-        .to_trf(TrfAddress::Full);
+        .to_trf_at(TrfAddress::Full);
 
     ctx.main
         .begin(weight_dm.view())

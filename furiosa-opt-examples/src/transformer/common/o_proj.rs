@@ -61,7 +61,7 @@ pub(crate) fn o_proj(
         .fetch::<m![S % 8], m![H % 112]>()
         .switch::<m![H / 448, X, H / 112], m![S % 8]>(SwitchConfig::Broadcast1 { slice1: 16, slice0: 8 })
         .collect::<m![S % 8], m![H / 16 % 7, S / 8, S % 8 # 16]>()
-        .to_trf(TrfAddress::FirstHalf);
+        .to_trf_at(TrfAddress::FirstHalf);
 
     // Reshape weight Slice to match TRF Slice for alignment.
     let weight_it: DmTensor<bf16, Chip, Cluster, m![H / 448, X, H / 112], m![H / 7 % 4, H % 7, H % 112]> =

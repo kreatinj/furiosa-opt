@@ -59,7 +59,7 @@ fn contraction_over_b_2048(
         .begin(rhs.view())
         .fetch::<m![C % 512], m![B % 64]>()
         .collect::<m![C % 512, B % 64 / 32], m![B % 32]>()
-        .to_trf(TrfAddress::Full);
+        .to_trf_at(TrfAddress::Full);
 
     // Perform contraction.
     ctx.main

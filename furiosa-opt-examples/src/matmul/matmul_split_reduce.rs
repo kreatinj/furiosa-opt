@@ -63,7 +63,7 @@ pub fn matmul_with_split_reduce(
             .fetch::<m![1], m![B % 16]>()
             .fetch_cast::<i8>()
             .collect::<m![1], m![B % 16 # 32]>()
-            .to_trf(TrfAddress::Full);
+            .to_trf_at(TrfAddress::Full);
 
         // Perform contraction for this tile
         if j == 0 {

@@ -21,7 +21,7 @@ pub fn matmul_4096(
         .begin(rhs.view())
         .fetch::<m![1], m![B % 32]>()
         .collect::<m![1], m![B % 32]>()
-        .to_trf(TrfAddress::Full);
+        .to_trf_at(TrfAddress::Full);
 
     let matmul_result: DmTensor<i8, Chip, Cluster, m![A / 1024 % 2, X], m![A / 2 % 512, A % 2 # 8]> = ctx
         .main

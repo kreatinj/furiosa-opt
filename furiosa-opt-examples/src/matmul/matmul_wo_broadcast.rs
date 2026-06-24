@@ -19,7 +19,7 @@ pub fn matmul_wo_broadcast(
         .begin(rhs.view())
         .fetch::<m![1], m![A / 8 % 2, B, A % 8]>()
         .collect::<m![A / 8 % 2, B / 4], m![B % 4, A % 8]>()
-        .to_trf(TrfAddress::Full);
+        .to_trf_at(TrfAddress::Full);
 
     let matmul_result: DmTensor<i8, Chip, Cluster, m![1 # 256], m![1 # 8]> = ctx
         .main

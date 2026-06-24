@@ -57,7 +57,7 @@ pub(super) fn lm_head(
         .fetch::<m![S % 8], m![H / 8 % 7, H % 8]>()
         .fetch_cast::<bf16>()
         .collect::<m![S % 8], m![H / 8 % 7, H / 56 % 4, S / 8 % 2, S % 8 # 16]>()
-        .to_trf(TrfAddress::FirstHalf);
+        .to_trf_at(TrfAddress::FirstHalf);
     let second_half = input_tiled.view().tile::<m![S / 16], 2, m![S % 16, H % 56 # 64]>(1);
     let input_trf_second: TrfTensor<
         bf16,
@@ -72,7 +72,7 @@ pub(super) fn lm_head(
         .fetch::<m![S % 8], m![H / 8 % 7, H % 8]>()
         .fetch_cast::<bf16>()
         .collect::<m![S % 8], m![H / 8 % 7, H / 56 % 4, S / 8 % 2, S % 8 # 16]>()
-        .to_trf(TrfAddress::SecondHalf);
+        .to_trf_at(TrfAddress::SecondHalf);
 
     // Process vocabulary chunks with double-buffered SRAM addresses.
     for chunk_idx in 0..19usize {
