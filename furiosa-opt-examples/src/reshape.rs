@@ -10,7 +10,7 @@ pub fn reshape(
     hbm_tensor: &HbmTensor<i32, m![A / 4 % 4], m![A / 16, A % 4, B]>,
 ) -> HbmTensor<i32, m![C], m![D, E, F, G, H, I]> {
     let hbm_transposed: HbmTensor<i32, m![A / 4 % 4], m![A % 4, B, A / 16]> =
-        hbm_tensor.to_hbm(&mut ctx.tdma, 0x100000);
+        hbm_tensor.to_hbm_at(&mut ctx.tdma, 0x100000);
     let dm_tensor: DmTensor<i32, m![A / 4 % 4], m![A / 2 % 2], m![B % 16, B / 16 % 16], m![B / 256, A % 2, A / 16]> =
         hbm_transposed.to_dm(&mut ctx.tdma, 0);
 
@@ -31,7 +31,7 @@ pub mod different_axes {
         hbm_tensor: &HbmTensor<i32, m![A / 4 % 4], m![A / 16, A % 4, B]>,
     ) -> HbmTensor<i32, m![C], m![D, E, F]> {
         let hbm_transposed: HbmTensor<i32, m![A / 4 % 4], m![A % 4, B, A / 16]> =
-            hbm_tensor.to_hbm(&mut ctx.tdma, 0x100000);
+            hbm_tensor.to_hbm_at(&mut ctx.tdma, 0x100000);
 
         let dm_tensor: DmTensor<
             i32,

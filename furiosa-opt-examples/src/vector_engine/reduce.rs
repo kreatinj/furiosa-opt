@@ -5,7 +5,7 @@ pub fn ve_intra_slice_reduce_add_fxp_sat(
     ctx: &mut Context,
     input: &HbmTensor<i32, Chip, m![A, R]>,
 ) -> HbmTensor<i32, Chip, m![A]> {
-    let input_transposed: HbmTensor<i32, Chip, m![R, A]> = input.to_hbm(&mut ctx.tdma, 0x4000);
+    let input_transposed: HbmTensor<i32, Chip, m![R, A]> = input.to_hbm_at(&mut ctx.tdma, 0x4000);
     let input_dm = input_transposed.to_dm::<Cluster, m![A / 2], m![R, A % 2]>(&mut ctx.tdma, 0x1000);
 
     let result: DmTensor<i32, Chip, Cluster, m![A / 2], m![A % 2]> = ctx
@@ -32,7 +32,7 @@ pub fn ve_intra_slice_reduce_max_i32(
     ctx: &mut Context,
     input: &HbmTensor<i32, Chip, m![A, R]>,
 ) -> HbmTensor<i32, Chip, m![A]> {
-    let input_transposed: HbmTensor<i32, Chip, m![R, A]> = input.to_hbm(&mut ctx.tdma, 0x4000);
+    let input_transposed: HbmTensor<i32, Chip, m![R, A]> = input.to_hbm_at(&mut ctx.tdma, 0x4000);
     let input_dm = input_transposed.to_dm::<Cluster, m![A / 2], m![R, A % 2]>(&mut ctx.tdma, 0x1000);
 
     let result: DmTensor<i32, Chip, Cluster, m![A / 2], m![A % 2]> = ctx
@@ -59,7 +59,7 @@ pub fn ve_intra_slice_reduce_min_i32(
     ctx: &mut Context,
     input: &HbmTensor<i32, Chip, m![A, R]>,
 ) -> HbmTensor<i32, Chip, m![A]> {
-    let input_transposed: HbmTensor<i32, Chip, m![R, A]> = input.to_hbm(&mut ctx.tdma, 0x4000);
+    let input_transposed: HbmTensor<i32, Chip, m![R, A]> = input.to_hbm_at(&mut ctx.tdma, 0x4000);
     let input_dm = input_transposed.to_dm::<Cluster, m![A / 2], m![R, A % 2]>(&mut ctx.tdma, 0x1000);
 
     let result: DmTensor<i32, Chip, Cluster, m![A / 2], m![A % 2]> = ctx
@@ -86,7 +86,7 @@ pub fn ve_intra_slice_reduce_add_f32(
     ctx: &mut Context,
     input: &HbmTensor<f32, Chip, m![A, R]>,
 ) -> HbmTensor<f32, Chip, m![A]> {
-    let input_transposed: HbmTensor<f32, Chip, m![R, A]> = input.to_hbm(&mut ctx.tdma, 0x4000);
+    let input_transposed: HbmTensor<f32, Chip, m![R, A]> = input.to_hbm_at(&mut ctx.tdma, 0x4000);
     let input_dm = input_transposed.to_dm::<Cluster, m![A / 2], m![R, A % 2]>(&mut ctx.tdma, 0x1000);
 
     let result: DmTensor<f32, Chip, Cluster, m![A / 2], m![A % 2]> = ctx
@@ -113,7 +113,7 @@ pub fn ve_intra_slice_reduce_max_f32(
     ctx: &mut Context,
     input: &HbmTensor<f32, Chip, m![A, R]>,
 ) -> HbmTensor<f32, Chip, m![A]> {
-    let input_transposed: HbmTensor<f32, Chip, m![R, A]> = input.to_hbm(&mut ctx.tdma, 0x4000);
+    let input_transposed: HbmTensor<f32, Chip, m![R, A]> = input.to_hbm_at(&mut ctx.tdma, 0x4000);
     let input_dm = input_transposed.to_dm::<Cluster, m![A / 2], m![R, A % 2]>(&mut ctx.tdma, 0x1000);
 
     let result: DmTensor<f32, Chip, Cluster, m![A / 2], m![A % 2]> = ctx
@@ -140,7 +140,7 @@ pub fn ve_intra_slice_reduce_min_f32(
     ctx: &mut Context,
     input: &HbmTensor<f32, Chip, m![A, R]>,
 ) -> HbmTensor<f32, Chip, m![A]> {
-    let input_transposed: HbmTensor<f32, Chip, m![R, A]> = input.to_hbm(&mut ctx.tdma, 0x4000);
+    let input_transposed: HbmTensor<f32, Chip, m![R, A]> = input.to_hbm_at(&mut ctx.tdma, 0x4000);
     let input_dm = input_transposed.to_dm::<Cluster, m![A / 2], m![R, A % 2]>(&mut ctx.tdma, 0x1000);
 
     let result: DmTensor<f32, Chip, Cluster, m![A / 2], m![A % 2]> = ctx
@@ -173,7 +173,7 @@ pub fn ve_intra_slice_reduce_split_slice_time(
     ctx: &mut Context,
     input: &HbmTensor<i32, Chip, m![S, A]>,
 ) -> HbmTensor<i32, Chip, m![S # 16 / 4, A]> {
-    let input_transposed: HbmTensor<i32, Chip, m![S, A]> = input.to_hbm(&mut ctx.tdma, 0x4000);
+    let input_transposed: HbmTensor<i32, Chip, m![S, A]> = input.to_hbm_at(&mut ctx.tdma, 0x4000);
     let input_dm =
         input_transposed.to_dm::<Cluster, m![S # 16 / 4, A / 8], m![S # 16 % 4, A % 8]>(&mut ctx.tdma, 0x1000);
 
@@ -203,7 +203,7 @@ pub fn ve_intra_slice_reduce_split_time_packet(
     ctx: &mut Context,
     input: &HbmTensor<i32, Chip, m![R16, A]>,
 ) -> HbmTensor<i32, Chip, m![A]> {
-    let input_transposed: HbmTensor<i32, Chip, m![A, R16]> = input.to_hbm(&mut ctx.tdma, 0x4000);
+    let input_transposed: HbmTensor<i32, Chip, m![A, R16]> = input.to_hbm_at(&mut ctx.tdma, 0x4000);
     let input_dm = input_transposed.to_dm::<Cluster, m![A / 2], m![A % 2, R16]>(&mut ctx.tdma, 0x1000);
 
     let result: DmTensor<i32, Chip, Cluster, m![A / 2], m![A % 2, 1 # 8]> = ctx

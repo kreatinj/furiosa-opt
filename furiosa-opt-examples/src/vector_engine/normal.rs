@@ -448,7 +448,7 @@ pub fn ve_elementwise_vrf(
     input: &HbmTensor<i32, Chip, m![A, B]>,
     vrf_data: &HbmTensor<i32, Chip, m![B]>,
 ) -> HbmTensor<i32, Chip, m![A, B]> {
-    let input_intermediate: HbmTensor<i32, Chip, m![B, A]> = input.to_hbm(&mut ctx.tdma, 0x8000);
+    let input_intermediate: HbmTensor<i32, Chip, m![B, A]> = input.to_hbm_at(&mut ctx.tdma, 0x8000);
     let input_dm = input_intermediate.to_dm::<Cluster, m![A / 2], m![B, A % 2]>(&mut ctx.tdma, 0x1000);
     let vrf_dm = vrf_data.to_dm::<Cluster, m![A / 2], m![B]>(&mut ctx.tdma, 0x2000);
 
@@ -483,7 +483,7 @@ pub fn ve_elementwise_multi_vrf(
     vrf_data1: &HbmTensor<i32, Chip, m![B]>,
     vrf_data2: &HbmTensor<i32, Chip, m![B]>,
 ) -> HbmTensor<i32, Chip, m![A, B]> {
-    let input_intermediate: HbmTensor<i32, Chip, m![B, A]> = input.to_hbm(&mut ctx.tdma, 0x0);
+    let input_intermediate: HbmTensor<i32, Chip, m![B, A]> = input.to_hbm_at(&mut ctx.tdma, 0x0);
     let input_dm = input_intermediate.to_dm::<Cluster, m![A / 2], m![B, A % 2]>(&mut ctx.tdma, 0x1000);
     let vrf_dm1 = vrf_data1.to_dm::<Cluster, m![A / 2], m![B]>(&mut ctx.tdma, 0x2000);
     let vrf_dm2 = vrf_data2.to_dm::<Cluster, m![A / 2], m![B]>(&mut ctx.tdma, 0x3000);

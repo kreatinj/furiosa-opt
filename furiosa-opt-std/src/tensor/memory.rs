@@ -370,6 +370,15 @@ impl<D: Scalar, Chip: M, Element: M, B: Backend> HbmTensor<D, Chip, Element, B> 
     pub fn to_hbm<const DMA: Dma, Element2: M>(
         &self,
         _dma: &mut DmaContext<{ DMA }>,
+    ) -> HbmTensor<D, Chip, Element2, B> {
+        HbmTensor::new(self.inner.transpose(true), None)
+    }
+
+    /// Converts to HBM tensor at `address`.
+    #[primitive(HbmTensor::to_hbm_at)]
+    pub fn to_hbm_at<const DMA: Dma, Element2: M>(
+        &self,
+        _dma: &mut DmaContext<{ DMA }>,
         address: Address,
     ) -> HbmTensor<D, Chip, Element2, B> {
         HbmTensor::new(self.inner.transpose(true), Some(address))

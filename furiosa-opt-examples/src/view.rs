@@ -43,7 +43,7 @@ pub mod padding {
         input_hbm: &HbmTensor<i32, m![1], m![[A, B] # 64]>,
     ) -> HbmTensor<i32, m![1], m![[A, B] # 64]> {
         let input_hbm_transposed: HbmTensor<i32, m![1], m![[A, B] # 64 % 8, [A, B] # 64 / 8]> =
-            input_hbm.to_hbm::<_, _>(&mut ctx.tdma, 0x2000);
+            input_hbm.to_hbm_at::<_, _>(&mut ctx.tdma, 0x2000);
         // Transfer input tensor to DM with shape:
         // - 1 on the cluster dimension,
         // - (A=9)(B=7)=64/16 on the slice dimension,
